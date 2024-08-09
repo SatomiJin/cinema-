@@ -11,32 +11,7 @@ function InfoMeComponent() {
             <a href="https://portfolio.satomijin.id.vn/">Satomi Jin</a> - <span className="info">{t("intro")}</span>
           </div>
         </div>
-        <div className="content-right col col-7">
-          <div className="category">
-            <div className="title">Phim mới</div>
-            <ul className="genres">
-              <li className="genre-item">Phim kinh di</li>
-              <li className="genre-item">Phim kinh di</li>
-              <li className="genre-item">Phim kinh di</li>
-            </ul>
-          </div>
-          <div className="category">
-            <div className="title">Phim mới</div>
-            <ul className="genres">
-              <li className="genre-item">Phim kinh di</li>
-              <li className="genre-item">Phim kinh di</li>
-              <li className="genre-item">Phim kinh di</li>
-            </ul>
-          </div>
-          <div className="category">
-            <div className="title">Phim mới</div>
-            <ul className="genres">
-              <li className="genre-item">Phim kinh di</li>
-              <li className="genre-item">Phim kinh di</li>
-              <li className="genre-item">Phim kinh di</li>
-            </ul>
-          </div>
-        </div>
+        <div className="content-right col col-7"></div>
       </div>
     </div>
   );
