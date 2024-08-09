@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { routes } from "./routes/index";
 import DefaultLayout from "./layouts/DefaultLayout/DefaultLayout";
 function App() {
+  console.log(process.env.REACT_APP_API_FILM_URL);
+
   let { i18n } = useTranslation();
   const getLanguage = () => {
     let lang = localStorage.getItem("language");
