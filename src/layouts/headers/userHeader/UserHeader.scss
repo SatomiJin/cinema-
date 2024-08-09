@@ -1,0 +1,19 @@
+.user-header {
+  .header-pc {
+    display: block;
+  }
+  .header-mobile {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .user-header {
+    .header-pc {
+      display: none;
+    }
+    .header-mobile {
+      display: block;
+    }
+  }
+}

@@ -1,0 +1,14 @@
+.language-container {
+  .dropdown {
+    .language-text {
+      text-transform: uppercase;
+      padding: 0.2rem;
+      border-radius: 0.2rem;
+      transition: all 0.3s ease-in-out;
+      &:hover {
+        cursor: pointer;
+        background-color: var(--search_hover_color);
+      }
+    }
+  }
+}

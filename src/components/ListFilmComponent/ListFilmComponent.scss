@@ -1,0 +1,46 @@
+.list-film-container {
+  .row {
+    color: var(--body_color);
+    .content-top {
+      display: flex;
+      justify-content: space-between;
+      .content-top_title {
+        border-left: 3px solid var(--film_highlight_color);
+        padding-left: 0.4rem;
+        font-weight: 600;
+      }
+      .content-top_buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        // gap: 0.2rem;
+        .see-more {
+          border: none;
+          outline: none;
+          padding: 0 0.2rem;
+          background-color: var(--film_highlight_color);
+          font-size: 0.7rem !important;
+          font-weight: 600;
+          transition: all 0.3s ease-in-out;
+          &:hover {
+            opacity: 0.8;
+          }
+        }
+        i {
+          font-size: 1.2rem;
+          transition: all 0.3s ease-in-out;
+          color: var(--body_color);
+          font-weight: 700;
+          transition: all 0.3s linear;
+          &:hover {
+            opacity: 0.8;
+            color: var(--film_highlight_color);
+            cursor: pointer;
+          }
+        }
+      }
+    }
+    .content-bottom {
+    }
+  }
+}

@@ -1,0 +1,72 @@
+.search_tm-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  background-color: var(--body_background);
+
+  .container {
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .search_input {
+        position: relative;
+        padding: 0;
+        .result_container {
+          position: absolute;
+          z-index: 11;
+          border: 1px solid var(--background_color_component);
+          background-color: var(--film_wrapper_button) !important;
+          width: 80vw;
+          margin-top: 0.5rem;
+          border-radius: 0.5rem;
+          // width: 90vw;
+          border-radius: 0.5rem;
+          max-height: 50vh;
+          overflow-y: scroll;
+          scrollbar-width: none;
+          scroll-behavior: smooth;
+          .search-item_info {
+            transition: all 0.3s linear;
+            &:hover {
+              opacity: 0.6;
+              cursor: pointer;
+            }
+          }
+        }
+        i {
+          position: absolute;
+          right: 1%;
+          top: 50%;
+          cursor: pointer;
+          transform: translateY(-50%);
+          color: var(--body_color);
+        }
+        input {
+          padding: 0.3rem 1rem;
+          width: 100%;
+          font-size: 1.2rem;
+          border-radius: 1rem;
+          border: none;
+          outline: none;
+          color: var(--body_color);
+          background-color: var(--search_color);
+        }
+      }
+      .close_button {
+        text-align: right;
+        i {
+          font-size: 1.2rem;
+          &:hover {
+            cursor: pointer;
+            opacity: 0.7;
+            color: var(--body_color);
+          }
+        }
+      }
+    }
+  }
+}

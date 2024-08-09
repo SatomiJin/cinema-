@@ -1,0 +1,26 @@
+.dark-mode-container {
+  .theme-button {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    // i {
+    //   color: var(--body_color);
+    // }
+
+    img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: #fff;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .dark-mode-container {
+    img {
+      width: 25px !important;
+      height: 25px !important;
+    }
+  }
+}

@@ -1,0 +1,32 @@
+.series-mobile_container {
+  .container {
+    .row {
+      .title {
+        background-color: var(--background_color_component);
+        color: var(--body_color);
+        text-align: center;
+        margin-top: 0.5rem;
+        text-transform: uppercase;
+        font-weight: 600;
+        padding: 0.5rem;
+      }
+      .list-film {
+        background-color: var(--film_wrapper_button);
+        color: var(--body_color);
+        margin-top: 1rem;
+        padding: 1rem 0.5rem;
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .pagination {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 1rem 0;
+      }
+    }
+  }
+}

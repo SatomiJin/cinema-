@@ -1,0 +1,123 @@
+.film-info-pc_container {
+  .container {
+    padding: 1rem 0;
+    .row {
+      color: var(--body_color);
+      .film-name {
+        // background-color: var(--background_color_component);
+        text-align: center;
+        padding: 1rem 0;
+        font-weight: 700;
+        text-transform: uppercase;
+        border-bottom: 1px solid var(--film_info_border);
+      }
+      .film-info_wrapper {
+        background-color: var(--background_color_component);
+        border-radius: 0.4rem;
+
+        .row {
+          padding: 1rem;
+          .film_poster {
+            display: flex;
+            align-items: center;
+            // border-radius: 1rem;
+
+            justify-content: center;
+            .image {
+              width: 70%;
+              background-image: url("../../../assets/image/poster-film.png");
+              background-position: center;
+              background-repeat: no-repeat;
+              background-size: cover;
+              height: 270px;
+              // width: 80%;
+              border-radius: 1rem;
+            }
+          }
+          .film_info {
+            padding: 0.5rem 2rem;
+            .film_info-item {
+              border-bottom: 1px solid var(--film_info_border);
+              border-top: 1px solid var(--film_info_border);
+              display: flex;
+              font-size: 15px;
+              align-items: center;
+              padding: 0.5rem;
+              span {
+                font-size: 15px;
+              }
+              .item_title {
+                width: 20%;
+                font-size: 16px;
+              }
+              .item_info {
+                font-size: 16px;
+                width: 80%;
+                text-align: center;
+              }
+            }
+          }
+        }
+      }
+
+      .film-play_buttons {
+        background-color: var(--film_wrapper_button);
+        margin-top: 1rem;
+        padding: 10px;
+        border-radius: 1rem;
+        box-sizing: border-box;
+        .play_button {
+          margin-left: 1rem;
+          background-color: var(--film_button_color);
+          padding: 0.5rem !important;
+          box-shadow: rgba(0, 0, 0, 0.3) 0px 3px 8px;
+          border-radius: 0.5rem !important;
+          transition: all 0.3s linear;
+          &:hover {
+            opacity: 0.8;
+          }
+
+          i {
+            font-size: 1.4rem;
+            color: var(--body_color);
+          }
+        }
+      }
+
+      .episode-desc_content {
+        margin-top: 0.5rem;
+        .row {
+          // gap: 1rem;
+          justify-content: space-between;
+          .list-episodes {
+            width: 30%;
+            border-radius: 0.4rem;
+            padding: 1rem;
+            background-color: var(--film_wrapper_button);
+            .list-episodes_title {
+              font-size: 1.2rem;
+              font-weight: 600;
+            }
+            .list-episodes_wrapper {
+              height: 100%;
+              padding: 1rem 0;
+            }
+          }
+          .description {
+            width: 69%;
+            padding: 1rem;
+            background-color: var(--film_wrapper_button);
+            border-radius: 0.4rem;
+            .title {
+              font-size: 1.2rem;
+              font-weight: 600;
+            }
+            .film_desc {
+              text-align: justify;
+            }
+          }
+        }
+      }
+    }
+  }
+}

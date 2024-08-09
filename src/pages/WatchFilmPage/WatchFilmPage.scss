@@ -1,0 +1,19 @@
+.watch-film-page_container {
+  .wrapper-pc_container {
+    display: block;
+  }
+  .wrapper-mobile_container {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .watch-film-page_container {
+    .wrapper-mobile_container {
+      display: block;
+    }
+    .wrapper-pc_container {
+      display: none;
+    }
+  }
+}

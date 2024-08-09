@@ -1,0 +1,40 @@
+.header-mobile-container {
+  position: sticky;
+  top: 0;
+  border-bottom: 1px solid gray;
+  .container {
+    .row {
+      background-color: var(--body_background);
+      position: relative;
+      padding: 0.25rem;
+      color: var(--body_color);
+      align-items: center;
+      .search_mobile_input {
+        display: none;
+        opacity: 0;
+        transition: all 0.5s linear;
+      }
+      .input_search-mobile:checked ~ .search_mobile_input {
+        display: block;
+        opacity: 1;
+      }
+      .menu {
+      }
+      .col {
+        text-align: center;
+        // background-color: red;
+        label {
+          i {
+            border-radius: 50%;
+            padding: 0.5rem;
+            transition: all 0.3s ease-in-out;
+            &:hover {
+              cursor: pointer;
+              background-color: var(--search_hover_color);
+            }
+          }
+        }
+      }
+    }
+  }
+}

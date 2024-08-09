@@ -1,0 +1,49 @@
+.slider-item-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  transition: all 0.3s linear;
+  border-radius: 1rem;
+
+  .poster {
+    border-radius: 1rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-image: url("https://img.phimapi.com/upload/vod/20240720-1/201de45ff5101d2f25ff9a607caa3520.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  .item_info {
+    text-shadow: 1px 1px 1px #000;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    color: #fff;
+    background-color: rgba($color: #000000, $alpha: 0.5);
+    border-radius: 1rem;
+    padding: 0.3rem;
+    width: 100%;
+    .name {
+      width: 250px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      text-wrap: nowrap;
+    }
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .slider-item-container {
+    // height: 100px;
+    .item_info {
+      font-size: 1rem;
+      text-shadow: 1px 1px 1px #000;
+    }
+  }
+}

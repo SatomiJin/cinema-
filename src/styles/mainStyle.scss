@@ -1,0 +1,105 @@
+:root {
+  --body_background: #fff;
+  --body_color: #1d2a35;
+
+  --background_color_body: #dcdcdc;
+  --background_color_component: #fff;
+
+  --search_color: rgba(220, 220, 220, 0.5);
+  --search_hover_color: rgba(52, 52, 52, 0.4);
+
+  --film_highlight_color: #ffa500;
+  --film_info_border: #ccc;
+  --film_wrapper_button: snow;
+  --film_button_color: #ffa500;
+  --film_button_color_hover: #ffa500;
+
+  --film_episode_color: #e7e0e0;
+  // watch film
+  --film_title_name: #ff4800;
+  --film_button_next: #ffa500;
+  --film_button_text: #fff;
+
+  // list film for type
+  --film_item: #f0f0f0;
+  --film_item_box_shadow: #00000026;
+}
+
+[data-theme="dark"] {
+  --body_background: #1d2a35;
+  --body_color: #fff;
+  // #297275 424040 5a5454
+  --background_color_body: #424040;
+  --background_color_component: #0f0f0f;
+
+  --search_color: rgb(74, 74, 75);
+  --search_hover_color: rgba(221, 221, 221, 0.4);
+
+  --film_highlight_color: #408bea;
+  --film_info_border: #2f2f2f;
+  --film_wrapper_button: #5a5454;
+  --film_button_color: #2a897f;
+  --film_button_color_hover: #bb6464;
+  --film_episode_color: #3b3b3b;
+  // watch film
+  --film_title_name: #ffb970;
+  --film_button_next: #2a897f;
+  --film_button_text: #fff;
+
+  // list film for type
+  --film_item: #3d3737;
+  --film_item_box_shadow: #00000026;
+}
+
+// Loading
+.loading-component {
+  margin-top: 1rem;
+  padding: 2rem;
+  height: 100%;
+}
+* {
+  font-family: "helvetica neue";
+  font-size: 20px;
+  font-weight: 200;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Scroll */
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+// swiper
+
+.swiper-pagination-bullet {
+  width: 12px !important;
+  height: 12px !important;
+  background-color: var(--body_color) !important;
+}
+
+// Pagination
+/* dark-theme.css */
+// .rc-pagination-item {
+//   background-color: red !important;
+// }

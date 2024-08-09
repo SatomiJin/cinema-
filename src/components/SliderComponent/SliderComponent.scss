@@ -1,0 +1,13 @@
+.slider-component-container {
+  .slider-wrapper {
+    .card-list {
+      padding: 0.5rem;
+      .card-item {
+        border-radius: 1rem;
+        margin-bottom: 1rem;
+        min-height: 200px;
+        position: relative;
+      }
+    }
+  }
+}

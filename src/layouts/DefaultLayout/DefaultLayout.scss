@@ -1,0 +1,12 @@
+.layout-container {
+  background-color: var(--background_color_body);
+  min-height: 100vh;
+  // height: 100vh;
+  .children_container {
+  }
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+}

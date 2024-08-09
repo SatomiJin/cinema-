@@ -1,0 +1,65 @@
+.slider-film-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  &:hover {
+    transform: scale(1) !important;
+  }
+  .slider-item_poster {
+    position: relative;
+    padding: 0;
+    height: 80%;
+    overflow: hidden;
+    .image {
+      height: 100%;
+      width: 100%;
+      // background-image: url("https://img.phimapi.com/upload/vod/20230914-1/e90c0102bbf19159b8b34a419199a697.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      transition: all 0.5s linear;
+    }
+    .play_hover {
+      opacity: 0;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      background-color: rgba($color: #000000, $alpha: 0.6);
+      transition: all 0.3s ease-in-out;
+      i {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 3rem;
+      }
+    }
+
+    &:hover .play_hover {
+      opacity: 1;
+    }
+    &:hover .image {
+      transform: scale(1.2);
+    }
+  }
+  .slider-item_info {
+    // width: 100%;
+    height: 20%;
+    .name {
+      text-wrap: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 0.9rem;
+    }
+    .original_name {
+      font-size: 0.7rem;
+      text-wrap: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}

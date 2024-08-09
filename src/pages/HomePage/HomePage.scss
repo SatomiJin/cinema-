@@ -1,0 +1,26 @@
+.home-page-container {
+  padding: 0.5rem 0;
+
+  .pc-tablet-home {
+    display: block;
+  }
+  .mobile-home {
+    display: none;
+    .back-to-top {
+      position: absolute;
+      bottom: 0;
+      z-index: 10;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .home-page-container {
+    .pc-tablet-home {
+      display: none;
+    }
+    .mobile-home {
+      display: block;
+    }
+  }
+}

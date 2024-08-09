@@ -1,0 +1,67 @@
+.search-item_container {
+  .container {
+    .row {
+      background-color: var(--film_wrapper_button) !important;
+
+      border-bottom: 1px solid var(--film_info_border);
+      .poster {
+        padding: 0;
+        .image {
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: cover;
+          width: 100%;
+          height: 50px;
+          border-radius: 10px;
+        }
+      }
+      .film-info {
+        // padding: 0;
+        .name {
+          text-align: left;
+          font-size: 20px;
+          overflow: hidden;
+          text-wrap: nowrap;
+
+          text-overflow: ellipsis;
+          width: 200px;
+        }
+        .type {
+          text-align: left;
+          font-size: 15px;
+        }
+      }
+    }
+  }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .search-item_container {
+    .container {
+      .row {
+        height: 100px;
+        // margin-bottom: 10px;
+        .poster {
+          .image {
+            height: 100px;
+          }
+        }
+      }
+    }
+  }
+}
+@media (max-width: 767px) {
+  .search-item_container {
+    .container {
+      .row {
+        .film-info {
+          .name {
+            font-size: 16px;
+          }
+          .type {
+            font-size: 14px;
+          }
+        }
+      }
+    }
+  }
+}
