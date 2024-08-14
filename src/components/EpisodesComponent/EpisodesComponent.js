@@ -11,13 +11,16 @@ function EpisodesComponent(props) {
     <div className="episodes-container">
       {props?.episodes &&
         props?.episodes?.length > 0 &&
-        props?.episodes?.map((item, index) => {
-          return (
-            <button onClick={() => handleChangeEp(item.slug)} className="btn_episode" type="button" key={index}>
-              {item?.slug === "full" ? "full" : index + 1}
-            </button>
-          );
-        })}
+        props?.episodes
+          ?.slice()
+          ?.reverse()
+          ?.map((item, index) => {
+            return (
+              <button onClick={() => handleChangeEp(item.slug)} className="btn_episode" type="button" key={index}>
+                {item?.slug === "full" ? "full" : props?.episodes?.length - index}
+              </button>
+            );
+          })}
     </div>
   );
 }

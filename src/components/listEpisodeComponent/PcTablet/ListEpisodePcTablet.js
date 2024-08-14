@@ -18,13 +18,16 @@ function ListEpisodePcTablets(props) {
   return (
     <div className="list-episode-pc_container">
       {episodes && episodes?.length > 0 ? (
-        episodes?.map((item, index) => {
-          return (
-            <button key={index} onClick={() => watchFilm(item)} type="button" className="btn episode_button">
-              {index + 1}
-            </button>
-          );
-        })
+        episodes
+          ?.slice()
+          ?.reverse()
+          ?.map((item, index) => {
+            return (
+              <button key={index} onClick={() => watchFilm(item)} type="button" className="btn episode_button">
+                {episodes?.length - index}
+              </button>
+            );
+          })
       ) : (
         <button type="button" className="btn episode_button"></button>
       )}

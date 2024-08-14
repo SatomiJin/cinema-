@@ -70,13 +70,21 @@ function FilmInfoMobile(props) {
               <div className="title">{t("listEp")}</div>
               <div className="episodes">
                 {episodes && episodes?.length > 0 ? (
-                  episodes?.map((item, index) => {
-                    return (
-                      <button onClick={() => watchFilm(item)} key={index} type="button" className="btn episode_button">
-                        {index + 1}
-                      </button>
-                    );
-                  })
+                  episodes
+                    ?.slice()
+                    ?.reverse()
+                    ?.map((item, index) => {
+                      return (
+                        <button
+                          onClick={() => watchFilm(item)}
+                          key={index}
+                          type="button"
+                          className="btn episode_button"
+                        >
+                          {episodes?.length - index}
+                        </button>
+                      );
+                    })
                 ) : (
                   <DotLoading />
                 )}
