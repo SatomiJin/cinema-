@@ -2,7 +2,7 @@ import "./SliderComponent.scss";
 // import imageTest from "../../assets/image/poster-film.png";
 import { SwiperSlide } from "swiper/react";
 import { Swiper as SwiperComponent } from "swiper/react";
-import { Navigation, Pagination, Grid } from "swiper/modules";
+import { Navigation, Pagination, Grid, Autoplay } from "swiper/modules";
 import { useMutationHook } from "../../hooks/useMutationHook";
 import SliderItem from "./SliderItem";
 import * as FilmService from "../../services/FilmService";
@@ -37,9 +37,13 @@ function SliderComponent() {
     <div className="slider-component-container">
       <div className="slider-wrapper">
         <SwiperComponent
-          modules={[Navigation, Pagination, Grid]}
+          modules={[Navigation, Pagination, Grid, Autoplay]}
           spaceBetween={10}
           grabCursor
+          autoplay={{
+            delay: 2000,
+            disableOnInteraction: false,
+          }}
           // autoplay={true}
           // loop={true}
           pagination={{ clickable: true, dynamicBullets: true, type: "bullets" }}
