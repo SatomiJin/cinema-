@@ -5,7 +5,9 @@ import * as FilmService from "../../services/FilmService";
 import "./FilmMoviePage.scss";
 import FilmMovieComponent from "../../components/FilmToTypeComponent/FilmMovieComponent/FilmMovieComponent";
 function FilmMoviePage() {
-  let mutation = useMutationHook((page, limit) => FilmService.getMovieFilm(page, limit));
+  let mutation = useMutationHook((page, limit) =>
+    FilmService.getMovieFilm(page, limit)
+  );
   let { data } = mutation;
   let [movieFilm, setMovieFilm] = useState([]);
   let [pageCurrent, setPageCurrent] = useState(0);
@@ -20,7 +22,7 @@ function FilmMoviePage() {
     setPageCurrent(location?.pathname?.split("/")[3]);
   }, [location]);
   useEffect(() => {
-    if (data && data?.status === "success") {
+    if (data && data?.status) {
       setMovieFilm([...data?.data?.items]);
     }
   }, [data]);
@@ -29,7 +31,11 @@ function FilmMoviePage() {
     <div className="movie-page_container">
       <div className="film-movie_pc">
         {/* <FilmSeriesPcTablet pagination={data?.data?.params?.pagination} data={seriesFilm} pageCurrent={pageCurrent} /> */}
-        <FilmMovieComponent pagination={data?.data?.params?.pagination} data={movieFilm} pageCurrent={pageCurrent} />
+        <FilmMovieComponent
+          pagination={data?.data?.params?.pagination}
+          data={movieFilm}
+          pageCurrent={pageCurrent}
+        />
       </div>
     </div>
   );

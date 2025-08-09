@@ -4,7 +4,9 @@ import { useLocation } from "react-router-dom";
 import * as FilmService from "../../services/FilmService";
 import FilmAnimeComponent from "../../components/FilmToTypeComponent/FilmAnimeComponent/FilmAnimeComponent";
 function FilmAnimePage() {
-  let mutation = useMutationHook((page, limit) => FilmService.getAnimeFilm(page, limit));
+  let mutation = useMutationHook((page, limit) =>
+    FilmService.getAnimeFilm(page, limit)
+  );
   let { data } = mutation;
   let [animeFilm, setAnimeFilm] = useState([]);
   let [pageCurrent, setPageCurrent] = useState(0);
@@ -19,7 +21,7 @@ function FilmAnimePage() {
     setPageCurrent(location?.pathname?.split("/")[3]);
   }, [location]);
   useEffect(() => {
-    if (data && data?.status === "success") {
+    if (data && data?.status) {
       setAnimeFilm([...data?.data?.items]);
     }
   }, [data]);
@@ -27,7 +29,11 @@ function FilmAnimePage() {
   return (
     <div className="anime-page_container">
       <div className="film-anime_pc">
-        <FilmAnimeComponent pagination={data?.data?.params?.pagination} data={animeFilm} pageCurrent={pageCurrent} />
+        <FilmAnimeComponent
+          pagination={data?.data?.params?.pagination}
+          data={animeFilm}
+          pageCurrent={pageCurrent}
+        />
         {/* <FilmSeriesPcTablet pagination={data?.data?.params?.pagination} data={seriesFilm} pageCurrent={pageCurrent} /> */}
         {/* <FilmMovieComponent pagination={data?.data?.params?.pagination} data={movieFilm} pageCurrent={pageCurrent} /> */}
       </div>

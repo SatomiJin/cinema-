@@ -10,8 +10,14 @@ import InfoMeComponent from "../../InfoMeComponent/InfoMeComponent";
 
 function HomePagePCTablet() {
   let { t } = useTranslation();
-  const { newFilmData, setNewFilmData, newSeriesData, setNewSeriesData, newMovieFilmData, setNewMovieFilmData } =
-    useContext(FilmContext);
+  const {
+    newFilmData,
+    setNewFilmData,
+    newSeriesData,
+    setNewSeriesData,
+    newMovieFilmData,
+    setNewMovieFilmData,
+  } = useContext(FilmContext);
 
   // get data
   let mutationGetNewFilm = useMutationHook(() => FilmService.getListNewFilm());
@@ -27,6 +33,7 @@ function HomePagePCTablet() {
     await mutationGetSeries.mutate();
     await mutationGetMovies.mutate();
   };
+
   // useEffect
   useEffect(() => {
     getDataFilm();
@@ -36,13 +43,14 @@ function HomePagePCTablet() {
     if (newFilmDataMutation && newFilmDataMutation.status === true) {
       setNewFilmData([...newFilmDataMutation.items]);
     }
-    if (newSeriesFilmMutation && newSeriesFilmMutation.status === "success") {
+    if (newSeriesFilmMutation && newSeriesFilmMutation.status) {
       setNewSeriesData([...newSeriesFilmMutation?.data?.items]);
     }
-    if (newMovieFilmMutation && newMovieFilmMutation.status === "success") {
+    if (newMovieFilmMutation && newMovieFilmMutation.status) {
       setNewMovieFilmData([...newMovieFilmMutation?.data?.items]);
     }
   }, [newFilmDataMutation, newSeriesFilmMutation, newMovieFilmMutation]);
+
   return (
     <div className="home-page-container">
       <div className="container">
@@ -52,13 +60,22 @@ function HomePagePCTablet() {
               <SliderComponent />
             </div>
             <div className="new-film">
-              <ListFilmComponent data={newFilmData && newFilmData?.length > 0 && newFilmData} name={t("newFilm")} />
+              <ListFilmComponent
+                data={newFilmData && newFilmData?.length > 0 && newFilmData}
+                name={t("newFilm")}
+              />
             </div>
             <div className="series-film">
-              <ListFilmComponent data={newSeriesData} name={t("newFilmSeries")} />
+              <ListFilmComponent
+                data={newSeriesData}
+                name={t("newFilmSeries")}
+              />
             </div>
             <div className="movies-film">
-              <ListFilmComponent data={newMovieFilmData} name={t("newMovieFilm")} />
+              <ListFilmComponent
+                data={newMovieFilmData}
+                name={t("newMovieFilm")}
+              />
             </div>
           </div>
           {/* <div className="content-right col col-4">baaaaa</div> */}

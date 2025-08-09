@@ -5,7 +5,9 @@ import * as FilmService from "../../services/FilmService";
 import { useLocation } from "react-router-dom";
 import FilmSeriesMobile from "../../components/FilmSeriesComponent/Mobiles/FilmSeriesMobile";
 function FilmSeriesPage() {
-  let mutation = useMutationHook((page, limit) => FilmService.getSeriesFilm(page, limit));
+  let mutation = useMutationHook((page, limit) =>
+    FilmService.getSeriesFilm(page, limit)
+  );
   let { data } = mutation;
   let [seriesFilm, setSeriesFilm] = useState([]);
   let [pageCurrent, setPageCurrent] = useState(0);
@@ -20,7 +22,7 @@ function FilmSeriesPage() {
     setPageCurrent(location?.pathname?.split("/")[3]);
   }, [location]);
   useEffect(() => {
-    if (data && data?.status === "success") {
+    if (data && data?.status) {
       setSeriesFilm([...data?.data?.items]);
     }
   }, [data]);
@@ -28,7 +30,11 @@ function FilmSeriesPage() {
   return (
     <div className="film-series-container">
       <div className="film-series_pc">
-        <FilmSeriesPcTablet pagination={data?.data?.params?.pagination} data={seriesFilm} pageCurrent={pageCurrent} />
+        <FilmSeriesPcTablet
+          pagination={data?.data?.params?.pagination}
+          data={seriesFilm}
+          pageCurrent={pageCurrent}
+        />
       </div>
       {/* <div className="film-series_mobile">
         <FilmSeriesMobile pagination={data?.data?.params?.pagination} data={seriesFilm} pageCurrent={pageCurrent} />

@@ -14,6 +14,7 @@ function SliderComponent() {
   let navigate = useNavigate();
   let mutationGet = useMutationHook(() => FilmService.getListAnime());
   let { data } = mutationGet;
+  console.log(data);
 
   // function
   const getAnimeData = async () => {
@@ -29,10 +30,11 @@ function SliderComponent() {
   }, []);
 
   useEffect(() => {
-    if (data && data.status === "success") {
+    if (data && data.status) {
       setDataAnime(data?.data.items);
     }
   }, [data]);
+
   return (
     <div className="slider-component-container">
       <div className="slider-wrapper">
@@ -46,7 +48,11 @@ function SliderComponent() {
           }}
           // autoplay={true}
           // loop={true}
-          pagination={{ clickable: true, dynamicBullets: true, type: "bullets" }}
+          pagination={{
+            clickable: true,
+            dynamicBullets: true,
+            type: "bullets",
+          }}
           breakpoints={{
             0: {
               slidesPerView: 1,
@@ -63,8 +69,15 @@ function SliderComponent() {
           {dataAnime && dataAnime.length > 0 ? (
             dataAnime.map((item, index) => {
               return (
-                <SwiperSlide onClick={() => moveToFilm(item?.slug, item?.type)} key={index} className="card-item">
-                  <SliderItem data={item} addLink={data?.data?.APP_DOMAIN_CDN_IMAGE} />
+                <SwiperSlide
+                  onClick={() => moveToFilm(item?.slug, item?.type)}
+                  key={index}
+                  className="card-item"
+                >
+                  <SliderItem
+                    data={item}
+                    addLink={data?.data?.APP_DOMAIN_CDN_IMAGE}
+                  />
                 </SwiperSlide>
               );
             })
