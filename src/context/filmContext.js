@@ -7,7 +7,7 @@ export const FilmProvider = ({ children }) => {
   const [newFilmData, setNewFilmData] = useState([]);
   const [newSeriesData, setNewSeriesData] = useState([]);
   const [newMovieFilmData, setNewMovieFilmData] = useState([]);
-
+  const [searchLoading, setSearchLoading] = useState(false);
   return (
     <FilmContext.Provider
       value={{
@@ -17,6 +17,8 @@ export const FilmProvider = ({ children }) => {
         setNewSeriesData,
         newMovieFilmData,
         setNewMovieFilmData,
+        searchLoading,
+        setSearchLoading,
       }}
     >
       {children}

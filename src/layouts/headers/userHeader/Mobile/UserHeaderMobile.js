@@ -3,13 +3,20 @@ import Menu from "./MobileOptions/Menu/Menu";
 import DarkMode from "../../../../themes/DarkMode";
 import LanguageComponent from "../../../../components/LanguageComponent/LanguageComponent";
 import "./UserHeaderMobile.scss";
+import { useNavigate } from "react-router-dom";
 
 function UserHeaderMobile() {
+  let navigate = useNavigate();
   return (
     <div className="header-mobile-container">
       <div className="container">
         <div className="row">
-          <input hidden type="checkbox" id="searchInput_mobile" className="input_search-mobile" />
+          <input
+            hidden
+            type="checkbox"
+            id="searchInput_mobile"
+            className="input_search-mobile"
+          />
           <div className="search_mobile_input">
             <SearchMobile />
           </div>
@@ -28,7 +35,12 @@ function UserHeaderMobile() {
             <LanguageComponent />
           </div>
           <div className="user col col-2">
-            <i className="fa-regular fa-user"></i>
+            <i
+              className="fa-solid fa-house"
+              onClick={() => {
+                navigate("/");
+              }}
+            ></i>
           </div>
         </div>
       </div>

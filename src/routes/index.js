@@ -3,6 +3,7 @@ import FilmInfoPage from "../pages/FilmInfoPage/FilmInfoPage";
 import FilmMoviePage from "../pages/FilmMoviePage/FilmMoviePage";
 import FilmSeriesPage from "../pages/FilmSeriesPage/FilmSeriesPage";
 import HomePage from "../pages/HomePage/HomePage";
+import SearchFilmPage from "../pages/SearchFilmPage/SearchFilmPage";
 import WatchFilmPage from "../pages/WatchFilmPage/WatchFilmPage";
 
 export let routes = [
@@ -39,6 +40,12 @@ export let routes = [
   {
     path: "/hoat-hinh/trang/:so-trang",
     page: FilmAnimePage,
+    layout: "l1",
+    isLogin: false,
+  },
+  {
+    path: "/tim-kiem/:name/:page",
+    page: SearchFilmPage,
     layout: "l1",
     isLogin: false,
   },

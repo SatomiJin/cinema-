@@ -3,14 +3,16 @@ import { useTranslation } from "react-i18next";
 import { useDebounce } from "../../../hooks/useDebounceHook";
 import * as FilmService from "../../../services/FilmService";
 import "./SearchPcComponent.scss";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import SearchItemComponent from "../../SearchItemComponent/SearchItemComponent";
+import { useNavigate } from "react-router-dom";
 function SearchPcComponent() {
   let { t } = useTranslation();
   let [searchInput, setSearchInput] = useState("");
   let [searchData, setSearchData] = useState([]);
   let [linkImage, setLinkImage] = useState("");
   let searchDebounce = useDebounce(searchInput, 500);
+  let navigate = useNavigate();
   const handleChangeSearch = (e) => {
     setSearchInput(e.target.value);
   };
@@ -28,10 +30,16 @@ function SearchPcComponent() {
     retryDelay: 1000,
     keepPreviousData: true,
   });
+
+  const handleSearchFilmBykey = async (keywords) => {
+    let keywordsSearch = keywords.split(" ").join("-");
+    navigate(`/tim-kiem/${keywordsSearch}/trang=1`);
+    setSearchInput("");
+  };
   // useEffect
   useEffect(() => {
-    if (data && data?.status === "success") {
-      setSearchData([...data?.data?.items]);
+    if (data && data.status === "success") {
+      setSearchData([...(data?.data?.items || [])]);
       setLinkImage(data?.data?.APP_DOMAIN_CDN_IMAGE);
     }
   }, [data]);
@@ -45,21 +53,33 @@ function SearchPcComponent() {
           placeholder={t("search")}
           value={searchInput}
           name="search"
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleSearchFilmBykey(searchInput);
+            }
+          }}
         />
         <button className="search-button">
           <i className="fa-solid fa-magnifying-glass"></i>
         </button>
-        <div style={{ display: `${searchDebounce !== "" ? "block" : "none"}` }} className="result_container">
+        {/* <div
+          style={{ display: `${searchDebounce !== "" ? "block" : "none"}` }}
+          className="result_container"
+        >
           {searchData &&
             searchData?.length > 0 &&
             searchData?.map((item, index) => {
               return (
                 <div className="search-item_info" key={index}>
-                  <SearchItemComponent setSearchInputPC={setSearchInput} filmItem={item} linkImage={linkImage} />
+                  <SearchItemComponent
+                    setSearchInputPC={setSearchInput}
+                    filmItem={item}
+                    linkImage={linkImage}
+                  />
                 </div>
               );
             })}
-        </div>
+        </div> */}
       </div>
     </div>
   );

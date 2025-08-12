@@ -10,13 +10,16 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import App from "./App";
 import "rc-pagination/assets/index.css";
+import { FilmProvider } from "./context/filmContext";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const queryClient = new QueryClient();
 
 root.render(
   <QueryClientProvider client={queryClient}>
     <React.StrictMode>
-      <App />
+      <FilmProvider>
+        <App />
+      </FilmProvider>
     </React.StrictMode>
   </QueryClientProvider>
 );

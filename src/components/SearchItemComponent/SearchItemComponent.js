@@ -12,17 +12,26 @@ function SearchItemComponent(props) {
   };
 
   return (
-    <div className="search-item_container" onClick={() => handleWatchFilm(props?.filmItem)}>
+    <div
+      className="search-item_container"
+      onClick={() => handleWatchFilm(props?.filmItem)}
+    >
       <div className="container">
         <div className="row">
           <div className="poster col col-4">
             <div
               className="image"
-              style={{ backgroundImage: `url(${props?.linkImage}/${props?.filmItem?.thumb_url})` }}
+              style={{
+                backgroundImage: `url(${props?.linkImage}/${props?.filmItem?.thumb_url})`,
+              }}
             ></div>
           </div>
           <div className="film-info col col-8">
-            <div className="name">{i18n.language === "en" ? props?.filmItem?.origin_name : props?.filmItem?.name} </div>
+            <div className="name">
+              {i18n.language === "en"
+                ? props?.filmItem?.origin_name
+                : props?.filmItem?.name}{" "}
+            </div>
             <div className="type">
               {props?.filmItem?.type === "hoathinh"
                 ? t("cartoon")

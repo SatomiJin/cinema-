@@ -1,0 +1,15 @@
+.search-film-page_container {
+    .container {
+        .search-title {
+            margin-top: 1rem;
+            color: var(--body_color);
+            border-radius: 0.5rem;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            width: fit-content;
+            font-weight: 600;
+            padding: 1rem;
+            background-color: var(--background_color_component);
+        }
+    }
+}

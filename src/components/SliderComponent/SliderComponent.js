@@ -14,7 +14,6 @@ function SliderComponent() {
   let navigate = useNavigate();
   let mutationGet = useMutationHook(() => FilmService.getListAnime());
   let { data } = mutationGet;
-  console.log(data);
 
   // function
   const getAnimeData = async () => {

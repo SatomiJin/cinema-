@@ -34,14 +34,18 @@ export const getFilmInfo = async (slug) => {
   let res = await axios.get(
     `${process.env.REACT_APP_API_FILM_URL}/phim/${slug}`
   );
+
   return res.data;
 };
 
 //  https://phimapi.com/v1/api/tim-kiem?keyword={Từ khóa}&limit={number}
-export const searchFilm = async (keywords, limit) => {
+export const searchFilm = async (keywords, limit, page) => {
   let res = await axios.get(
-    `${process.env.REACT_APP_API_FILM_URL}/v1/api/tim-kiem?keyword=${keywords}&limit=${limit}`
+    `${
+      process.env.REACT_APP_API_FILM_URL
+    }/v1/api/tim-kiem?keyword=${keywords}&limit=10&page=${page || 1}`
   );
+
   return res.data;
 };
 

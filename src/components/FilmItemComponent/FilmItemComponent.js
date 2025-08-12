@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 function FilmItemComponent(props) {
   // "https://phimimg.com"
+
   let [data, setData] = useState({});
   let { i18n } = useTranslation();
   let navigate = useNavigate();
@@ -29,13 +30,20 @@ function FilmItemComponent(props) {
         <div className="poster">
           <div
             className="image"
-            style={{ backgroundImage: `url("${data && data?.poster_url && changeUrl(data?.poster_url)}")` }}
+            style={{
+              backgroundImage: `url("${
+                data && data?.poster_url && changeUrl(data?.poster_url)
+              }")`,
+            }}
           ></div>
           <div className="overlay"></div>
           <i className="fa-solid fa-play play-icon"></i>
         </div>
         <div className="name-info">
-          <div className="name" title={i18n.language === "en" ? data?.origin_name : data?.name}>
+          <div
+            className="name"
+            title={i18n.language === "en" ? data?.origin_name : data?.name}
+          >
             {i18n.language === "en" ? data?.origin_name : data?.name}
           </div>
           <div className="origin_name" title={data?.origin_name}>
