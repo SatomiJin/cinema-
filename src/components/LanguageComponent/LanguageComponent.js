@@ -26,7 +26,12 @@ function LanguageComponent() {
   return (
     <div className="language-container">
       <div className="dropdown">
-        <div className="language-text" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        <div
+          className="language-text"
+          id="languageDropdown"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
           {language}
         </div>
         <ul className="dropdown-menu" aria-labelledby="languageDropdown">

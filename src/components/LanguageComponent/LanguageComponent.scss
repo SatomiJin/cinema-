@@ -10,5 +10,10 @@
         background-color: var(--search_hover_color);
       }
     }
+    .dropdown-menu {
+      .dropdown-item {
+        cursor: pointer !important;
+      }
+    }
   }
 }

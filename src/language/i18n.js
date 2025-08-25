@@ -49,6 +49,9 @@ i18next.use(initReactI18next).init({
         listSeries: "Danh sách phim bộ",
         listMovie: "Danh sách phim lẻ",
         listAnime: "Danh sách anime",
+
+        //search film
+        keywordSearch: "Từ khóa tìm kiếm",
       },
     },
     en: {
@@ -91,6 +94,9 @@ i18next.use(initReactI18next).init({
         listSeries: "List series film",
         listSMovie: "List Movie film",
         listSAnime: "List Anime film",
+
+        //search film
+        keywordSearch: "Keyword Searching",
       },
     },
   },
