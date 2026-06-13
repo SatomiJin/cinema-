@@ -22,6 +22,7 @@ i18next.use(initReactI18next).init({
         newFilm: "Phim mới cập nhật",
         newFilmSeries: "Phim bộ mới cập nhật",
         newMovieFilm: "Phim lẻ mới cập nhật",
+        newAnimeFilm: "Hoạt hình mới cập nhật",
 
         // intro
         intro:
@@ -66,6 +67,7 @@ i18next.use(initReactI18next).init({
         newFilm: "Newly updated movies",
         newFilmSeries: "Newly updated series film",
         newMovieFilm: "Newly updated movie film",
+        newAnimeFilm: "Newly updated anime",
         // intro
         intro:
           "Hello, I'm Đồng Hữu Trọng (Satomi Jin) a Front-end developer from Ho Chi Minh City. Specializing in Frontend with ReactJS and Backend with NodeJS.",
@@ -92,8 +94,8 @@ i18next.use(initReactI18next).init({
 
         // list film
         listSeries: "List series film",
-        listSMovie: "List Movie film",
-        listSAnime: "List Anime film",
+        listMovie: "List movies",
+        listAnime: "List anime",
 
         //search film
         keywordSearch: "Keyword Searching",

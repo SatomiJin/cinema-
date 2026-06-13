@@ -7,7 +7,7 @@ import "./HomePageMobile.scss";
 
 function HomePageMobile() {
   let { t } = useTranslation();
-  const { newFilmData, newSeriesData, newMovieFilmData } = useContext(FilmContext);
+  const { newFilmData, newSeriesData, newMovieFilmData, newAnimeData } = useContext(FilmContext);
 
   return (
     <div className="home-page-mobile">
@@ -17,13 +17,16 @@ function HomePageMobile() {
             <SliderComponent />
           </div>
           <div className="new-film">
-            <ListFilmComponent data={newFilmData} name={t("newFilm")} />
+            <ListFilmComponent data={newFilmData} name={t("newFilm")} path="/phim-bo/trang/1" />
           </div>
           <div className="series-film">
-            <ListFilmComponent data={newSeriesData} name={t("newFilmSeries")} />
+            <ListFilmComponent data={newSeriesData} name={t("newFilmSeries")} path="/phim-bo/trang/1" />
           </div>
           <div className="movies-film">
-            <ListFilmComponent data={newMovieFilmData} name={t("newMovieFilm")} />
+            <ListFilmComponent data={newMovieFilmData} name={t("newMovieFilm")} path="/phim-le/trang/1" />
+          </div>
+          <div className="anime-film">
+            <ListFilmComponent data={newAnimeData} name={t("newAnimeFilm")} path="/hoat-hinh/trang/1" />
           </div>
           <div className="more-info">
             <div className="title">{t("contactMe")}</div>

@@ -62,6 +62,7 @@
           transition: all 0.3s ease-in-out;
           &:hover {
             background-color: var(--film_button_color_hover);
+            color: var(--film_button_text);
           }
         }
       }

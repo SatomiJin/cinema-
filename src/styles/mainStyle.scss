@@ -1,28 +1,28 @@
 :root {
-  --body_background: #fff;
+  --body_background: #f5f6f8;
   --body_color: #1d2a35;
 
-  --background_color_body: #dcdcdc;
-  --background_color_component: #fff;
+  --background_color_body: #e4e7ec;
+  --background_color_component: #ffffff;
 
-  --search_color: rgba(220, 220, 220, 0.5);
-  --search_hover_color: rgba(52, 52, 52, 0.4);
+  --search_color: rgba(200, 205, 215, 0.6);
+  --search_hover_color: rgba(30, 50, 80, 0.12);
 
-  --film_highlight_color: #ffa500;
-  --film_info_border: #ccc;
-  --film_wrapper_button: snow;
-  --film_button_color: #ffa500;
-  --film_button_color_hover: #ffa500;
+  --film_highlight_color: #2563eb;
+  --film_info_border: #d1d5db;
+  --film_wrapper_button: #f0f4ff;
+  --film_button_color: #2563eb;
+  --film_button_color_hover: #1d4ed8;
 
-  --film_episode_color: #e7e0e0;
+  --film_episode_color: #e8edf5;
   // watch film
-  --film_title_name: #ff4800;
-  --film_button_next: #ffa500;
+  --film_title_name: #1e40af;
+  --film_button_next: #2563eb;
   --film_button_text: #fff;
 
   // list film for type
-  --film_item: #f0f0f0;
-  --film_item_box_shadow: #00000026;
+  --film_item: #eef1f7;
+  --film_item_box_shadow: #1d2a3520;
 }
 
 [data-theme="dark"] {

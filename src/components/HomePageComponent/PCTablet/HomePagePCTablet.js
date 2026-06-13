@@ -17,6 +17,8 @@ function HomePagePCTablet() {
     setNewSeriesData,
     newMovieFilmData,
     setNewMovieFilmData,
+    newAnimeData,
+    setNewAnimeData,
   } = useContext(FilmContext);
 
   // get data
@@ -24,21 +26,23 @@ function HomePagePCTablet() {
   let newFilmDataMutation = mutationGetNewFilm.data;
   let mutationGetSeries = useMutationHook(() => FilmService.getListNewSeries());
   let newSeriesFilmMutation = mutationGetSeries.data;
-
   let mutationGetMovies = useMutationHook(() => FilmService.getListNewMovie());
   let newMovieFilmMutation = mutationGetMovies.data;
+  let mutationGetAnime = useMutationHook(() => FilmService.getListAnime());
+  let newAnimeFilmMutation = mutationGetAnime.data;
+
   // function
   const getDataFilm = async () => {
     await mutationGetNewFilm.mutate();
     await mutationGetSeries.mutate();
     await mutationGetMovies.mutate();
+    await mutationGetAnime.mutate();
   };
 
   // useEffect
   useEffect(() => {
     getDataFilm();
   }, []);
-  // console.log("newFilmDataMutation", newFilmDataMutation);
   useEffect(() => {
     if (newFilmDataMutation && newFilmDataMutation.status === true) {
       setNewFilmData([...newFilmDataMutation.items]);
@@ -49,7 +53,10 @@ function HomePagePCTablet() {
     if (newMovieFilmMutation && newMovieFilmMutation.status) {
       setNewMovieFilmData([...newMovieFilmMutation?.data?.items]);
     }
-  }, [newFilmDataMutation, newSeriesFilmMutation, newMovieFilmMutation]);
+    if (newAnimeFilmMutation && newAnimeFilmMutation.status) {
+      setNewAnimeData([...newAnimeFilmMutation?.data?.items]);
+    }
+  }, [newFilmDataMutation, newSeriesFilmMutation, newMovieFilmMutation, newAnimeFilmMutation]);
 
   return (
     <div className="home-page-container">
@@ -63,18 +70,28 @@ function HomePagePCTablet() {
               <ListFilmComponent
                 data={newFilmData && newFilmData?.length > 0 && newFilmData}
                 name={t("newFilm")}
+                path="/phim-bo/trang/1"
               />
             </div>
             <div className="series-film">
               <ListFilmComponent
                 data={newSeriesData}
                 name={t("newFilmSeries")}
+                path="/phim-bo/trang/1"
               />
             </div>
             <div className="movies-film">
               <ListFilmComponent
                 data={newMovieFilmData}
                 name={t("newMovieFilm")}
+                path="/phim-le/trang/1"
+              />
+            </div>
+            <div className="anime-film">
+              <ListFilmComponent
+                data={newAnimeData}
+                name={t("newAnimeFilm")}
+                path="/hoat-hinh/trang/1"
               />
             </div>
           </div>
