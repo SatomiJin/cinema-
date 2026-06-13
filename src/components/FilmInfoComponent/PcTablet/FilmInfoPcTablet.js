@@ -3,15 +3,29 @@ import "./FilmInfoPcTablet.scss";
 import { useTranslation } from "react-i18next";
 import ListEpisodePcTablets from "../../listEpisodeComponent/PcTablet/ListEpisodePcTablet";
 import DotLoading from "../../LoadingComponent/DotLoading";
+import { useNavigate } from "react-router-dom";
 function FilmInfoPcTablet(props) {
   let [data, setData] = useState({});
   let [episodes, setEpisodes] = useState({});
   let { t, i18n } = useTranslation();
+  let navigate = useNavigate();
 
   useEffect(() => {
     if (props?.data?.name) setData(props.data);
     if (props?.episodes) setEpisodes(props?.episodes);
-  }, [props.data]);
+  }, [props.data, props.episodes]);
+
+  const watchFirstEpisode = () => {
+    let listEpisodes = episodes?.server_data || [];
+    let firstEpisode =
+      listEpisodes.find((item) => item?.slug === "tap-01" || item?.slug === "tap-1") ||
+      listEpisodes[0];
+
+    if (data?.slug && firstEpisode?.slug) {
+      navigate(`/xem-phim/${data.slug}/${firstEpisode.slug}`);
+    }
+  };
+
   return (
     <div className="film-info-pc_container">
       <div className="container">
@@ -68,7 +82,7 @@ function FilmInfoPcTablet(props) {
             </div>
           </div>
           <div className="film-play_buttons col col-12">
-            <button type="button" className="btn play_button">
+            <button type="button" className="btn play_button" onClick={() => watchFirstEpisode()}>
               <i className="fa-regular fa-circle-play"></i>
             </button>
           </div>

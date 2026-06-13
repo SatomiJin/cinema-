@@ -13,11 +13,20 @@ function FilmInfoMobile(props) {
     if (props?.data?.name !== "") setData(props?.data);
     if (props?.episodes && props?.episodes?.server_data && props?.episodes?.server_data?.length > 0)
       setEpisodes(props?.episodes?.server_data);
-  }, [props.data]);
+  }, [props.data, props.episodes]);
   let navigate = useNavigate();
 
   const watchFilm = (item) => {
     navigate(`/xem-phim/${data?.slug}/${item?.slug}`);
+  };
+  const watchFirstEpisode = () => {
+    let firstEpisode =
+      episodes.find((item) => item?.slug === "tap-01" || item?.slug === "tap-1") ||
+      episodes[0];
+
+    if (data?.slug && firstEpisode?.slug) {
+      navigate(`/xem-phim/${data.slug}/${firstEpisode.slug}`);
+    }
   };
   return (
     <div className="film-info-mobile_container">
@@ -59,7 +68,7 @@ function FilmInfoMobile(props) {
           </div>
           <div className="film-button_wrapper col col-12">
             <div className="buttons">
-              <button type="button" className="btn film-play_button">
+              <button type="button" className="btn film-play_button" onClick={() => watchFirstEpisode()}>
                 <i className="fa-solid fa-play"></i>
               </button>
             </div>

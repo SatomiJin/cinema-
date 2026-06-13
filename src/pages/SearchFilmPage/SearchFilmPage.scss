@@ -1,5 +1,8 @@
 .search-film-page_container {
     .container {
+        .search-film-mobile {
+            display: none;
+        }
         .search-title {
             margin-top: 1rem;
             color: var(--body_color);
@@ -10,6 +13,25 @@
             font-weight: 600;
             padding: 1rem;
             background-color: var(--background_color_component);
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .search-film-page_container {
+        .container {
+            .search-title {
+                width: 100%;
+                text-align: center;
+                font-size: 1rem;
+                padding: 0.5rem;
+            }
+            .search-film-pc {
+                display: none;
+            }
+            .search-film-mobile {
+                display: block;
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from "react";
 
 import { FilmContext } from "../../context/filmContext";
 import SearchFilmPc from "../../components/SearchFilmComponent/PcTablet/SearchFIlmPc";
+import SearchFilmMobile from "../../components/SearchFilmComponent/Mobile/SearchFilmMobile";
 import * as FilmService from "../../services/FilmService";
 import "./SearchFilmPage.scss";
 import { useTranslation } from "react-i18next";
@@ -41,15 +42,29 @@ function SearchFilmPage() {
         <div className="search-title">
           {t("keywordSearch")}: {`${searchKeyword}`}
         </div>
-        <SearchFilmPc
-          data={
-            searchDataFilm && searchDataFilm?.items?.length > 0
-              ? searchDataFilm.items
-              : []
-          }
-          pagination={searchDataFilm?.params?.pagination}
-          searchKey={originKeyword}
-        />
+        <div className="search-film-pc">
+          <SearchFilmPc
+            data={
+              searchDataFilm && searchDataFilm?.items?.length > 0
+                ? searchDataFilm.items
+                : []
+            }
+            pagination={searchDataFilm?.params?.pagination}
+            searchKey={originKeyword}
+          />
+        </div>
+        <div className="search-film-mobile">
+          <SearchFilmMobile
+            data={
+              searchDataFilm && searchDataFilm?.items?.length > 0
+                ? searchDataFilm.items
+                : []
+            }
+            pagination={searchDataFilm?.params?.pagination}
+            searchKey={originKeyword}
+            pageCurrent={originPage}
+          />
+        </div>
       </div>
     </div>
   );

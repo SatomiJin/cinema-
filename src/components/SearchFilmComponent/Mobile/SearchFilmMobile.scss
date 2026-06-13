@@ -1,0 +1,23 @@
+.search-film-mobile_container {
+  .container {
+    .row {
+      .search_content {
+        background-color: var(--film_wrapper_button);
+        color: var(--body_color);
+        margin-top: 1rem;
+        padding: 1rem 0.5rem;
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .pagination {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 1rem 0;
+      }
+    }
+  }
+}

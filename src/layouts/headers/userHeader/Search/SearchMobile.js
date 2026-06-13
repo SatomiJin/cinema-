@@ -5,12 +5,14 @@ import { useQuery } from "@tanstack/react-query";
 import * as FilmService from "../../../../services/FilmService";
 import SearchItemComponent from "../../../../components/SearchItemComponent/SearchItemComponent";
 import "./SearchMobile.scss";
+import { useNavigate } from "react-router-dom";
 function SearchMobile() {
   let { t } = useTranslation();
   let [searchInput, setSearchInput] = useState("");
   let [searchData, setSearchData] = useState([]);
   let [linkImage, setLinkImage] = useState("");
   let searchDebounce = useDebounce(searchInput, 500);
+  let navigate = useNavigate();
   const handleChangeSearch = (e) => {
     setSearchInput(e.target.value);
   };
@@ -22,6 +24,15 @@ function SearchMobile() {
     return res;
   };
   const clearInput = () => {
+    setSearchInput("");
+  };
+  const handleSearchFilmBykey = (keywords) => {
+    let searchValue = keywords.trim();
+
+    if (!searchValue) return;
+
+    let keywordsSearch = searchValue.split(" ").join("-");
+    navigate(`/tim-kiem/${keywordsSearch}/trang=1`);
     setSearchInput("");
   };
   const { data } = useQuery({
@@ -45,13 +56,21 @@ function SearchMobile() {
           <div className="input_wrapper col col-10">
             <input
               onChange={(e) => handleChangeSearch(e)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSearchFilmBykey(searchInput);
+                }
+              }}
               type="text"
               value={searchInput}
               className="input_search-mobile"
               placeholder={t("search")}
             />
 
-            <i className="fa-solid fa-magnifying-glass"></i>
+            <i
+              className="fa-solid fa-magnifying-glass"
+              onClick={() => handleSearchFilmBykey(searchInput)}
+            ></i>
             <div className="search-result" style={{ display: `${searchDebounce !== "" ? "block" : "none"}` }}>
               {searchData &&
                 searchData?.length > 0 &&
