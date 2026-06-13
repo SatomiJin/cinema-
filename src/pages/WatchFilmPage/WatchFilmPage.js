@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import WatchPcTablet from "../../components/WatchFilmComponent/WatchPcTablet/WatchPcTablet";
 import { useMutationHook } from "../../hooks/useMutationHook";
-import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import * as FilmService from "../../services/FilmService";
 import "./WatchFilmPage.scss";
@@ -11,10 +10,10 @@ function WatchFilmPage() {
   let mutation = useMutationHook((data) => FilmService.getFilmInfo(data));
   let location = useLocation();
   let splitLocation = location.pathname.split("/");
-  let { i18n } = useTranslation();
   let { data } = mutation;
   let [episodes, setEpisodes] = useState([]);
   let [filmInfo, setFilmInfo] = useState({});
+  let [isMobile, setIsMobile] = useState(() => window.innerWidth <= 768);
   let filmEp = {
     slug: splitLocation[2],
     ep: splitLocation[3],
@@ -26,6 +25,18 @@ function WatchFilmPage() {
   // useEffect
   useEffect(() => {
     handleGetFilm();
+  }, [filmEp.slug]);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
   useEffect(() => {
     if (data && data?.movie) {
@@ -40,12 +51,11 @@ function WatchFilmPage() {
 
   return (
     <div className="watch-film-page_container">
-      <div className="wrapper-pc_container">
-        <WatchPcTablet filmInfo={filmInfo} epInfo={epInfo} episodes={episodes} />
-      </div>
-      <div className="wrapper-mobile_container">
+      {isMobile ? (
         <WatchMobile filmInfo={filmInfo} epInfo={epInfo} episodes={episodes} />
-      </div>
+      ) : (
+        <WatchPcTablet filmInfo={filmInfo} epInfo={epInfo} episodes={episodes} />
+      )}
     </div>
   );
 }
