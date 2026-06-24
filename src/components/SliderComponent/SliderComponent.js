@@ -8,7 +8,7 @@ import SliderItem from "./SliderItem";
 import * as FilmService from "../../services/FilmService";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import LoadingComponent from "../LoadingComponent/LoadingComponent";
+import "./SliderSkeleton.scss";
 function SliderComponent() {
   let [dataAnime, setDataAnime] = useState([]);
   let navigate = useNavigate();
@@ -78,9 +78,16 @@ function SliderComponent() {
               );
             })
           ) : (
-            <div className="card-item">
-              <LoadingComponent />
-            </div>
+            [1, 2, 3].map((i) => (
+              <SwiperSlide key={i} className="card-item">
+                <div className="slider-skeleton">
+                  <div className="slider-skeleton__poster"></div>
+                  <div className="slider-skeleton__badge"></div>
+                  <div className="slider-skeleton__line slider-skeleton__line--title"></div>
+                  <div className="slider-skeleton__line slider-skeleton__line--sub"></div>
+                </div>
+              </SwiperSlide>
+            ))
           )}
         </SwiperComponent>
       </div>

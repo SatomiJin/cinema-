@@ -9,7 +9,7 @@
 
     .list-slider_item--skeleton {
       animation: slide-up-item 0.45s var(--transition-smooth) both;
-      animation-delay: calc(var(--index, 0) * 60ms);
+      animation-delay: calc(var(--index, 0) * 80ms);
     }
 
     .skeleton-film-item {
@@ -18,44 +18,44 @@
 
       .skeleton-poster,
       .skeleton-line {
-        animation: skeleton-shimmer 1.2s var(--transition-smooth) infinite;
+        animation: skeleton-shimmer 1.6s ease-in-out infinite;
         background: linear-gradient(
-          90deg,
-          var(--skeleton-base) 25%,
+          105deg,
+          var(--skeleton-base) 0%,
+          var(--skeleton-base) 30%,
           var(--skeleton-highlight) 50%,
-          var(--skeleton-base) 75%
+          var(--skeleton-base) 70%,
+          var(--skeleton-base) 100%
         );
-        background-size: 200% 100%;
+        background-size: 250% 100%;
         border-radius: 0.4rem;
       }
 
       .skeleton-poster {
         height: 200px;
-        margin-bottom: 0.6rem;
+        margin-bottom: 0.8rem;
+        border-radius: 0.6rem;
       }
 
       .skeleton-line {
-        height: 0.7rem;
-        margin-bottom: 0.4rem;
+        height: 0.65rem;
+        margin-bottom: 0.45rem;
+        border-radius: 0.3rem;
       }
 
       .skeleton-line--name {
-        width: 82%;
+        width: 78%;
       }
 
       .skeleton-line--origin {
-        width: 58%;
+        width: 52%;
+        opacity: 0.7;
       }
     }
   }
 }
 
 @keyframes skeleton-shimmer {
-  from {
-    background-position: 200% 0;
-  }
-
-  to {
-    background-position: -200% 0;
-  }
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
