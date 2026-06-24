@@ -33,7 +33,7 @@ function DarkMode() {
   return (
     <div className="dark-mode-container">
       <button className="theme-button" type="button" onClick={() => toggleMode()}>
-        <img src={theme === "light" ? dark : light} alt="themeMode" />
+        <img src={theme === "light" ? dark : light} alt="themeMode" loading="lazy" decoding="async" />
       </button>
     </div>
   );

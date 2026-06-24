@@ -4,20 +4,21 @@
   bottom: 0;
   right: 0;
   left: 0;
-  transition: all 0.3s linear;
+  overflow: hidden;
+  transition: transform 0.35s var(--transition-spring), box-shadow 0.35s var(--transition-smooth);
   border-radius: 1rem;
 
   .poster {
+    display: block;
     border-radius: 1rem;
     position: absolute;
     top: 0;
     left: 0;
     bottom: 0;
     right: 0;
-    background-image: url("https://img.phimapi.com/upload/vod/20240720-1/201de45ff5101d2f25ff9a607caa3520.jpg");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
   }
   .item_info {
     text-shadow: 1px 1px 1px #000;

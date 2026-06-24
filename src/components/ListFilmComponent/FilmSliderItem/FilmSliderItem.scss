@@ -4,6 +4,8 @@
   right: 0;
   left: 0;
   bottom: 0;
+  animation: slide-up-item 0.45s var(--transition-smooth) both;
+  animation-delay: calc(var(--index, 0) * 60ms);
   &:hover {
     transform: scale(1) !important;
   }
@@ -13,13 +15,11 @@
     height: 80%;
     overflow: hidden;
     .image {
+      display: block;
       height: 100%;
       width: 100%;
-      // background-image: url("https://img.phimapi.com/upload/vod/20230914-1/e90c0102bbf19159b8b34a419199a697.jpg");
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center;
-      transition: all 0.5s linear;
+      object-fit: cover;
+      transition: transform 0.35s var(--transition-spring);
     }
     .play_hover {
       opacity: 0;
@@ -28,22 +28,26 @@
       bottom: 0;
       right: 0;
       left: 0;
-      background-color: rgba($color: #000000, $alpha: 0.6);
-      transition: all 0.3s ease-in-out;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.06) 0%, rgba(0, 0, 0, 0.72) 100%);
+      transition: opacity 0.35s var(--transition-smooth);
       i {
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%) scale(0.8);
         font-size: 3rem;
+        transition: transform 0.35s var(--transition-spring);
       }
     }
 
     &:hover .play_hover {
       opacity: 1;
     }
+    &:hover .play_hover i {
+      transform: translate(-50%, -50%) scale(1);
+    }
     &:hover .image {
-      transform: scale(1.2);
+      transform: scale(1.06);
     }
   }
   .slider-item_info {
@@ -61,5 +65,17 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
+  }
+}
+
+@keyframes slide-up-item {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

@@ -5,11 +5,8 @@ import "./ListFilmSlider.scss";
 import FilmSliderItem from "../FilmSliderItem/FilmSliderItem";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import LoadingComponent from "../../LoadingComponent/LoadingComponent";
 function ListFilmSlider(props) {
   let [listFilm, setListFilm] = useState([]);
-  let { t } = useTranslation();
   // function
   let navigate = useNavigate();
   const moveToFilm = (item) => {
@@ -45,19 +42,29 @@ function ListFilmSlider(props) {
           listFilm?.map((item, index) => {
             return (
               <SwiperSlide
-                style={{ cursor: "pointer" }}
                 onClick={() => moveToFilm(item)}
                 key={index}
                 className="list-slider_item"
+                style={{ "--index": `${index}`, cursor: "pointer" }}
               >
-                <FilmSliderItem data={item} />
+                <FilmSliderItem data={item} index={index} />
               </SwiperSlide>
             );
           })
         ) : (
-          <div className="list-slider_item">
-            <LoadingComponent />
-          </div>
+          [...Array(5)].map((_, index) => (
+            <SwiperSlide
+              key={index}
+              className="list-slider_item list-slider_item--skeleton"
+              style={{ "--index": `${index}` }}
+            >
+              <div className="skeleton-film-item">
+                <div className="skeleton-poster"></div>
+                <div className="skeleton-line skeleton-line--name"></div>
+                <div className="skeleton-line skeleton-line--origin"></div>
+              </div>
+            </SwiperSlide>
+          ))
         )}
       </SwiperComponent>
     </div>

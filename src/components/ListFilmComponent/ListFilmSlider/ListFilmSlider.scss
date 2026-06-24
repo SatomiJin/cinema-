@@ -6,5 +6,56 @@
       margin: 1rem 0 2rem 0;
       position: relative;
     }
+
+    .list-slider_item--skeleton {
+      animation: slide-up-item 0.45s var(--transition-smooth) both;
+      animation-delay: calc(var(--index, 0) * 60ms);
+    }
+
+    .skeleton-film-item {
+      height: 100%;
+      width: 100%;
+
+      .skeleton-poster,
+      .skeleton-line {
+        animation: skeleton-shimmer 1.2s var(--transition-smooth) infinite;
+        background: linear-gradient(
+          90deg,
+          var(--skeleton-base) 25%,
+          var(--skeleton-highlight) 50%,
+          var(--skeleton-base) 75%
+        );
+        background-size: 200% 100%;
+        border-radius: 0.4rem;
+      }
+
+      .skeleton-poster {
+        height: 200px;
+        margin-bottom: 0.6rem;
+      }
+
+      .skeleton-line {
+        height: 0.7rem;
+        margin-bottom: 0.4rem;
+      }
+
+      .skeleton-line--name {
+        width: 82%;
+      }
+
+      .skeleton-line--origin {
+        width: 58%;
+      }
+    }
+  }
+}
+
+@keyframes skeleton-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+
+  to {
+    background-position: -200% 0;
   }
 }

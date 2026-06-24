@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./FilmItemComponent.scss";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import defaultPoster from "../../assets/image/poster-film.png";
 function FilmItemComponent(props) {
   // "https://phimimg.com"
 
@@ -24,18 +25,37 @@ function FilmItemComponent(props) {
     // console.log(data);
     navigate(`/${data?.type}/${data?.slug}`);
   };
+
+  const handleCardClick = (event) => {
+    const card = event.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const ripple = document.createElement("span");
+    const size = Math.max(rect.width, rect.height);
+
+    ripple.className = "ripple";
+    ripple.style.width = `${size}px`;
+    ripple.style.height = `${size}px`;
+    ripple.style.left = `${event.clientX - rect.left - size / 2}px`;
+    ripple.style.top = `${event.clientY - rect.top - size / 2}px`;
+    card.appendChild(ripple);
+    ripple.addEventListener("animationend", () => ripple.remove());
+
+    setTimeout(() => goToInfo(data), 120);
+  };
+
+  const posterUrl = data && data?.poster_url ? changeUrl(data?.poster_url) : defaultPoster;
+
   return (
-    <div className="film-item_container" onClick={() => goToInfo(data)}>
+    <div className="film-item_container" onClick={handleCardClick}>
       <div className="item_wrapper">
         <div className="poster">
-          <div
+          <img
             className="image"
-            style={{
-              backgroundImage: `url("${
-                data && data?.poster_url && changeUrl(data?.poster_url)
-              }")`,
-            }}
-          ></div>
+            src={posterUrl}
+            alt={i18n.language === "en" ? data?.origin_name : data?.name}
+            loading="lazy"
+            decoding="async"
+          />
           <div className="overlay"></div>
           <i className="fa-solid fa-play play-icon"></i>
         </div>

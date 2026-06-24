@@ -21,17 +21,17 @@
           background-color: var(--film_highlight_color);
           font-size: 0.7rem !important;
           font-weight: 600;
-          transition: all 0.3s ease-in-out;
+          transition: opacity 0.25s var(--transition-quick), transform 0.25s var(--transition-spring);
           &:hover {
             opacity: 0.8;
+            transform: translateY(-1px);
           }
         }
         i {
           font-size: 1.2rem;
-          transition: all 0.3s ease-in-out;
           color: var(--body_color);
           font-weight: 700;
-          transition: all 0.3s linear;
+          transition: color 0.25s var(--transition-quick), opacity 0.25s var(--transition-quick);
           &:hover {
             opacity: 0.8;
             color: var(--film_highlight_color);

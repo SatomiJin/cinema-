@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { useMutationHook } from "../../../hooks/useMutationHook";
 import ListFilmComponent from "../../ListFilmComponent/ListFilmComponent";
 import SliderComponent from "../../SliderComponent/SliderComponent";
@@ -58,36 +58,57 @@ function HomePagePCTablet() {
     }
   }, [newFilmDataMutation, newSeriesFilmMutation, newMovieFilmMutation, newAnimeFilmMutation]);
 
+  useEffect(() => {
+    const sections = document.querySelectorAll(".fade-section");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   return (
     <div className="home-page-container">
       <div className="container">
         <div className="home-page_pc-tb row">
           <div className="content-left col col-12">
-            <div className="content-left_slider">
+            <div className="content-left_slider fade-section" style={{ "--section-index": "0" }}>
               <SliderComponent />
             </div>
-            <div className="new-film">
+            <div className="new-film fade-section" style={{ "--section-index": "1" }}>
               <ListFilmComponent
                 data={newFilmData && newFilmData?.length > 0 && newFilmData}
                 name={t("newFilm")}
                 path="/phim-bo/trang/1"
               />
             </div>
-            <div className="series-film">
+            <div className="series-film fade-section" style={{ "--section-index": "2" }}>
               <ListFilmComponent
                 data={newSeriesData}
                 name={t("newFilmSeries")}
                 path="/phim-bo/trang/1"
               />
             </div>
-            <div className="movies-film">
+            <div className="movies-film fade-section" style={{ "--section-index": "3" }}>
               <ListFilmComponent
                 data={newMovieFilmData}
                 name={t("newMovieFilm")}
                 path="/phim-le/trang/1"
               />
             </div>
-            <div className="anime-film">
+            <div className="anime-film fade-section" style={{ "--section-index": "4" }}>
               <ListFilmComponent
                 data={newAnimeData}
                 name={t("newAnimeFilm")}

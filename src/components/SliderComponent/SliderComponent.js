@@ -76,6 +76,7 @@ function SliderComponent() {
                   <SliderItem
                     data={item}
                     addLink={data?.data?.APP_DOMAIN_CDN_IMAGE}
+                    priority={index === 0}
                   />
                 </SwiperSlide>
               );

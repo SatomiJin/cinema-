@@ -7,36 +7,40 @@
   justify-content: center;
 }
 .loader {
-  width: 2rem;
-  height: 1.6rem;
-  --c: no-repeat linear-gradient(var(--body_color) 0 0);
-  background: var(--c) 0 100%/8px 30px, var(--c) 50% 100%/8px 20px, var(--c) 100% 100%/8px 10px;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 90deg,
+    transparent 0deg,
+    var(--film_highlight_color) 120deg,
+    var(--body_color) 260deg,
+    transparent 360deg
+  );
+  animation: morph-loader 1.2s var(--transition-smooth) infinite;
   position: relative;
-  clip-path: inset(-100% 0);
 }
-.loader:before {
+.loader::before {
   content: "";
   position: absolute;
-  width: 8px;
-  height: 8px;
+  inset: 0.35rem;
   border-radius: 50%;
-  background: var(--body_color);
-  left: -16px;
-  top: 0;
-  animation: l5-1 2s linear infinite, l5-2 0.5s cubic-bezier(0, 200, 0.8, 200) infinite;
+  background-color: var(--background_color_component);
 }
-@keyframes l5-1 {
+
+@keyframes morph-loader {
   0% {
-    left: -16px;
-    transform: translateY(-8px);
+    border-radius: 50%;
+    transform: rotate(0deg) scale(0.94);
   }
-  100% {
-    left: calc(100% + 8px);
-    transform: translateY(22px);
+
+  45% {
+    border-radius: 32%;
+    transform: rotate(180deg) scale(1.06);
   }
-}
-@keyframes l5-2 {
+
   100% {
-    top: -0.1px;
+    border-radius: 50%;
+    transform: rotate(360deg) scale(0.94);
   }
 }

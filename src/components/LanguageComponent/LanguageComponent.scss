@@ -4,7 +4,7 @@
       text-transform: uppercase;
       padding: 0.2rem;
       border-radius: 0.2rem;
-      transition: all 0.3s ease-in-out;
+      transition: transform 0.25s var(--transition-spring), opacity 0.25s var(--transition-quick);
       &:hover {
         cursor: pointer;
         background-color: var(--search_hover_color);

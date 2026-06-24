@@ -5,6 +5,19 @@
       // border: 1px solid #ccc;
       background-color: var(--background_color_component);
       padding: 1rem;
+
+      .fade-section {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.45s var(--transition-smooth), transform 0.45s var(--transition-smooth);
+        transition-delay: calc(var(--section-index, 0) * 70ms);
+
+        &.visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
       .contact-me {
         padding: 1rem 2rem 0 2rem;
         color: var(--body_color);
@@ -26,7 +39,7 @@
             i {
               font-size: 1.4rem;
               font-weight: 700;
-              transition: all 0.3s ease-in-out;
+              transition: color 0.25s var(--transition-quick), transform 0.25s var(--transition-spring);
               &:hover {
                 cursor: pointer;
                 color: var(--film_highlight_color);

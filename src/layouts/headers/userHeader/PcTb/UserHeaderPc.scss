@@ -4,16 +4,18 @@
   color: var(--body_color);
   background-color: var(--body_background);
   border-bottom: 1px solid gray;
+  transition: background-color 0.3s var(--transition-smooth), backdrop-filter 0.3s var(--transition-smooth);
   .row {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     height: 3rem;
+    transition: height 0.3s var(--transition-smooth);
     .search_input_tm {
       opacity: 0;
       display: none;
-      transition: all 0.3s ease-in-out;
+      transition: opacity 0.3s var(--transition-smooth);
     }
     .input_search-tm:checked ~ .search_input_tm {
       opacity: 1;
@@ -29,11 +31,12 @@
       margin: 0;
       .item {
         padding: 0.3rem;
-        transition: all 0.3s ease-in-out;
+        transition: background-color 0.25s var(--transition-quick), transform 0.25s var(--transition-spring);
         border-radius: 0.3rem;
         &:hover {
           cursor: pointer;
           background-color: rgba(#fff, 0.4);
+          transform: translateY(-1px);
           // font-weight: 600;
         }
       }
@@ -46,7 +49,7 @@
         width: fit-content;
         padding: 0.5rem;
         border-radius: 50%;
-        transition: all 0.3s ease-in-out;
+        transition: background-color 0.25s var(--transition-quick), color 0.25s var(--transition-quick);
 
         &:hover {
           cursor: pointer;
@@ -63,10 +66,11 @@
         font-size: 1.2rem;
         padding: 0.3rem;
         border-radius: 0.4rem;
-        transition: all 0.3s linear;
+        transition: background-color 0.25s var(--transition-quick), transform 0.25s var(--transition-spring);
         &:hover {
           cursor: pointer;
           background-color: var(--search_hover_color);
+          transform: translateY(-1px);
         }
       }
     }
