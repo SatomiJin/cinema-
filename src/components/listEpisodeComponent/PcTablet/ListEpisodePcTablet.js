@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./ListEpisodePcTablets.scss";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 function ListEpisodePcTablets(props) {
   let [episodes, setListEpisode] = useState([]);
   let [slug, setSlug] = useState("");

@@ -3,7 +3,6 @@ import "./SearchFilmPc.scss";
 import FilmItemComponent from "../../FilmItemComponent/FilmItemComponent";
 import Pagination from "rc-pagination";
 import { useNavigate } from "react-router-dom";
-import { use } from "react";
 import DotLoading from "../../LoadingComponent/DotLoading";
 import { FilmContext } from "../../../context/filmContext";
 function SearchFilmPc(props) {

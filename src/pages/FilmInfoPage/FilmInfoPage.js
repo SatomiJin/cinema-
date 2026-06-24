@@ -2,24 +2,24 @@ import { useLocation } from "react-router-dom";
 import FilmInfoPcTablet from "../../components/FilmInfoComponent/PcTablet/FilmInfoPcTablet";
 import { useMutationHook } from "../../hooks/useMutationHook";
 import * as FilmService from "../../services/FilmService";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import FilmInfoMobile from "../../components/FilmInfoComponent/Mobile/FilmInfoMobile";
 import "./FilmInfoPage.scss";
 function FilmInfoPage() {
   let location = useLocation();
   let slugFilm = location.pathname.split("/")[2];
   let mutationGetFilm = useMutationHook((data) => FilmService.getFilmInfo(data));
-  let { data } = mutationGetFilm;
+  let { data, mutate } = mutationGetFilm;
   let [filmData, setFilmData] = useState({});
   let [episodes, setEpisodes] = useState({});
   // function
-  let getInfoFilm = async () => {
-    await mutationGetFilm.mutate(slugFilm);
-  };
+  let getInfoFilm = useCallback(() => {
+    mutate(slugFilm);
+  }, [mutate, slugFilm]);
   // useEffect
   useEffect(() => {
     getInfoFilm();
-  }, [location]);
+  }, [getInfoFilm]);
 
   useEffect(() => {
     if (data && data.status) {

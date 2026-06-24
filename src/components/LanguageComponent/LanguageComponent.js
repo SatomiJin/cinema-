@@ -22,7 +22,7 @@ function LanguageComponent() {
       setLanguage(i18n.language);
       //   i18n.changeLanguage(i18n.language);
     }
-  }, []);
+  }, [i18n]);
   return (
     <div className="language-container">
       <div className="dropdown">

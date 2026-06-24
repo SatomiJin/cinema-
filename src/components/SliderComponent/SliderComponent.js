@@ -13,20 +13,16 @@ function SliderComponent() {
   let [dataAnime, setDataAnime] = useState([]);
   let navigate = useNavigate();
   let mutationGet = useMutationHook(() => FilmService.getListAnime());
-  let { data } = mutationGet;
+  let { data, mutate } = mutationGet;
 
-  // function
-  const getAnimeData = async () => {
-    await mutationGet.mutate();
-  };
   const moveToFilm = (slug, type) => {
     navigate(`/${type}/${slug}`);
   };
 
   // useEffect
   useEffect(() => {
-    getAnimeData();
-  }, []);
+    mutate();
+  }, [mutate]);
 
   useEffect(() => {
     if (data && data.status) {

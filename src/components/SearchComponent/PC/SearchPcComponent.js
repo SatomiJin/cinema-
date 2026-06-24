@@ -1,48 +1,21 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useDebounce } from "../../../hooks/useDebounceHook";
-import * as FilmService from "../../../services/FilmService";
 import "./SearchPcComponent.scss";
-import { useQuery } from "@tanstack/react-query";
-import SearchItemComponent from "../../SearchItemComponent/SearchItemComponent";
 import { useNavigate } from "react-router-dom";
 function SearchPcComponent() {
   let { t } = useTranslation();
   let [searchInput, setSearchInput] = useState("");
-  let [searchData, setSearchData] = useState([]);
-  let [linkImage, setLinkImage] = useState("");
-  let searchDebounce = useDebounce(searchInput, 500);
   let navigate = useNavigate();
   const handleChangeSearch = (e) => {
     setSearchInput(e.target.value);
   };
-
-  const handleGetFilmSearch = async (context) => {
-    const limit = context && context.queryKey && context.queryKey[1];
-    const search = context && context.queryKey && context.queryKey[2];
-    let res = await FilmService.searchFilm(search, limit);
-    return res;
-  };
-  const { data } = useQuery({
-    queryKey: ["film", 10, searchDebounce],
-    queryFn: handleGetFilmSearch,
-    retry: 3,
-    retryDelay: 1000,
-    keepPreviousData: true,
-  });
 
   const handleSearchFilmBykey = async (keywords) => {
     let keywordsSearch = keywords.split(" ").join("-");
     navigate(`/tim-kiem/${keywordsSearch}/trang=1`);
     setSearchInput("");
   };
-  // useEffect
-  useEffect(() => {
-    if (data && data.status === "success") {
-      setSearchData([...(data?.data?.items || [])]);
-      setLinkImage(data?.data?.APP_DOMAIN_CDN_IMAGE);
-    }
-  }, [data]);
+
   return (
     <div className="search-container">
       <div className="search-input">

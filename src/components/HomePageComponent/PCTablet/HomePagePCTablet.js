@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { useContext, useEffect } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import { useMutationHook } from "../../../hooks/useMutationHook";
 import ListFilmComponent from "../../ListFilmComponent/ListFilmComponent";
 import SliderComponent from "../../SliderComponent/SliderComponent";
@@ -23,26 +23,26 @@ function HomePagePCTablet() {
 
   // get data
   let mutationGetNewFilm = useMutationHook(() => FilmService.getListNewFilm());
-  let newFilmDataMutation = mutationGetNewFilm.data;
+  let { data: newFilmDataMutation, mutate: mutateNewFilm } = mutationGetNewFilm;
   let mutationGetSeries = useMutationHook(() => FilmService.getListNewSeries());
-  let newSeriesFilmMutation = mutationGetSeries.data;
+  let { data: newSeriesFilmMutation, mutate: mutateSeries } = mutationGetSeries;
   let mutationGetMovies = useMutationHook(() => FilmService.getListNewMovie());
-  let newMovieFilmMutation = mutationGetMovies.data;
+  let { data: newMovieFilmMutation, mutate: mutateMovies } = mutationGetMovies;
   let mutationGetAnime = useMutationHook(() => FilmService.getListAnime());
-  let newAnimeFilmMutation = mutationGetAnime.data;
+  let { data: newAnimeFilmMutation, mutate: mutateAnime } = mutationGetAnime;
 
   // function
-  const getDataFilm = async () => {
-    await mutationGetNewFilm.mutate();
-    await mutationGetSeries.mutate();
-    await mutationGetMovies.mutate();
-    await mutationGetAnime.mutate();
-  };
+  const getDataFilm = useCallback(() => {
+    mutateNewFilm();
+    mutateSeries();
+    mutateMovies();
+    mutateAnime();
+  }, [mutateAnime, mutateMovies, mutateNewFilm, mutateSeries]);
 
   // useEffect
   useEffect(() => {
     getDataFilm();
-  }, []);
+  }, [getDataFilm]);
   useEffect(() => {
     if (newFilmDataMutation && newFilmDataMutation.status === true) {
       setNewFilmData([...newFilmDataMutation.items]);
@@ -56,7 +56,16 @@ function HomePagePCTablet() {
     if (newAnimeFilmMutation && newAnimeFilmMutation.status) {
       setNewAnimeData([...newAnimeFilmMutation?.data?.items]);
     }
-  }, [newFilmDataMutation, newSeriesFilmMutation, newMovieFilmMutation, newAnimeFilmMutation]);
+  }, [
+    newFilmDataMutation,
+    newSeriesFilmMutation,
+    newMovieFilmMutation,
+    newAnimeFilmMutation,
+    setNewAnimeData,
+    setNewFilmData,
+    setNewMovieFilmData,
+    setNewSeriesData,
+  ]);
 
   useEffect(() => {
     const sections = document.querySelectorAll(".fade-section");

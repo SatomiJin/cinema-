@@ -5,15 +5,13 @@ import { routes } from "./routes/index";
 import DefaultLayout from "./layouts/DefaultLayout/DefaultLayout";
 function App() {
   let { i18n } = useTranslation();
-  const getLanguage = () => {
+
+  useEffect(() => {
     let lang = localStorage.getItem("language");
     if (lang) {
       i18n.changeLanguage(lang);
     }
-  };
-  useEffect(() => {
-    getLanguage();
-  }, []);
+  }, [i18n]);
   return (
     <div className="App">
       <Router>
@@ -23,8 +21,6 @@ function App() {
             routes.map((item, index) => {
               let Page = item.page;
               let path = item.path;
-              let Layout = DefaultLayout;
-              let isLogin = item.isLogin;
               return (
                 <Route
                   key={index}

@@ -1,13 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import "./WatchMobile.scss";
 import { useTranslation } from "react-i18next";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import EpisodesComponent from "../../EpisodesComponent/EpisodesComponent";
 import DotLoading from "../../LoadingComponent/DotLoading";
 function WatchMobile(props) {
   let navigate = useNavigate();
   let { t, i18n } = useTranslation();
-  let [data, setData] = useState({});
+  let data = props;
   // function
   const redirectOtherEp = async (data) => {
     if (data === "next") {
@@ -21,28 +21,25 @@ function WatchMobile(props) {
       navigate(`/xem-phim/${props?.filmInfo?.slug}/tap-${episodes}`);
     }
   };
-  const activeEp = () => {
-    let ep = props?.epInfo && Number(props?.epInfo?.name.split(" ")[1]);
-    let epF = props?.epInfo && props?.epInfo?.slug;
-
-    let listButtons = document.querySelectorAll(`.btn_episode`);
-    listButtons.forEach((button) => {
-      if (Number(button.textContent) === ep || button.textContent === epF) {
-        button.classList.add("button_film_active");
-      } else {
-        button.classList.remove("button_film_active");
-      }
-    });
-  };
-
   useEffect(() => {
-    if (props?.filmInfo && props?.epInfo) {
-      setData(props);
-    }
-    if (data?.filmInfo && data?.filmInfo?.slug && data?.episodes?.length > 0) {
+    const activeEp = () => {
+      let ep = props?.epInfo && Number(props?.epInfo?.name.split(" ")[1]);
+      let epF = props?.epInfo && props?.epInfo?.slug;
+
+      let listButtons = document.querySelectorAll(`.btn_episode`);
+      listButtons.forEach((button) => {
+        if (Number(button.textContent) === ep || button.textContent === epF) {
+          button.classList.add("button_film_active");
+        } else {
+          button.classList.remove("button_film_active");
+        }
+      });
+    };
+
+    if (props?.filmInfo?.slug && props?.episodes?.length > 0) {
       activeEp();
     }
-  }, [props, data]);
+  }, [props?.episodes, props?.epInfo, props?.filmInfo?.slug]);
 
   return (
     <div className="mobile-container">

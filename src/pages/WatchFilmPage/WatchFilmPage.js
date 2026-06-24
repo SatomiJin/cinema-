@@ -10,7 +10,7 @@ function WatchFilmPage() {
   let mutation = useMutationHook((data) => FilmService.getFilmInfo(data));
   let location = useLocation();
   let splitLocation = location.pathname.split("/");
-  let { data } = mutation;
+  let { data, mutate } = mutation;
   let [episodes, setEpisodes] = useState([]);
   let [filmInfo, setFilmInfo] = useState({});
   let [isMobile, setIsMobile] = useState(() => window.innerWidth <= 768);
@@ -18,14 +18,11 @@ function WatchFilmPage() {
     slug: splitLocation[2],
     ep: splitLocation[3],
   };
-  // function
-  const handleGetFilm = async () => {
-    await mutation.mutate(filmEp.slug);
-  };
+
   // useEffect
   useEffect(() => {
-    handleGetFilm();
-  }, [filmEp.slug]);
+    mutate(filmEp.slug);
+  }, [filmEp.slug, mutate]);
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);

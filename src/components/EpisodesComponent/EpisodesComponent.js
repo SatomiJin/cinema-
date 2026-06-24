@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import "./EpisodesComponent.scss";
-import { useEffect } from "react";
 function EpisodesComponent(props) {
   let navigate = useNavigate();
   const handleChangeEp = (data) => {
