@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 
 import { FilmContext } from "../../context/filmContext";
 import SearchFilmPc from "../../components/SearchFilmComponent/PcTablet/SearchFIlmPc";
@@ -9,7 +9,7 @@ import "./SearchFilmPage.scss";
 import { useTranslation } from "react-i18next";
 function SearchFilmPage() {
   let [searchDataFilm, setSearchDataFilm] = useState([]);
-  const { searchLoading, setSearchLoading } = useContext(FilmContext);
+  const { setSearchLoading } = useContext(FilmContext);
 
   let location = useLocation();
   let { t } = useTranslation();
@@ -19,22 +19,25 @@ function SearchFilmPage() {
 
   let searchKeyword = originKeyword.split("-").join(" ");
 
-  const searchFilmData = async (keyword, limit) => {
-    setSearchLoading(true);
-    const res = await FilmService.searchFilm(keyword, limit, originPage);
+  const searchFilmData = useCallback(
+    async (keyword) => {
+      setSearchLoading(true);
+      const res = await FilmService.searchFilm(keyword, 10, originPage);
 
-    if (res && res.status === "success" && res?.data.items) {
-      setSearchDataFilm({ ...res?.data });
-      setSearchLoading(false);
-    } else {
-      setSearchDataFilm([]);
-      setSearchLoading(false);
-    }
-  };
+      if (res && res.status === "success" && res?.data.items) {
+        setSearchDataFilm({ ...res?.data });
+        setSearchLoading(false);
+      } else {
+        setSearchDataFilm([]);
+        setSearchLoading(false);
+      }
+    },
+    [originPage, setSearchLoading]
+  );
 
   useEffect(() => {
     searchFilmData(searchKeyword);
-  }, [searchKeyword, location]);
+  }, [searchFilmData, searchKeyword]);
 
   return (
     <div className="search-film-page_container">

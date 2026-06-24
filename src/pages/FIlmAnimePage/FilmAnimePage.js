@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useMutationHook } from "../../hooks/useMutationHook";
 import { useLocation } from "react-router-dom";
 import * as FilmService from "../../services/FilmService";
@@ -7,19 +7,24 @@ function FilmAnimePage() {
   let mutation = useMutationHook((page, limit) =>
     FilmService.getAnimeFilm(page, limit)
   );
-  let { data } = mutation;
+  let { data, mutate } = mutation;
   let [animeFilm, setAnimeFilm] = useState([]);
   let [pageCurrent, setPageCurrent] = useState(0);
   let location = useLocation();
 
-  const getSeriesData = async (page, limit) => {
-    await mutation.mutate(page, limit);
-  };
+  const getSeriesData = useCallback(
+    (page) => {
+      mutate(page);
+    },
+    [mutate]
+  );
 
   useEffect(() => {
-    getSeriesData(Number(pageCurrent), 10);
-    setPageCurrent(location?.pathname?.split("/")[3]);
-  }, [location]);
+    const pageFromPath = location?.pathname?.split("/")[3] || 1;
+
+    setPageCurrent(pageFromPath);
+    getSeriesData(Number(pageFromPath));
+  }, [getSeriesData, location?.pathname]);
   useEffect(() => {
     if (data && data?.status) {
       setAnimeFilm([...data?.data?.items]);
