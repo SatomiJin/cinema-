@@ -1,18 +1,25 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import "./SearchPcComponent.scss";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { getSearchCategoryByLocation, getSearchCategoryQuery } from "../../../utils/searchScope";
 function SearchPcComponent() {
   let { t } = useTranslation();
   let [searchInput, setSearchInput] = useState("");
   let navigate = useNavigate();
+  let location = useLocation();
+  let searchCategory = getSearchCategoryByLocation(location);
   const handleChangeSearch = (e) => {
     setSearchInput(e.target.value);
   };
 
   const handleSearchFilmBykey = async (keywords) => {
-    let keywordsSearch = keywords.split(" ").join("-");
-    navigate(`/tim-kiem/${keywordsSearch}/trang=1`);
+    let searchValue = keywords.trim();
+
+    if (!searchValue) return;
+
+    let keywordsSearch = searchValue.split(" ").join("-");
+    navigate(`/tim-kiem/${keywordsSearch}/trang=1${getSearchCategoryQuery(searchCategory)}`);
     setSearchInput("");
   };
 
@@ -32,7 +39,7 @@ function SearchPcComponent() {
             }
           }}
         />
-        <button className="search-button">
+        <button className="search-button" onClick={() => handleSearchFilmBykey(searchInput)}>
           <i className="fa-solid fa-magnifying-glass"></i>
         </button>
         {/* <div

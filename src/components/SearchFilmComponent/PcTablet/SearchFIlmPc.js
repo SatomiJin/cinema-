@@ -16,7 +16,11 @@ function SearchFilmPc(props) {
   const onChange = (page, pageSize) => {
     setCurrent(page);
     setPageSize(10);
-    navigate(`/tim-kiem/${props?.searchKey}/trang=${page}`);
+    navigate(
+      `/tim-kiem/${props?.searchKey}/trang=${page}${
+        props?.searchCategory ? `?category=${props.searchCategory}` : ""
+      }`
+    );
   };
   useEffect(() => {
     if (props && props?.data && props?.data?.length > 0) {

@@ -11,6 +11,7 @@ function UserHeaderMobile() {
     <div className="header-mobile-container">
       <div className="container">
         <div className="row">
+          <input hidden type="checkbox" id="mobileMenuInput" className="input_menu-mobile" />
           <input
             hidden
             type="checkbox"
@@ -20,10 +21,10 @@ function UserHeaderMobile() {
           <div className="search_mobile_input">
             <SearchMobile />
           </div>
-          <div className="menu col col-4">
+          <div className="menu col col-3">
             <Menu />
           </div>
-          <div className="search col col-2">
+          <div className="search col col-3">
             <label htmlFor="searchInput_mobile">
               <i className="fa-solid fa-magnifying-glass"></i>
             </label>

@@ -19,7 +19,11 @@ function SearchFilmMobile(props) {
 
   const onChange = (page) => {
     setPageSize(10);
-    navigate(`/tim-kiem/${props?.searchKey}/trang=${page}`);
+    navigate(
+      `/tim-kiem/${props?.searchKey}/trang=${page}${
+        props?.searchCategory ? `?category=${props.searchCategory}` : ""
+      }`
+    );
   };
 
   useEffect(() => {

@@ -8,7 +8,9 @@
     position: sticky;
     top: 0;
     z-index: 10;
-    transition: box-shadow 0.3s var(--transition-smooth), transform 0.3s var(--transition-smooth);
+    transition:
+      box-shadow 0.3s var(--transition-smooth),
+      transform 0.3s var(--transition-smooth);
 
     &.scrolled {
       box-shadow: rgba(0, 0, 0, 0.18) 0 8px 24px;
@@ -20,8 +22,10 @@
         background-color: color-mix(in srgb, var(--body_background) 88%, transparent);
       }
 
-      .user-header-container .row {
-        height: 2.6rem;
+      @media (min-width: 768px) {
+        .user-header-container .row {
+          height: 2.6rem;
+        }
       }
     }
   }

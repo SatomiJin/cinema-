@@ -5,7 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 import * as FilmService from "../../../../services/FilmService";
 import SearchItemComponent from "../../../../components/SearchItemComponent/SearchItemComponent";
 import "./SearchMobile.scss";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { getSearchCategoryByLocation, getSearchCategoryQuery } from "../../../../utils/searchScope";
 function SearchMobile() {
   let { t } = useTranslation();
   let [searchInput, setSearchInput] = useState("");
@@ -13,6 +14,8 @@ function SearchMobile() {
   let [linkImage, setLinkImage] = useState("");
   let searchDebounce = useDebounce(searchInput, 500);
   let navigate = useNavigate();
+  let location = useLocation();
+  let searchCategory = getSearchCategoryByLocation(location);
   const handleChangeSearch = (e) => {
     setSearchInput(e.target.value);
   };
@@ -20,7 +23,8 @@ function SearchMobile() {
   const handleGetFilmSearch = async (context) => {
     const limit = context && context.queryKey && context.queryKey[1];
     const search = context && context.queryKey && context.queryKey[2];
-    let res = await FilmService.searchFilm(search, limit);
+    const category = context && context.queryKey && context.queryKey[3];
+    let res = await FilmService.searchFilm(search, limit, 1, { category });
     return res;
   };
   const clearInput = () => {
@@ -32,11 +36,11 @@ function SearchMobile() {
     if (!searchValue) return;
 
     let keywordsSearch = searchValue.split(" ").join("-");
-    navigate(`/tim-kiem/${keywordsSearch}/trang=1`);
+    navigate(`/tim-kiem/${keywordsSearch}/trang=1${getSearchCategoryQuery(searchCategory)}`);
     setSearchInput("");
   };
   const { data } = useQuery({
-    queryKey: ["film", 10, searchDebounce],
+    queryKey: ["film", 10, searchDebounce, searchCategory],
     queryFn: handleGetFilmSearch,
     retry: 3,
     retryDelay: 1000,
@@ -45,7 +49,7 @@ function SearchMobile() {
   // useEffect
   useEffect(() => {
     if (data && data?.status === "success") {
-      setSearchData([...data?.data?.items]);
+      setSearchData(data?.data?.items || []);
       setLinkImage(data?.data?.APP_DOMAIN_CDN_IMAGE);
     }
   }, [data]);

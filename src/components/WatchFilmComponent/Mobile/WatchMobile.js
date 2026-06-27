@@ -12,12 +12,12 @@ function WatchMobile(props) {
   const redirectOtherEp = async (data) => {
     if (data === "next") {
       let ep = Number(props?.epInfo?.name.split(" ")[1]) + 1;
-      let episodes = ep > 10 ? ep : `0${ep}`;
+      let episodes = ep >= 10 ? ep : `0${ep}`;
       navigate(`/xem-phim/${props?.filmInfo?.slug}/tap-${episodes}`);
     }
     if (data === "prev") {
       let ep = Number(props?.epInfo?.name.split(" ")[1]) - 1;
-      let episodes = ep > 10 ? ep : `0${ep}`;
+      let episodes = ep >= 10 ? ep : `0${ep}`;
       navigate(`/xem-phim/${props?.filmInfo?.slug}/tap-${episodes}`);
     }
   };

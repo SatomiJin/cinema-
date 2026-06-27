@@ -5,12 +5,16 @@ import * as FilmService from "../../../../services/FilmService";
 import "./SearchTablet.scss";
 import { useDebounce } from "../../../../hooks/useDebounceHook";
 import SearchItemComponent from "../../../../components/SearchItemComponent/SearchItemComponent";
+import { useLocation } from "react-router-dom";
+import { getSearchCategoryByLocation } from "../../../../utils/searchScope";
 function SearchTM() {
   let { t } = useTranslation();
   let [searchInput, setSearchInput] = useState("");
   let [searchData, setSearchData] = useState([]);
   let [linkImage, setLinkImage] = useState("");
   let searchDebounce = useDebounce(searchInput, 500);
+  let location = useLocation();
+  let searchCategory = getSearchCategoryByLocation(location);
   const handleChangeSearch = (e) => {
     setSearchInput(e.target.value);
   };
@@ -18,14 +22,15 @@ function SearchTM() {
   const handleGetFilmSearch = async (context) => {
     const limit = context && context.queryKey && context.queryKey[1];
     const search = context && context.queryKey && context.queryKey[2];
-    let res = await FilmService.searchFilm(search, limit);
+    const category = context && context.queryKey && context.queryKey[3];
+    let res = await FilmService.searchFilm(search, limit, 1, { category });
     return res;
   };
   const clearInput = () => {
     setSearchInput("");
   };
   const { data } = useQuery({
-    queryKey: ["film", 10, searchDebounce],
+    queryKey: ["film", 10, searchDebounce, searchCategory],
     queryFn: handleGetFilmSearch,
     retry: 3,
     retryDelay: 1000,
@@ -34,7 +39,7 @@ function SearchTM() {
   // useEffect
   useEffect(() => {
     if (data && data?.status === "success") {
-      setSearchData([...data?.data?.items]);
+      setSearchData(data?.data?.items || []);
       setLinkImage(data?.data?.APP_DOMAIN_CDN_IMAGE);
     }
   }, [data]);

@@ -7,7 +7,7 @@
     position: relative;
     width: 100%;
     background-color: var(--search_color);
-    border-radius: 0.7rem;
+    border-radius: 999px;
     position: relative;
     .result_container {
       position: absolute;
@@ -28,11 +28,13 @@
     }
     .search {
       outline: none;
-      padding: 0.2rem 0.5rem;
+      min-height: 2.35rem;
+      padding: 0.35rem 3rem 0.35rem 0.9rem;
       border: none;
       background-color: transparent;
       width: 100%;
       color: var(--body_color);
+      font-size: 0.95rem;
     }
     input::placeholder {
       color: var(--body_color);
@@ -50,7 +52,7 @@
 
       i {
         color: var(--body_color);
-        font-size: 15px;
+        font-size: 0.95rem;
       }
     }
   }
