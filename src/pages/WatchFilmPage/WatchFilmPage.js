@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import * as FilmService from "../../services/FilmService";
 import "./WatchFilmPage.scss";
 import WatchMobile from "../../components/WatchFilmComponent/Mobile/WatchMobile";
+import { saveWatchHistory } from "../../utils/watchHistory";
 
 function WatchFilmPage() {
   let mutation = useMutationHook((data) => FilmService.getFilmInfo(data));
@@ -44,6 +45,12 @@ function WatchFilmPage() {
   }, [data]);
 
   let epInfo = episodes && episodes.length > 0 && episodes.find((item) => item.slug === filmEp.ep);
+
+  useEffect(() => {
+    if (filmInfo?.slug && epInfo?.slug && epInfo?.link_embed) {
+      saveWatchHistory({ filmInfo, epInfo });
+    }
+  }, [epInfo, filmInfo]);
   // function
 
   return (

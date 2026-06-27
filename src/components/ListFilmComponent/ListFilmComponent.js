@@ -23,14 +23,16 @@ function ListFilmComponent(props) {
       <div className="row">
         <div className="content-top col-12">
           <div className="content-top_title">{data?.name}</div>
-          <div className="content-top_buttons">
-            <button type="button" className="btn btn-primary see-more" onClick={handleSeeMore}>
-              {t("seeMore")}
-            </button>
-          </div>
+          {!props?.hideSeeMore && (
+            <div className="content-top_buttons">
+              <button type="button" className="btn btn-primary see-more" onClick={handleSeeMore}>
+                {t("seeMore")}
+              </button>
+            </div>
+          )}
         </div>
         <div className="content-bottom">
-          <ListFilmSlider listFilm={data?.data} />
+          <ListFilmSlider listFilm={data?.data} onItemClick={props?.onItemClick} />
         </div>
       </div>
     </div>

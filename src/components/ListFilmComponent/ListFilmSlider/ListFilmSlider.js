@@ -10,6 +10,11 @@ function ListFilmSlider(props) {
   // function
   let navigate = useNavigate();
   const moveToFilm = (item) => {
+    if (props?.onItemClick) {
+      props.onItemClick(item);
+      return;
+    }
+
     navigate(`/${item?.type}/${item?.slug}`);
   };
 
@@ -38,7 +43,7 @@ function ListFilmSlider(props) {
           },
         }}
       >
-        {listFilm && listFilm?.length > 5 ? (
+        {listFilm && listFilm?.length > 0 ? (
           listFilm?.map((item, index) => {
             return (
               <SwiperSlide

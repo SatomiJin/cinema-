@@ -4,6 +4,7 @@ import SliderComponent from "../../SliderComponent/SliderComponent";
 import { FilmContext } from "../../../context/filmContext";
 import { useContext } from "react";
 import "./HomePageMobile.scss";
+import WatchHistoryComponent from "../../WatchHistoryComponent/WatchHistoryComponent";
 
 function HomePageMobile() {
   let { t } = useTranslation();
@@ -15,6 +16,9 @@ function HomePageMobile() {
         <div className="home-page-mobile_wrapper row">
           <div className="anime-recommend">
             <SliderComponent />
+          </div>
+          <div className="watch-history">
+            <WatchHistoryComponent />
           </div>
           <div className="new-film">
             <ListFilmComponent data={newFilmData} name={t("newFilm")} path="/phim-bo/trang/1" />

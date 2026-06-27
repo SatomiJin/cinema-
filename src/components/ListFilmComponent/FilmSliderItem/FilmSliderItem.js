@@ -33,7 +33,7 @@ function FilmSliderItem(props) {
       </div>
       <div className="slider-item_info">
         <div className="name">{data?.name}</div>
-        <div className="original_name">{data?.origin_name}</div>
+        <div className="original_name">{data?.episodeName || data?.origin_name}</div>
       </div>
     </div>
   );

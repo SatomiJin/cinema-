@@ -7,6 +7,7 @@ import * as FilmService from "../../../services/FilmService";
 import { FilmContext } from "../../../context/filmContext";
 import "./HomePagePCTablet.scss";
 import InfoMeComponent from "../../InfoMeComponent/InfoMeComponent";
+import WatchHistoryComponent from "../../WatchHistoryComponent/WatchHistoryComponent";
 
 function HomePagePCTablet() {
   let { t } = useTranslation();
@@ -96,28 +97,31 @@ function HomePagePCTablet() {
             <div className="content-left_slider fade-section" style={{ "--section-index": "0" }}>
               <SliderComponent />
             </div>
-            <div className="new-film fade-section" style={{ "--section-index": "1" }}>
+            <div className="watch-history fade-section" style={{ "--section-index": "1" }}>
+              <WatchHistoryComponent />
+            </div>
+            <div className="new-film fade-section" style={{ "--section-index": "2" }}>
               <ListFilmComponent
                 data={newFilmData && newFilmData?.length > 0 && newFilmData}
                 name={t("newFilm")}
                 path="/phim-bo/trang/1"
               />
             </div>
-            <div className="series-film fade-section" style={{ "--section-index": "2" }}>
+            <div className="series-film fade-section" style={{ "--section-index": "3" }}>
               <ListFilmComponent
                 data={newSeriesData}
                 name={t("newFilmSeries")}
                 path="/phim-bo/trang/1"
               />
             </div>
-            <div className="movies-film fade-section" style={{ "--section-index": "3" }}>
+            <div className="movies-film fade-section" style={{ "--section-index": "4" }}>
               <ListFilmComponent
                 data={newMovieFilmData}
                 name={t("newMovieFilm")}
                 path="/phim-le/trang/1"
               />
             </div>
-            <div className="anime-film fade-section" style={{ "--section-index": "4" }}>
+            <div className="anime-film fade-section" style={{ "--section-index": "5" }}>
               <ListFilmComponent
                 data={newAnimeData}
                 name={t("newAnimeFilm")}
