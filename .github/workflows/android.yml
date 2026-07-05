@@ -43,6 +43,7 @@ jobs:
         run: npm run build
         env:
           BUILD_PATH: android-build
+          REACT_APP_API_FILM_URL: https://phimapi.com
           CI: "false"
 
       - name: Copy assets to Android

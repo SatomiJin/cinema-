@@ -7,10 +7,18 @@
     justify-content: center;
     gap: 0.35rem;
     min-height: 2.35rem;
-    width: 100%;
+    width: 3rem;
     border-radius: 0.5rem;
     font-weight: 700;
     transition: background-color 0.25s var(--transition-quick), color 0.25s var(--transition-quick);
+
+    i {
+      font-size: 1.25rem;
+    }
+
+    span {
+      display: none;
+    }
 
     &:hover {
       cursor: pointer;
@@ -24,7 +32,7 @@
     left: 0.75rem;
     right: 0.75rem;
     z-index: 30;
-    max-height: calc(100vh - 5rem);
+    max-height: calc(100dvh - 5rem);
     overflow-y: auto;
     padding: 0.8rem;
     border: 1px solid var(--film_info_border);
@@ -43,6 +51,7 @@
       margin-bottom: 0.6rem;
       color: var(--film_highlight_color);
       font-weight: 800;
+      font-size: 1.05rem;
     }
 
     .mobile-menu-close {
@@ -72,6 +81,7 @@
         background-color: var(--search_color);
         color: var(--body_color);
         font-weight: 700;
+        font-size: 0.9rem;
       }
     }
 
@@ -83,6 +93,7 @@
         color: var(--film_highlight_color);
         font-weight: 800;
         padding: 0.25rem 0;
+        font-size: 0.95rem;
       }
 
       .menu-group_options {
@@ -100,6 +111,7 @@
         padding: 0.35rem 0.5rem;
         text-align: left;
         font-weight: 600;
+        font-size: 0.9rem;
 
         &:hover {
           background-color: var(--search_hover_color);
