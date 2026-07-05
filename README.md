@@ -68,3 +68,55 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## Android App
+
+This project uses Capacitor to package the React build as an Android app.
+
+### `npm run android:copy`
+
+Builds the React app and copies the web assets into the native Android project.
+
+### `npm run android:open`
+
+Opens the Android project in Android Studio.
+
+### `npm run android:build:debug`
+
+Builds a debug APK with the Gradle wrapper. This requires Android Studio or Android SDK to be installed and either `ANDROID_HOME` to be set or `android/local.properties` to contain a valid `sdk.dir`.
+
+The debug APK is generated at:
+
+```text
+android/app/build/outputs/apk/debug/app-debug.apk
+```
+
+## GitHub Android Builds
+
+GitHub Actions builds an Android APK on every push to `main`/`master`, pull request, manual dispatch, and version tag.
+
+For normal CI builds, download the APK from the workflow artifact:
+
+```text
+Actions > Android > cinema-debug-apk
+```
+
+For app updates that can install over an existing APK, use a signed release APK. Android requires all update APKs to keep the same `applicationId`, be signed with the same key, and have a higher `versionCode`.
+
+Add these repository secrets before publishing release APKs:
+
+```text
+ANDROID_KEYSTORE_BASE64
+ANDROID_KEYSTORE_PASSWORD
+ANDROID_KEY_ALIAS
+ANDROID_KEY_PASSWORD
+```
+
+Then create and push a version tag:
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+The workflow attaches the release APK to the GitHub Release for that tag. If the app was installed from a previous APK signed with the same keystore, Android will allow installing the newer APK over it.

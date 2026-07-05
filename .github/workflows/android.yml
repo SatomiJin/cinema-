@@ -1,0 +1,96 @@
+name: Android
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    tags:
+      - "v*"
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      HAS_RELEASE_SIGNING: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' && secrets.ANDROID_KEYSTORE_PASSWORD != '' && secrets.ANDROID_KEY_ALIAS != '' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build React assets
+        run: npm run build
+        env:
+          BUILD_PATH: android-build
+          CI: "false"
+
+      - name: Copy assets to Android
+        run: npx cap copy android
+
+      - name: Make Gradle executable
+        run: chmod +x android/gradlew
+
+      - name: Build debug APK
+        working-directory: android
+        run: ./gradlew assembleDebug
+        env:
+          VERSION_CODE: ${{ github.run_number }}
+          VERSION_NAME: ${{ github.ref_type == 'tag' && github.ref_name || format('0.1.{0}', github.run_number) }}
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: cinema-debug-apk
+          path: android/app/build/outputs/apk/debug/*.apk
+
+      - name: Prepare release signing key
+        if: startsWith(github.ref, 'refs/tags/v') && env.HAS_RELEASE_SIGNING == 'true'
+        run: |
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > android/app/release.keystore
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+
+      - name: Build release APK
+        if: startsWith(github.ref, 'refs/tags/v') && env.HAS_RELEASE_SIGNING == 'true'
+        working-directory: android
+        run: ./gradlew assembleRelease
+        env:
+          VERSION_CODE: ${{ github.run_number }}
+          VERSION_NAME: ${{ github.ref_name }}
+          ANDROID_KEYSTORE_PATH: release.keystore
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+
+      - name: Upload release APK
+        if: startsWith(github.ref, 'refs/tags/v') && env.HAS_RELEASE_SIGNING == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: cinema-release-apk
+          path: android/app/build/outputs/apk/release/*.apk
+
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v') && env.HAS_RELEASE_SIGNING == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: android/app/build/outputs/apk/release/*.apk

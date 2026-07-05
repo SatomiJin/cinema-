@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@capacitor/android": "^8.4.1",
+    "@capacitor/cli": "^8.4.1",
+    "@capacitor/core": "^8.4.1",
     "@tanstack/react-query": "^5.51.11",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -23,6 +26,13 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build:android": "powershell -ExecutionPolicy Bypass -File scripts/web-clean.ps1 -BuildDir android-build && set BUILD_PATH=android-build&& react-scripts build",
+    "build:clean": "powershell -ExecutionPolicy Bypass -File scripts/web-clean.ps1",
+    "android:clean": "powershell -ExecutionPolicy Bypass -File scripts/android-clean.ps1",
+    "android:copy": "powershell -ExecutionPolicy Bypass -File scripts/android-copy.ps1",
+    "android:sync": "npm run android:copy",
+    "android:open": "npx cap open android",
+    "android:build:debug": "npm run android:copy && cd android && gradlew.bat assembleDebug",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
