@@ -1,6 +1,9 @@
 import axios from "axios";
 
 const SEARCH_TIMEOUT = 12000;
+const DETAIL_TIMEOUT = 12000;
+
+const getFilmApiUrl = () => process.env.REACT_APP_API_FILM_URL?.replace(/\/$/, "");
 
 const buildSearchParams = (keywords, limit = 10, page = 1, filters = {}) => {
   const searchParams = new URLSearchParams({
@@ -70,8 +73,20 @@ export const getListAnime = async () => {
 };
 
 export const getFilmInfo = async (slug) => {
-  let res = await axios.get(
-    `${process.env.REACT_APP_API_FILM_URL}/phim/${slug}`
+  const normalizedSlug = typeof slug === "string" ? slug.trim() : "";
+  const apiUrl = getFilmApiUrl();
+
+  if (!apiUrl) {
+    throw new Error("Film API URL is not configured.");
+  }
+
+  if (!normalizedSlug) {
+    throw new Error("Film slug is missing.");
+  }
+
+  const res = await axios.get(
+    `${apiUrl}/phim/${encodeURIComponent(normalizedSlug)}`,
+    { timeout: DETAIL_TIMEOUT }
   );
 
   return res.data;

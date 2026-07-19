@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import FilmInfoPcTablet from "../../components/FilmInfoComponent/PcTablet/FilmInfoPcTablet";
 import { useMutationHook } from "../../hooks/useMutationHook";
 import * as FilmService from "../../services/FilmService";
@@ -6,10 +6,9 @@ import { useCallback, useEffect, useState } from "react";
 import FilmInfoMobile from "../../components/FilmInfoComponent/Mobile/FilmInfoMobile";
 import "./FilmInfoPage.scss";
 function FilmInfoPage() {
-  let location = useLocation();
-  let slugFilm = location.pathname.split("/")[2];
+  const { tenPhim: slugFilm } = useParams();
   let mutationGetFilm = useMutationHook((data) => FilmService.getFilmInfo(data));
-  let { data, mutate } = mutationGetFilm;
+  let { data, error, isError, isPending, mutate } = mutationGetFilm;
   let [filmData, setFilmData] = useState({});
   let [episodes, setEpisodes] = useState({});
   // function
@@ -27,6 +26,25 @@ function FilmInfoPage() {
       setEpisodes(data?.episodes[0]);
     }
   }, [data]);
+
+  const errorMessage = error?.response?.data?.msg || error?.message;
+
+  if (isError) {
+    return (
+      <div className="film-info-container">
+        <p role="alert">Không tải được thông tin phim: {errorMessage || "Phim không tồn tại."}</p>
+      </div>
+    );
+  }
+
+  if (!isPending && data && !data.status) {
+    return (
+      <div className="film-info-container">
+        <p role="alert">Không tải được thông tin phim: {data.msg || "Phim không tồn tại."}</p>
+      </div>
+    );
+  }
+
   return (
     <div className="film-info-container">
       <div className="film-info-pc">
