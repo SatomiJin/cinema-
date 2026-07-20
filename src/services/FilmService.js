@@ -5,6 +5,19 @@ const DETAIL_TIMEOUT = 12000;
 
 const getFilmApiUrl = () => process.env.REACT_APP_API_FILM_URL?.replace(/\/$/, "");
 
+const normalizeFilmDetail = (payload) => {
+  if (payload?.status !== "success" || !payload?.data?.item) {
+    return payload;
+  }
+
+  return {
+    status: true,
+    msg: payload.message || "",
+    movie: payload.data.item,
+    episodes: payload.data.item.episodes || [],
+  };
+};
+
 const buildSearchParams = (keywords, limit = 10, page = 1, filters = {}) => {
   const searchParams = new URLSearchParams({
     keyword: keywords,
@@ -44,9 +57,14 @@ const filterSearchDataByCategory = (data, category) => {
 
 export const getListNewFilm = async () => {
   let res = await axios.get(
-    `${process.env.REACT_APP_API_FILM_URL}/danh-sach/phim-moi-cap-nhat?page=1`
+    `${process.env.REACT_APP_API_FILM_URL}/v1/api/danh-sach?page=1`
   );
-  return res.data;
+
+  return {
+    ...res.data,
+    status: res.data?.status === "success",
+    items: res.data?.data?.items || [],
+  };
 };
 
 export const getListNewSeries = async () => {
@@ -85,11 +103,11 @@ export const getFilmInfo = async (slug) => {
   }
 
   const res = await axios.get(
-    `${apiUrl}/phim/${encodeURIComponent(normalizedSlug)}`,
+    `${apiUrl}/v1/api/phim/${encodeURIComponent(normalizedSlug)}`,
     { timeout: DETAIL_TIMEOUT }
   );
 
-  return res.data;
+  return normalizeFilmDetail(res.data);
 };
 
 //  https://phimapi.com/v1/api/tim-kiem?keyword={Từ khóa}&limit={number}
