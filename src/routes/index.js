@@ -39,13 +39,13 @@ export let routes = [
     isLogin: false,
   },
   {
-    path: "/:loai-phim/:ten-phim",
+    path: "/:loaiPhim/:tenPhim",
     page: FilmInfoPage,
     layout: "l1",
     isLogin: false,
   },
   {
-    path: "/xem-phim/:ten-phim/:tap",
+    path: "/xem-phim/:tenPhim/:tap",
     page: WatchFilmPage,
     layout: "l1",
     isLogin: false,
