@@ -2,8 +2,10 @@ import axios from "axios";
 
 const SEARCH_TIMEOUT = 12000;
 const DETAIL_TIMEOUT = 12000;
+const DEFAULT_FILM_API_URL = "https://phimapi.com";
 
-const getFilmApiUrl = () => process.env.REACT_APP_API_FILM_URL?.replace(/\/$/, "");
+const getFilmApiUrl = () =>
+  (process.env.REACT_APP_API_FILM_URL || DEFAULT_FILM_API_URL).replace(/\/$/, "");
 
 const normalizeFilmDetail = (payload) => {
   if (payload?.status !== "success" || !payload?.data?.item) {
@@ -93,10 +95,6 @@ export const getListAnime = async () => {
 export const getFilmInfo = async (slug) => {
   const normalizedSlug = typeof slug === "string" ? slug.trim() : "";
   const apiUrl = getFilmApiUrl();
-
-  if (!apiUrl) {
-    throw new Error("Film API URL is not configured.");
-  }
 
   if (!normalizedSlug) {
     throw new Error("Film slug is missing.");

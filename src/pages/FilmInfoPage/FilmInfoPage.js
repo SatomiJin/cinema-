@@ -13,7 +13,9 @@ function FilmInfoPage() {
   let [episodes, setEpisodes] = useState({});
   // function
   let getInfoFilm = useCallback(() => {
-    mutate(slugFilm);
+    if (slugFilm?.trim()) {
+      mutate(slugFilm);
+    }
   }, [mutate, slugFilm]);
   // useEffect
   useEffect(() => {
@@ -28,6 +30,14 @@ function FilmInfoPage() {
   }, [data]);
 
   const errorMessage = error?.response?.data?.msg || error?.message;
+
+  if (!slugFilm?.trim()) {
+    return (
+      <div className="film-info-container">
+        <p role="alert">Không tìm thấy slug phim trên đường dẫn.</p>
+      </div>
+    );
+  }
 
   if (isError) {
     return (
