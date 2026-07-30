@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import "./WatchMobile.scss";
 import { useTranslation } from "react-i18next";
-import { useEffect } from "react";
 import EpisodesComponent from "../../EpisodesComponent/EpisodesComponent";
 import DotLoading from "../../LoadingComponent/DotLoading";
 function WatchMobile(props) {
@@ -9,38 +8,11 @@ function WatchMobile(props) {
   let { t, i18n } = useTranslation();
   let data = props;
   // function
-  const redirectOtherEp = async (data) => {
-    if (data === "next") {
-      let ep = Number(props?.epInfo?.name.split(" ")[1]) + 1;
-      let episodes = ep >= 10 ? ep : `0${ep}`;
-      navigate(`/xem-phim/${props?.filmInfo?.slug}/tap-${episodes}`);
-    }
-    if (data === "prev") {
-      let ep = Number(props?.epInfo?.name.split(" ")[1]) - 1;
-      let episodes = ep >= 10 ? ep : `0${ep}`;
-      navigate(`/xem-phim/${props?.filmInfo?.slug}/tap-${episodes}`);
-    }
+  const activeIndex = props?.episodes?.findIndex((episode) => episode.slug === props?.epInfo?.slug) ?? -1;
+  const redirectOtherEp = (direction) => {
+    const target = props?.episodes?.[activeIndex + direction];
+    if (props?.filmInfo?.slug && target?.slug) navigate(`/xem-phim/${props.filmInfo.slug}/${target.slug}`);
   };
-  useEffect(() => {
-    const activeEp = () => {
-      let ep = props?.epInfo && Number(props?.epInfo?.name.split(" ")[1]);
-      let epF = props?.epInfo && props?.epInfo?.slug;
-
-      let listButtons = document.querySelectorAll(`.btn_episode`);
-      listButtons.forEach((button) => {
-        if (Number(button.textContent) === ep || button.textContent === epF) {
-          button.classList.add("button_film_active");
-        } else {
-          button.classList.remove("button_film_active");
-        }
-      });
-    };
-
-    if (props?.filmInfo?.slug && props?.episodes?.length > 0) {
-      activeEp();
-    }
-  }, [props?.episodes, props?.epInfo, props?.filmInfo?.slug]);
-
   return (
     <div className="mobile-container">
       <div className="container">
@@ -79,6 +51,7 @@ function WatchMobile(props) {
                 title={data?.filmInfo?.origin_name}
                 src={data && data?.epInfo?.link_embed}
                 allow="autoplay; fullscreen; picture-in-picture"
+                allowFullScreen
               ></iframe>
             ) : (
               <div className="film_video">
@@ -88,16 +61,16 @@ function WatchMobile(props) {
           </div>
           <div className="film-buttons_wrapper col col-12">
             <button
-              disabled={props?.epInfo && Number(props?.epInfo?.name.split(" ")[1]) <= 1}
-              onClick={() => redirectOtherEp("prev")}
+              disabled={activeIndex <= 0}
+              onClick={() => redirectOtherEp(-1)}
               type="button"
               className="btn film_button btn_prev_ep"
             >
               <i className="fa-solid fa-angle-left"></i> {t("prevEp")}
             </button>
             <button
-              disabled={props?.epInfo && Number(props?.epInfo?.name.split(" ")[1]) === props?.episodes?.length}
-              onClick={() => redirectOtherEp("next")}
+              disabled={activeIndex < 0 || activeIndex >= props?.episodes?.length - 1}
+              onClick={() => redirectOtherEp(1)}
               type="button"
               className="btn film_button btn_next_ep"
             >
@@ -106,7 +79,7 @@ function WatchMobile(props) {
           </div>
           <div className="film-episodes_wrapper col col-12">
             {data?.filmInfo && data?.filmInfo?.slug && data?.episodes?.length > 0 ? (
-              <EpisodesComponent slug={data?.filmInfo.slug} episodes={data?.episodes} />
+              <EpisodesComponent activeEpisode={data?.epInfo?.slug} slug={data?.filmInfo.slug} episodes={data?.episodes} />
             ) : (
               <DotLoading />
             )}

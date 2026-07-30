@@ -1,0 +1,65 @@
+.not-found-page {
+  min-height: min(78vh, 48rem);
+  display: grid;
+  place-items: center;
+  padding: 2rem 1rem;
+  color: var(--body_color);
+}
+
+.not-found-page__panel {
+  width: min(100%, 42rem);
+  padding: clamp(1.5rem, 6vw, 4rem);
+  text-align: center;
+  border: 1px solid var(--film_info_border);
+  border-radius: 1rem;
+  background: linear-gradient(145deg, var(--background_color_component), var(--film_wrapper_button));
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.25);
+}
+
+.not-found-page__eyebrow {
+  display: block;
+  color: var(--film_highlight_color);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.not-found-page__reel {
+  margin: 0.35rem 0;
+  font-size: clamp(5rem, 20vw, 10rem);
+  font-weight: 800;
+  letter-spacing: -0.1em;
+  line-height: 0.9;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--film_highlight_color);
+  text-shadow: 0 0 1.75rem rgba(255, 183, 77, 0.2);
+}
+
+.not-found-page h1 {
+  margin: 1rem 0 0.6rem;
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+}
+
+.not-found-page p {
+  max-width: 32rem;
+  margin: 0 auto 1.5rem;
+  line-height: 1.6;
+  opacity: 0.78;
+}
+
+.not-found-page__cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.65rem 1rem;
+  border-radius: 0.5rem;
+  background-color: var(--film_button_color);
+  color: var(--film_button_text);
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.18s ease, opacity 0.18s ease;
+
+  &:hover { transform: translateY(-2px); opacity: 0.9; }
+  &:focus-visible { outline: 2px solid var(--film_highlight_color); outline-offset: 4px; }
+}

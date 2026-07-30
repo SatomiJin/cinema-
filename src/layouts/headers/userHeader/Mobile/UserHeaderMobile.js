@@ -1,50 +1,31 @@
+import { useState } from "react";
+import { Home, Search } from "lucide-react";
 import SearchMobile from "../Search/SearchMobile";
 import Menu from "./MobileOptions/Menu/Menu";
 import DarkMode from "../../../../themes/DarkMode";
 import LanguageComponent from "../../../../components/LanguageComponent/LanguageComponent";
 import "./UserHeaderMobile.scss";
 import { useNavigate } from "react-router-dom";
+import UiVersionToggle from "../../../../components/ui/UiVersionToggle";
 
 function UserHeaderMobile() {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
+  const [isMenuOpen, setMenuOpen] = useState(false);
+  const [isSearchOpen, setSearchOpen] = useState(false);
   return (
     <div className="header-mobile-container">
-      <div className="container">
-        <div className="row">
-          <input hidden type="checkbox" id="mobileMenuInput" className="input_menu-mobile" />
-          <input
-            hidden
-            type="checkbox"
-            id="searchInput_mobile"
-            className="input_search-mobile"
-          />
-          <div className="search_mobile_input">
-            <SearchMobile />
-          </div>
-          <div className="menu col col-3">
-            <Menu />
-          </div>
-          <div className="search col col-3">
-            <label htmlFor="searchInput_mobile">
-              <i className="fa-solid fa-magnifying-glass"></i>
-            </label>
-          </div>
-          <div className="theme col col-2">
-            <DarkMode />
-          </div>
-          <div className="language col col-2">
-            <LanguageComponent />
-          </div>
-          <div className="user col col-2">
-            <i
-              className="fa-solid fa-house"
-              onClick={() => {
-                navigate("/");
-              }}
-            ></i>
-          </div>
+      <div className="container"><div className="row">
+        <Menu isOpen={isMenuOpen} onOpenChange={setMenuOpen} />
+        <button className="mobile-brand" type="button" onClick={() => navigate("/")} aria-label="Satomi Movie home"><span aria-hidden="true">S</span>Satomi</button>
+        <div className="mobile-header-actions">
+          <button className="mobile-control" type="button" aria-label="Open search" aria-expanded={isSearchOpen} onClick={() => { setMenuOpen(false); setSearchOpen(true); }}><Search aria-hidden="true" size={20} /></button>
+          <div className="theme"><DarkMode /></div>
+          <div className="language"><LanguageComponent /></div>
+          <UiVersionToggle compact />
+          <button className="mobile-control classic-home-control" type="button" onClick={() => navigate("/")} aria-label="Satomi Movie home"><Home aria-hidden="true" size={20} /></button>
         </div>
-      </div>
+        {isSearchOpen && <SearchMobile onClose={() => setSearchOpen(false)} />}
+      </div></div>
     </div>
   );
 }

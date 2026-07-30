@@ -6,17 +6,28 @@ function EpisodesComponent(props) {
     navigate(`/xem-phim/${props?.slug}/${data}`);
   };
 
+  const episodes = props?.episodes || [];
+
   return (
-    <div className="episodes-container">
-      {props?.episodes &&
-        props?.episodes?.length > 0 &&
-        props?.episodes
-          ?.slice()
-          ?.reverse()
-          ?.map((item, index) => {
+    <div className="episodes-container" aria-label="Episode selector">
+      {episodes.length > 0 &&
+        episodes
+          .slice()
+          .reverse()
+          .map((item, index) => {
+            const label = item?.slug === "full" ? "full" : episodes.length - index;
+            const isActive = item?.slug === props?.activeEpisode;
+
             return (
-              <button onClick={() => handleChangeEp(item.slug)} className="btn_episode" type="button" key={index}>
-                {item?.slug === "full" ? "full" : props?.episodes?.length - index}
+              <button
+                aria-current={isActive ? "true" : undefined}
+                aria-label={isActive ? `Currently watching episode ${label}` : `Watch episode ${label}`}
+                className={`btn_episode${isActive ? " button_film_active" : ""}`}
+                key={item?.slug || index}
+                onClick={() => handleChangeEp(item.slug)}
+                type="button"
+              >
+                {label}
               </button>
             );
           })}

@@ -1,21 +1,17 @@
-import { useEffect, useState } from "react";
 import "./FilmSliderItem.scss";
 import defaultPoster from "../../../assets/image/poster-film.png";
-function FilmSliderItem(props) {
-  let [data, setData] = useState({});
 
-  useEffect(() => {
-    if (props && props?.data && props?.data?.name !== "") {
-      setData({ ...props?.data });
-    }
-  }, [props]);
+function FilmSliderItem(props) {
+  const data = props?.data || {};
+
   const changeUrl = (url) => {
+    if (!url) return defaultPoster;
     let splitUrl = url.split("/");
     let testUrl = splitUrl?.some((item) => item === "phimimg.com");
     if (testUrl) return url;
     if (!testUrl) return `https://img.phimapi.com/${url}`;
   };
-  const posterUrl = data && data?.poster_url ? changeUrl(data?.poster_url) : defaultPoster;
+  const posterUrl = data?.poster_url ? changeUrl(data.poster_url) : defaultPoster;
 
   return (
     <div className="slider-film-container">

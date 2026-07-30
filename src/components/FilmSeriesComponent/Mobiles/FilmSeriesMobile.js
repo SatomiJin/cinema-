@@ -14,9 +14,7 @@ function FilmSeriesMobile(props) {
   const [current, setCurrent] = useState(props?.pageCurrent);
   let navigate = useNavigate();
   useEffect(() => {
-    if (props?.data && props?.data.length > 0) {
-      setListFilm([...props?.data]);
-    }
+    setListFilm(props?.data?.length > 0 ? [...props.data] : []);
     setCurrent(props?.pageCurrent);
   }, [props]);
   const onChange = (page, pageSize) => {
@@ -28,23 +26,19 @@ function FilmSeriesMobile(props) {
     <div className="series-mobile_container">
       <div className="container">
         <div className="row">
-          <div className="title col col-12">{t("listSeries")}</div>
-          <div className="list-film col col-12">
-            {listFilm &&
-              listFilm?.length > 0 &&
-              listFilm.map((item, index) => {
-                return <FilmItemComponent dataFilm={item} key={index} />;
-              })}
-          </div>
-          <div className="pagination col col-12">
+          <header className="title col col-12"><span className="discovery-kicker">{t("movieArchive")}</span><h1>{t("listSeries")}</h1></header>
+          {listFilm.length > 0 ? <><div className="list-film col col-12">
+            {listFilm.map((item, index) => <FilmItemComponent dataFilm={item} key={index} />)}
+          </div><div className="pagination col col-12">
             <Pagination
+              aria-label="Series pages"
               onChange={onChange}
               current={current}
               total={totalItems}
               pageSize={pageSize}
               // pageSizeOptions={["10", "20", "30"]}
             />
-          </div>
+          </div></> : <p className="discovery-empty col col-12" role="status">{t("noData")}</p>}
         </div>
       </div>
     </div>

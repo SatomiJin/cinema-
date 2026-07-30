@@ -22,6 +22,12 @@ i18next.use(initReactI18next).init({
         search: "Tìm kiếm...",
         menu: "Danh mục",
         seeMore: "Xem thêm",
+        backToTop: "Về đầu trang",
+        chooseLanguage: "Chọn ngôn ngữ",
+        skipToContent: "Đi đến nội dung chính",
+        classicUi: "Cổ điển",
+        modernUi: "Hiện đại",
+        switchUi: "Chuyển sang giao diện {{ui}}",
 
         newFilm: "Phim mới cập nhật",
         newFilmSeries: "Phim bộ mới cập nhật",
@@ -55,6 +61,7 @@ i18next.use(initReactI18next).init({
         listSeries: "Danh sách phim bộ",
         listMovie: "Danh sách phim lẻ",
         listAnime: "Danh sách anime",
+        movieArchive: "Kho phim tuyển chọn",
 
         //search film
         keywordSearch: "Từ khóa tìm kiếm",
@@ -73,6 +80,12 @@ i18next.use(initReactI18next).init({
         search: "Search...",
         menu: "Menu",
         seeMore: "See more",
+        backToTop: "Back to top",
+        chooseLanguage: "Choose language",
+        skipToContent: "Skip to main content",
+        classicUi: "Classic",
+        modernUi: "Modern",
+        switchUi: "Switch to {{ui}} interface",
         newFilm: "Newly updated movies",
         newFilmSeries: "Newly updated series film",
         newMovieFilm: "Newly updated movie film",
@@ -106,6 +119,7 @@ i18next.use(initReactI18next).init({
         listSeries: "List series film",
         listMovie: "List movies",
         listAnime: "List anime",
+        movieArchive: "Curated movie archive",
 
         //search film
         keywordSearch: "Keyword Searching",

@@ -68,8 +68,9 @@ function FilmInfoMobile(props) {
           </div>
           <div className="film-button_wrapper col col-12">
             <div className="buttons">
-              <button type="button" className="btn film-play_button" onClick={() => watchFirstEpisode()}>
+              <button aria-label={t("watching")} disabled={!data?.slug || !episodes?.length} type="button" className="btn film-play_button" onClick={watchFirstEpisode}>
                 <i className="fa-solid fa-play"></i>
+                <span>{t("watching")}</span>
               </button>
             </div>
           </div>

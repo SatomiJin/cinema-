@@ -13,9 +13,7 @@ function FilmAnimeComponent(props) {
   let { t } = useTranslation();
   let navigate = useNavigate();
   useEffect(() => {
-    if (props?.data && props?.data.length > 0) {
-      setListFilm([...props?.data]);
-    }
+    setListFilm(props?.data?.length > 0 ? [...props.data] : []);
     setCurrent(props?.pageCurrent);
   }, [props]);
   const onChange = (page, pageSize) => {
@@ -27,7 +25,7 @@ function FilmAnimeComponent(props) {
     <div className="film-anime_container">
       <div className="container">
         <div className="row">
-          <div className="title col col-12">{t("listAnime")}</div>
+          <header className="title col col-12"><span className="discovery-kicker">{t("movieArchive")}</span><h1>{t("listAnime")}</h1></header>
 
           {listFilm && listFilm?.length > 0 ? (
             <>
@@ -40,6 +38,7 @@ function FilmAnimeComponent(props) {
               </div>
               <div className="pagination col col-12">
                 <Pagination
+                  aria-label="Animation pages"
                   onChange={onChange}
                   current={current}
                   total={totalItems}

@@ -4,6 +4,7 @@ import FilmMoviePage from "../pages/FilmMoviePage/FilmMoviePage";
 import FilmSeriesPage from "../pages/FilmSeriesPage/FilmSeriesPage";
 import FilteredFilmPage from "../pages/FilteredFilmPage/FilteredFilmPage";
 import HomePage from "../pages/HomePage/HomePage";
+import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
 import SearchFilmPage from "../pages/SearchFilmPage/SearchFilmPage";
 import WatchFilmPage from "../pages/WatchFilmPage/WatchFilmPage";
 
@@ -74,10 +75,10 @@ export let routes = [
     layout: "l1",
     isLogin: false,
   },
-  // {
-  //   path: "*",
-  //   page: "Not Found 404",
-  //   layout: "l1",
-  //   isLogin: false,
-  // },
+  {
+    path: "*",
+    page: NotFoundPage,
+    layout: "l1",
+    isLogin: false,
+  },
 ];

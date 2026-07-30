@@ -13,7 +13,10 @@
             font-weight: 600;
             padding: 1rem;
             background-color: var(--background_color_component);
+            border-left: 3px solid var(--film_highlight_color);
+            letter-spacing: 0.03em;
         }
+        .search-error { margin: 0.75rem 0 0; padding: 0.75rem 1rem; border-left: 3px solid var(--film_highlight_color); background-color: var(--background_color_component); color: var(--body_color); }
     }
 }
 

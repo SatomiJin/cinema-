@@ -40,12 +40,13 @@ function SearchFilmPc(props) {
             return <FilmItemComponent dataFilm={item} key={index} />;
           })
         ) : (
-          <p>No films found.</p>
+          <p className="discovery-empty" role="status">No films found.</p>
         )}
       </div>
       {!searchLoading && listFilm && listFilm.length > 0 && (
         <div className="pagination">
           <Pagination
+            aria-label="Search results pages"
             onChange={onChange}
             current={current}
             total={totalItems}

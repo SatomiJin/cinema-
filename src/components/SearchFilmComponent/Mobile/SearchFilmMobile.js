@@ -46,12 +46,13 @@ function SearchFilmMobile(props) {
                 return <FilmItemComponent dataFilm={item} key={index} />;
               })
             ) : (
-              <p>{t("noData")}</p>
+              <p className="discovery-empty" role="status">{t("noData")}</p>
             )}
           </div>
           {!searchLoading && listFilm && listFilm.length > 0 && (
             <div className="pagination col col-12">
               <Pagination
+                aria-label="Search results pages"
                 onChange={onChange}
                 current={currentPage}
                 total={totalItems}

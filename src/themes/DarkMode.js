@@ -1,42 +1,21 @@
 import { useEffect, useState } from "react";
-import dark from "../assets/image/dark-mode.png";
-import light from "../assets/image/light-mode.png";
+import { Moon, Sun } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import "./DarkMode.scss";
 function DarkMode() {
-  let [theme, setTheme] = useState("light");
-
-  // function
-  const setDarkMode = () => {
-    setTheme("dark");
-    document.querySelector("body").setAttribute(`data-theme`, "dark");
-    localStorage.setItem("theme", "dark");
-  };
-  const setLightMode = () => {
-    setTheme("light");
-    document.querySelector("body").setAttribute(`data-theme`, "light");
-    localStorage.setItem("theme", "light");
-  };
-  const toggleMode = () => {
-    if (theme === "light") setDarkMode();
-    else setLightMode();
-  };
-  //useEffect
+  const [theme, setTheme] = useState("light");
+  const { t } = useTranslation();
+  const applyTheme = (nextTheme) => { setTheme(nextTheme); document.documentElement.setAttribute("data-theme", nextTheme); localStorage.setItem("theme", nextTheme); };
   useEffect(() => {
-    let themeStorage = localStorage.getItem("theme");
-    if (themeStorage) {
-      if (themeStorage === "light") setLightMode();
-      else setDarkMode();
-    } else {
-      document.querySelector("body").setAttribute(`data-theme`, "light");
-    }
+    const storedTheme = localStorage.getItem("theme");
+    const bootTheme = document.documentElement.getAttribute("data-theme");
+    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    const initialTheme = storedTheme || bootTheme || systemTheme;
+    setTheme(initialTheme);
+    document.documentElement.setAttribute("data-theme", initialTheme);
   }, []);
-  return (
-    <div className="dark-mode-container">
-      <button className="theme-button" type="button" onClick={() => toggleMode()}>
-        <img src={theme === "light" ? dark : light} alt="themeMode" loading="lazy" decoding="async" />
-      </button>
-    </div>
-  );
+  const isLight = theme === "light";
+  const nextThemeLabel = isLight ? t("darkMode", { defaultValue: "Switch to dark theme" }) : t("lightMode", { defaultValue: "Switch to light theme" });
+  return <div className="dark-mode-container"><button className="theme-button" type="button" onClick={() => applyTheme(isLight ? "dark" : "light")} aria-label={nextThemeLabel} title={nextThemeLabel}>{isLight ? <Moon aria-hidden="true" size={19} /> : <Sun aria-hidden="true" size={19} />}</button></div>;
 }
-
 export default DarkMode;

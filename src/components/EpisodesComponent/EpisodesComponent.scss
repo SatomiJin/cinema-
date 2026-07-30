@@ -4,24 +4,36 @@
   max-height: 500px;
   // height: 90%;
   padding: 1rem;
-  overflow-x: hidden;
+  overflow-y: auto;
   scroll-behavior: smooth;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.1rem;
+  gap: 0.45rem;
   align-items: center;
   justify-content: center;
 }
 
+.btn_episode {
+  min-width: 2.75rem;
+  min-height: 2.5rem;
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+
+  &:focus-visible {
+    outline: 2px solid var(--film_highlight_color);
+    outline-offset: 2px;
+  }
+}
+
 @media (max-width: 768px) {
   .episodes-container {
-    max-height: 300px !important;
-    padding: 0.2rem !important;
+    max-height: 300px;
+    padding: 0.2rem;
   }
 }
 
 .button_film_active {
-  background-color: var(--film_button_color_hover) !important;
-  color: var(--film_button_text) !important;
+  background-color: var(--film_button_color_hover);
+  color: var(--film_button_text);
   font-weight: 700;
 }

@@ -3,9 +3,11 @@ import Pagination from "rc-pagination";
 import { useNavigate } from "react-router-dom";
 import FilmItemComponent from "../FilmItemComponent/FilmItemComponent";
 import DotLoading from "../LoadingComponent/DotLoading";
+import { useTranslation } from "react-i18next";
 import "../FilmSeriesComponent/PcTablet/FilmSeriesPcTablet.scss";
 
 function FilteredFilmComponent(props) {
+  const { t } = useTranslation();
   let [listFilm, setListFilm] = useState([]);
   let [pageSize, setPageSize] = useState(10);
   let [current, setCurrent] = useState(props?.pageCurrent);
@@ -32,7 +34,10 @@ function FilteredFilmComponent(props) {
     <div className="series-pc_container">
       <div className="container">
         <div className="row">
-          <div className="title col col-12">{props?.title}</div>
+          <header className="title col col-12">
+            <span className="discovery-kicker">{t("movieArchive")}</span>
+            <h1>{props?.title}</h1>
+          </header>
           {props?.loading ? (
             <div className="loading-component">
               <DotLoading />
@@ -46,6 +51,7 @@ function FilteredFilmComponent(props) {
               </div>
               <div className="pagination col col-12">
                 <Pagination
+                  aria-label="Filtered results pages"
                   onChange={onChange}
                   current={current}
                   total={totalItems}
@@ -55,7 +61,7 @@ function FilteredFilmComponent(props) {
               </div>
             </>
           ) : (
-            <p>{props?.emptyText}</p>
+            <p className="discovery-empty col col-12" role="status">{props?.emptyText}</p>
           )}
         </div>
       </div>

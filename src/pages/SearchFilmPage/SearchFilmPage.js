@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 import { SEARCH_CATEGORY_QUERY_KEY } from "../../utils/searchScope";
 function SearchFilmPage() {
   let [searchDataFilm, setSearchDataFilm] = useState([]);
+  let [searchError, setSearchError] = useState("");
   const { setSearchLoading } = useContext(FilmContext);
 
   let location = useLocation();
@@ -25,19 +26,25 @@ function SearchFilmPage() {
   const searchFilmData = useCallback(
     async (keyword) => {
       setSearchLoading(true);
-      const res = await FilmService.searchFilm(keyword, 10, originPage, {
-        category: searchCategory,
-      });
+      setSearchError("");
+      try {
+        const res = await FilmService.searchFilm(keyword, 10, originPage, {
+          category: searchCategory,
+        });
 
-      if (res && res.status === "success" && res?.data.items) {
-        setSearchDataFilm({ ...res?.data });
-        setSearchLoading(false);
-      } else {
+        if (res && res.status === "success" && res?.data.items) {
+          setSearchDataFilm({ ...res?.data });
+        } else {
+          setSearchDataFilm([]);
+        }
+      } catch (error) {
         setSearchDataFilm([]);
+        setSearchError(error?.message || t("noData"));
+      } finally {
         setSearchLoading(false);
       }
     },
-    [originPage, searchCategory, setSearchLoading]
+    [originPage, searchCategory, setSearchLoading, t]
   );
 
   useEffect(() => {
@@ -51,6 +58,7 @@ function SearchFilmPage() {
           {t("keywordSearch")}: {`${searchKeyword}`}
           {searchCategory ? ` (${searchCategory})` : ""}
         </div>
+        {searchError && <p className="search-error" role="alert">{searchError}</p>}
         <div className="search-film-pc">
           <SearchFilmPc
             data={

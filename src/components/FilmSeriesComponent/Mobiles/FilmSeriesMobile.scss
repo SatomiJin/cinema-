@@ -9,12 +9,16 @@
         text-transform: uppercase;
         font-weight: 600;
         padding: 0.5rem;
+        border-left: 3px solid var(--film_highlight_color);
+        .discovery-kicker { display: block; color: var(--film_highlight_color); font-size: 0.65rem; letter-spacing: 0.11em; }
+        h1 { margin: 0.2rem 0 0; font-size: inherit; }
       }
       .list-film {
         background-color: var(--film_wrapper_button);
         color: var(--body_color);
         margin-top: 1rem;
         padding: 1rem 0.5rem;
+        border: 1px solid var(--film_info_border);
         display: flex;
         gap: 0.5rem;
         align-items: center;

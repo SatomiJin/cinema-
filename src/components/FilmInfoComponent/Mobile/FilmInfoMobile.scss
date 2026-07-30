@@ -8,6 +8,8 @@
         font-weight: 700;
         text-align: center;
         padding: 1rem 0;
+        font-size: 1.35rem;
+        letter-spacing: 0.03em;
       }
       .film-info_wrapper {
         .wrapper_poster {
@@ -43,6 +45,12 @@
           .film-play_button {
             background-color: var(--film_button_color);
             color: #fff;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            min-height: 2.75rem;
+            &:focus-visible { outline: 2px solid var(--film_highlight_color); outline-offset: 3px; }
+            &:disabled { cursor: not-allowed; opacity: 0.45; }
           }
         }
       }
@@ -72,7 +80,7 @@
               background-color: var(--film_episode_color);
               font-weight: 600;
               color: var(--body_color);
-              transition: all 0.1s ease-in-out;
+              transition: background-color 0.16s ease, color 0.16s ease;
               &:hover {
                 background-color: var(--film_button_color_hover);
                 color: var(--film_button_text);

@@ -21,7 +21,7 @@
             .item {
               i {
                 font-size: 1.4rem;
-                transition: all 0.3s linear;
+                transition: color 180ms ease, transform 180ms ease;
                 &:hover {
                   cursor: pointer;
                   color: var(--film_highlight_color);

@@ -1,0 +1,43 @@
+.ui-version-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.38rem;
+  min-height: 2.45rem;
+  border: 1px solid var(--film_info_border);
+  border-radius: 0.45rem;
+  padding: 0.4rem 0.58rem;
+  background: color-mix(in srgb, var(--body_background) 82%, transparent);
+  color: var(--body_color);
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 750;
+  line-height: 1;
+  white-space: nowrap;
+  transition:
+    border-color 160ms var(--transition-quick),
+    background-color 160ms var(--transition-quick),
+    color 160ms var(--transition-quick);
+}
+
+.ui-version-toggle:hover {
+  border-color: color-mix(in srgb, var(--film_highlight_color) 42%, var(--film_info_border));
+  background: var(--control-hover-bg);
+  color: var(--control-hover-color);
+}
+
+.ui-version-toggle--compact {
+  width: 2.65rem;
+  height: 2.65rem;
+  min-height: 0;
+  padding: 0;
+}
+
+.ui-version-toggle--compact span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}

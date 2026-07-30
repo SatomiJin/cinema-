@@ -82,8 +82,9 @@ function FilmInfoPcTablet(props) {
             </div>
           </div>
           <div className="film-play_buttons col col-12">
-            <button type="button" className="btn play_button" onClick={() => watchFirstEpisode()}>
+            <button aria-label={t("watching")} disabled={!data?.slug || !(episodes?.server_data?.length)} type="button" className="btn play_button" onClick={watchFirstEpisode}>
               <i className="fa-regular fa-circle-play"></i>
+              <span>{t("watching")}</span>
             </button>
           </div>
           <div className="episode-desc_content col col-12">

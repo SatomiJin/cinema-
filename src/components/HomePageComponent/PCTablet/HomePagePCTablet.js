@@ -23,14 +23,34 @@ function HomePagePCTablet() {
   } = useContext(FilmContext);
 
   // get data
-  let mutationGetNewFilm = useMutationHook(() => FilmService.getListNewFilm());
-  let { data: newFilmDataMutation, mutate: mutateNewFilm } = mutationGetNewFilm;
-  let mutationGetSeries = useMutationHook(() => FilmService.getListNewSeries());
-  let { data: newSeriesFilmMutation, mutate: mutateSeries } = mutationGetSeries;
-  let mutationGetMovies = useMutationHook(() => FilmService.getListNewMovie());
-  let { data: newMovieFilmMutation, mutate: mutateMovies } = mutationGetMovies;
-  let mutationGetAnime = useMutationHook(() => FilmService.getListAnime());
-  let { data: newAnimeFilmMutation, mutate: mutateAnime } = mutationGetAnime;
+  const mutationGetNewFilm = useMutationHook(() => FilmService.getListNewFilm());
+  const {
+    data: newFilmDataMutation,
+    mutate: mutateNewFilm,
+    isIdle: isNewFilmIdle,
+    isPending: isNewFilmPending,
+  } = mutationGetNewFilm;
+  const mutationGetSeries = useMutationHook(() => FilmService.getListNewSeries());
+  const {
+    data: newSeriesFilmMutation,
+    mutate: mutateSeries,
+    isIdle: isSeriesIdle,
+    isPending: isSeriesPending,
+  } = mutationGetSeries;
+  const mutationGetMovies = useMutationHook(() => FilmService.getListNewMovie());
+  const {
+    data: newMovieFilmMutation,
+    mutate: mutateMovies,
+    isIdle: isMoviesIdle,
+    isPending: isMoviesPending,
+  } = mutationGetMovies;
+  const mutationGetAnime = useMutationHook(() => FilmService.getListAnime());
+  const {
+    data: newAnimeFilmMutation,
+    mutate: mutateAnime,
+    isIdle: isAnimeIdle,
+    isPending: isAnimePending,
+  } = mutationGetAnime;
 
   // function
   const getDataFilm = useCallback(() => {
@@ -68,88 +88,64 @@ function HomePagePCTablet() {
     setNewSeriesData,
   ]);
 
-  useEffect(() => {
-    const sections = document.querySelectorAll(".fade-section");
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    sections.forEach((section) => observer.observe(section));
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
   return (
-    <div className="home-page-container">
+    <div className="home-page-shell">
       <div className="container">
-        <div className="home-page_pc-tb row">
+        <div className="home-page_pc-tb">
           <div className="content-left col col-12">
-            <div className="content-left_slider fade-section" style={{ "--section-index": "0" }}>
+            <section className="content-left_slider cinema-section" style={{ "--section-index": "0" }}>
               <SliderComponent />
-            </div>
-            <div className="watch-history fade-section" style={{ "--section-index": "1" }}>
+            </section>
+            <section className="watch-history cinema-section" style={{ "--section-index": "1" }}>
               <WatchHistoryComponent />
-            </div>
-            <div className="new-film fade-section" style={{ "--section-index": "2" }}>
+            </section>
+            <section className="new-film cinema-section" style={{ "--section-index": "2" }}>
               <ListFilmComponent
-                data={newFilmData && newFilmData?.length > 0 && newFilmData}
+                data={newFilmData}
                 name={t("newFilm")}
                 path="/phim-bo/trang/1"
+                loading={isNewFilmIdle || isNewFilmPending}
               />
-            </div>
-            <div className="series-film fade-section" style={{ "--section-index": "3" }}>
+            </section>
+            <section className="series-film cinema-section" style={{ "--section-index": "3" }}>
               <ListFilmComponent
                 data={newSeriesData}
                 name={t("newFilmSeries")}
                 path="/phim-bo/trang/1"
+                loading={isSeriesIdle || isSeriesPending}
               />
-            </div>
-            <div className="movies-film fade-section" style={{ "--section-index": "4" }}>
+            </section>
+            <section className="movies-film cinema-section" style={{ "--section-index": "4" }}>
               <ListFilmComponent
                 data={newMovieFilmData}
                 name={t("newMovieFilm")}
                 path="/phim-le/trang/1"
+                loading={isMoviesIdle || isMoviesPending}
               />
-            </div>
-            <div className="anime-film fade-section" style={{ "--section-index": "5" }}>
+            </section>
+            <section className="anime-film cinema-section" style={{ "--section-index": "5" }}>
               <ListFilmComponent
                 data={newAnimeData}
                 name={t("newAnimeFilm")}
                 path="/hoat-hinh/trang/1"
+                loading={isAnimeIdle || isAnimePending}
               />
-            </div>
+            </section>
           </div>
-          {/* <div className="content-right col col-4">baaaaa</div> */}
           <div className="more-info col col-12">
             <InfoMeComponent />
           </div>
-          <div className="contact-me col col-12">
-            <div className="copyright">&#174; CopyRight by Satomi Jin</div>
-            <ul className="social-connect">
-              <li className="social-item">
-                <i className="fa-brands fa-facebook"></i>
-              </li>
-              <li className="social-item">
-                <i className="fa-solid fa-envelope"></i>
-              </li>
-              <li className="social-item">
-                <i className="fa-brands fa-linkedin"></i>
-              </li>
-              <li className="social-item">
-                <i className="fa-brands fa-github"></i>
-              </li>
-            </ul>
-          </div>
+          <footer className="contact-me col col-12">
+            <span aria-hidden="true">©</span>
+            <a
+              className="portfolio-link"
+              href="https://portfolio.satomijin.id.vn/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Satomi Jin <span aria-hidden="true">↗</span>
+            </a>
+          </footer>
         </div>
       </div>
     </div>

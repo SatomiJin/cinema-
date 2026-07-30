@@ -15,8 +15,8 @@ function SliderItem(props) {
         fetchPriority={props?.priority ? "high" : "auto"}
       />
       <div className="item_info">
-        <div className="name">{props?.data.name}</div>
-        <div className="year">{props?.data.year}</div>
+        <div className="name">{props?.data?.name}</div>
+        <div className="year">{props?.data?.year}</div>
       </div>
     </div>
   );

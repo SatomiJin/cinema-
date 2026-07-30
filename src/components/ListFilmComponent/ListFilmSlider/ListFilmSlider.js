@@ -1,63 +1,86 @@
 import { SwiperSlide } from "swiper/react";
 import { Swiper as SwiperComponent } from "swiper/react";
-import { Navigation, Pagination, Grid } from "swiper/modules";
+import { Pagination } from "swiper/modules";
 import "./ListFilmSlider.scss";
 import FilmSliderItem from "../FilmSliderItem/FilmSliderItem";
-import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { useUiVersion } from "../../../context/UiVersionContext";
+
 function ListFilmSlider(props) {
-  let [listFilm, setListFilm] = useState([]);
-  // function
-  let navigate = useNavigate();
-  const moveToFilm = (item) => {
+  const { isClassic } = useUiVersion();
+  const listFilm = Array.isArray(props?.listFilm) ? props.listFilm : [];
+  const renderFilmLink = (item, index) => {
+    const content = <FilmSliderItem data={item} index={index} />;
+
     if (props?.onItemClick) {
-      props.onItemClick(item);
-      return;
+      return (
+        <button
+          type="button"
+          className="film-card-action"
+          onClick={() => props.onItemClick(item)}
+          aria-label={item?.name}
+        >
+          {content}
+        </button>
+      );
     }
 
-    navigate(`/${item?.type}/${item?.slug}`);
+    return (
+      <Link
+        className="film-card-action"
+        to={`/${item?.type}/${item?.slug}`}
+        aria-label={item?.name}
+      >
+        {content}
+      </Link>
+    );
   };
 
-  useEffect(() => {
-    if (props && props?.listFilm && props?.listFilm?.length > 0) {
-      setListFilm([...props?.listFilm]);
-    }
-  }, [props]);
   return (
     <div className="list-slider-component-container">
       <SwiperComponent
         className="list-slider_wrapper"
-        modules={[Navigation, Pagination, Grid]}
+        modules={[Pagination]}
         spaceBetween={10}
+        slidesPerGroup={1}
+        speed={380}
         grabCursor
+        preventInteractionOnTransition
+        threshold={10}
+        longSwipesRatio={0.25}
+        longSwipesMs={300}
+        resistanceRatio={0.25}
+        touchReleaseOnEdges
         pagination={{ clickable: true, dynamicBullets: true, type: "bullets" }}
-        breakpoints={{
-          0: {
-            slidesPerView: 3,
-          },
-          620: {
-            slidesPerView: 3,
-          },
-          1024: {
-            slidesPerView: 5,
-          },
-        }}
+        breakpoints={
+          isClassic
+            ? {
+                0: { slidesPerView: 3 },
+                620: { slidesPerView: 3 },
+                1024: { slidesPerView: 5 },
+              }
+            : {
+                0: { slidesPerView: 2.15 },
+                620: { slidesPerView: 3.25 },
+                1024: { slidesPerView: 5.2 },
+                1440: { slidesPerView: 6.2 },
+              }
+        }
       >
-        {listFilm && listFilm?.length > 0 ? (
-          listFilm?.map((item, index) => {
+        {listFilm.length > 0 ? (
+          listFilm.map((item, index) => {
             return (
               <SwiperSlide
-                onClick={() => moveToFilm(item)}
-                key={index}
+                key={item?.slug || index}
                 className="list-slider_item"
-                style={{ "--index": `${index}`, cursor: "pointer" }}
+                style={{ "--index": `${index}` }}
               >
-                <FilmSliderItem data={item} index={index} />
+                {renderFilmLink(item, index)}
               </SwiperSlide>
             );
           })
-        ) : (
-          [...Array(5)].map((_, index) => (
+        ) : props?.loading ? (
+          [...Array(7)].map((_, index) => (
             <SwiperSlide
               key={index}
               className="list-slider_item list-slider_item--skeleton"
@@ -70,6 +93,13 @@ function ListFilmSlider(props) {
               </div>
             </SwiperSlide>
           ))
+        ) : (
+          <SwiperSlide className="list-slider_item list-slider_item--empty">
+            <div className="film-rail-empty" role="status">
+              <span aria-hidden="true">—</span>
+              <p>{props?.emptyLabel}</p>
+            </div>
+          </SwiperSlide>
         )}
       </SwiperComponent>
     </div>

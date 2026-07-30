@@ -1,26 +1,4 @@
-.dark-mode-container {
-  .theme-button {
-    border: none;
-    outline: none;
-    background-color: transparent;
-    // i {
-    //   color: var(--body_color);
-    // }
-
-    img {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background-color: #fff;
-    }
-  }
-}
-
-@media (max-width: 767px) {
-  .dark-mode-container {
-    img {
-      width: 25px !important;
-      height: 25px !important;
-    }
-  }
-}
+.dark-mode-container { display: inline-flex; }
+.theme-button { display: inline-grid; width: 2.45rem; height: 2.45rem; place-items: center; border: 0; border-radius: .45rem; background: transparent; color: var(--body_color); }
+.theme-button:hover { background: var(--control-hover-bg); color: var(--control-hover-color); }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--film_highlight_color); outline-offset: 2px; }

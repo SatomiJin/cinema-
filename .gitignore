@@ -28,3 +28,5 @@ yarn-error.log*
 *.keystore
 *.jks
 android/local.properties
+# Added by code-review-graph
+.code-review-graph/

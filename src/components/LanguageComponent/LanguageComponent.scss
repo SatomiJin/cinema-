@@ -1,19 +1,6 @@
-.language-container {
-  .dropdown {
-    .language-text {
-      text-transform: uppercase;
-      padding: 0.2rem;
-      border-radius: 0.2rem;
-      transition: transform 0.25s var(--transition-spring), opacity 0.25s var(--transition-quick);
-      &:hover {
-        cursor: pointer;
-        background-color: var(--search_hover_color);
-      }
-    }
-    .dropdown-menu {
-      .dropdown-item {
-        cursor: pointer !important;
-      }
-    }
-  }
-}
+.language-container { position: relative; }
+.language-trigger { display: inline-flex; align-items: center; gap: .12rem; min-height: 2.45rem; border: 0; border-radius: .45rem; padding: .4rem .45rem; background: transparent; color: var(--body_color); font: inherit; font-size: .78rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.language-trigger:hover { background: var(--control-hover-bg); color: var(--control-hover-color); }
+.language-menu { position: absolute; top: calc(100% + .4rem); right: 0; z-index: 55; min-width: 9rem; margin: 0; padding: .35rem; list-style: none; border: 1px solid var(--film_info_border); border-radius: .5rem; background: var(--body_background); box-shadow: 0 .8rem 2rem rgb(0 0 0 / .25); }
+.language-menu button { width: 100%; border: 0; border-radius: .3rem; padding: .45rem .55rem; background: transparent; color: var(--body_color); font: inherit; text-align: left; }
+.language-menu button:hover, .language-menu button[aria-current="true"] { background: var(--control-hover-bg); color: var(--control-hover-color); }

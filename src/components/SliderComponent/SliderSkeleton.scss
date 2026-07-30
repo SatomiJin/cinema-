@@ -1,27 +1,28 @@
 .slider-skeleton {
   position: absolute;
   inset: 0;
-  border-radius: 1rem;
+  border-radius: inherit;
   overflow: hidden;
   padding: 0.8rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   gap: 0.5rem;
-  animation: slide-up-item 0.45s var(--transition-smooth) both;
+  animation: slide-up-item 450ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+  border: 1px solid color-mix(in srgb, var(--text-primary, #f2efe8) 8%, transparent);
 
   &__poster {
     position: absolute;
     inset: 0;
-    border-radius: 1rem;
+    border-radius: inherit;
     animation: skeleton-shimmer 1.6s ease-in-out infinite;
     background: linear-gradient(
       105deg,
-      var(--skeleton-base) 0%,
-      var(--skeleton-base) 30%,
-      var(--skeleton-highlight) 50%,
-      var(--skeleton-base) 70%,
-      var(--skeleton-base) 100%
+      var(--skeleton-base, #151821) 0%,
+      var(--skeleton-base, #151821) 30%,
+      var(--skeleton-highlight, #252a36) 50%,
+      var(--skeleton-base, #151821) 70%,
+      var(--skeleton-base, #151821) 100%
     );
     background-size: 250% 100%;
   }
@@ -46,6 +47,13 @@
 
     &--title { width: 72%; }
     &--sub   { width: 45%; opacity: 0.6; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slider-skeleton,
+  .slider-skeleton__poster {
+    animation: none;
   }
 }
 

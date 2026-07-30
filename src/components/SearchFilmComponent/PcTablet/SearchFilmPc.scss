@@ -13,12 +13,14 @@
         border-radius: 0.5rem;
         margin-top: 1rem;
         padding: 1rem 0.5rem;
+        border: 1px solid var(--film_info_border);
         display: flex;
         gap: 0.5rem;
         align-items: center;
         justify-content: center;
         flex-wrap: wrap;
     }
+    .discovery-empty { width: 100%; padding: 2rem 1rem; text-align: center; opacity: 0.72; }
     .pagination {
         display: flex;
         justify-content: center;
