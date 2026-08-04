@@ -49,6 +49,32 @@ describe("app update service", () => {
 
   test("surfaces a missing GitHub release", async () => {
     const fetchImpl = jest.fn().mockResolvedValue({ ok: false, status: 404 });
-    await expect(checkForAppUpdate({ currentVersion: "1.0.0", fetchImpl })).rejects.toThrow("NO_RELEASE");
+    await expect(checkForAppUpdate({ currentVersion: "1.0.0", fetchImpl })).rejects.toMatchObject({
+      code: "UPDATE_SOURCE_UNAVAILABLE",
+      status: 404,
+    });
+  });
+
+  test("distinguishes network failures from server failures", async () => {
+    const networkFetch = jest.fn().mockRejectedValue(new TypeError("Failed to fetch"));
+    const serverFetch = jest.fn().mockResolvedValue({ ok: false, status: 503 });
+
+    await expect(
+      checkForAppUpdate({ currentVersion: "1.0.0", fetchImpl: networkFetch }),
+    ).rejects.toMatchObject({ code: "UPDATE_NETWORK_ERROR" });
+    await expect(
+      checkForAppUpdate({ currentVersion: "1.0.0", fetchImpl: serverFetch }),
+    ).rejects.toMatchObject({ code: "UPDATE_SERVICE_ERROR", status: 503 });
+  });
+
+  test("rejects malformed release payloads with a specific error", async () => {
+    const fetchImpl = jest.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ assets: [], html_url: "https://example.com/release" }),
+    });
+
+    await expect(
+      checkForAppUpdate({ currentVersion: "1.0.0", fetchImpl }),
+    ).rejects.toMatchObject({ code: "INVALID_RELEASE" });
   });
 });

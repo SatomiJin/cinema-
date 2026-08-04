@@ -1,6 +1,6 @@
-import { act, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { MemoryRouter, useLocation } from "react-router-dom";
+import { BrowserRouter, MemoryRouter, useLocation, useNavigate } from "react-router-dom";
 import { App as CapacitorApp } from "@capacitor/app";
 import { Capacitor } from "@capacitor/core";
 import { NativeBackHandler } from "./App";
@@ -27,11 +27,17 @@ function LocationProbe() {
   return <output aria-label="current route">{location.pathname}</output>;
 }
 
+function NavigateToFilm() {
+  const navigate = useNavigate();
+  return <button onClick={() => navigate("/phim-le/test-film")}>Open film</button>;
+}
+
 describe("NativeBackHandler", () => {
   let backButtonListener;
   let removeListener;
 
   beforeEach(() => {
+    window.history.replaceState({}, "", "/");
     backButtonListener = undefined;
     removeListener = jest.fn().mockResolvedValue(undefined);
     Capacitor.isNativePlatform.mockReturnValue(true);
@@ -64,6 +70,27 @@ describe("NativeBackHandler", () => {
 
     view.unmount();
     await waitFor(() => expect(removeListener).toHaveBeenCalledTimes(1));
+  });
+
+  test("returns from a film route when the WebView does not see React Router history", async () => {
+    render(
+      <BrowserRouter>
+        <NativeBackHandler />
+        <NavigateToFilm />
+        <LocationProbe />
+      </BrowserRouter>,
+    );
+
+    await waitFor(() => expect(backButtonListener).toEqual(expect.any(Function)));
+
+    fireEvent.click(screen.getByRole("button", { name: "Open film" }));
+    expect(screen.getByLabelText("current route")).toHaveTextContent("/phim-le/test-film");
+    expect(window.history.state.idx).toBe(1);
+
+    act(() => backButtonListener({ canGoBack: false }));
+
+    await waitFor(() => expect(screen.getByLabelText("current route")).toHaveTextContent(/^\/$/));
+    expect(CapacitorApp.minimizeApp).not.toHaveBeenCalled();
   });
 
   test("minimizes the Android app at the first history entry", async () => {

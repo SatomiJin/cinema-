@@ -1,12 +1,124 @@
-.app-update { position: relative; display: inline-flex; flex: 0 0 auto; }
-.app-update__button { display: inline-flex; align-items: center; justify-content: center; gap: .38rem; min-height: 2.45rem; border: 1px solid var(--film_info_border); border-radius: .45rem; padding: .4rem .58rem; background: color-mix(in srgb, var(--body_background) 82%, transparent); color: var(--body_color); font: inherit; font-size: .72rem; font-weight: 750; line-height: 1; white-space: nowrap; }
-.app-update__button:hover, .app-update__button.is-available { border-color: color-mix(in srgb, var(--film_highlight_color) 55%, var(--film_info_border)); background: var(--control-hover-bg); color: var(--film_highlight_color); }
-.app-update__button:disabled { cursor: wait; opacity: .72; }
-.app-update--compact .app-update__button { width: 2.65rem; height: 2.65rem; min-height: 0; padding: 0; }
-.app-update--compact .app-update__button span { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); }
-.app-update__message { position: absolute; z-index: 70; top: calc(100% + .65rem); right: 0; width: max-content; max-width: min(20rem, calc(100vw - 1rem)); border: 1px solid var(--film_info_border); border-radius: .55rem; padding: .55rem .7rem; background: var(--body_background); color: var(--body_color); box-shadow: var(--shadow-soft); font-size: .76rem; font-weight: 600; line-height: 1.4; white-space: normal; }
-.app-update__message--available { border-color: color-mix(in srgb, var(--film_highlight_color) 55%, var(--film_info_border)); }
-.app-update__message--error { border-color: var(--danger); }
-.is-spinning { animation: app-update-spin .8s linear infinite; }
-@keyframes app-update-spin { to { transform: rotate(360deg); } }
-@media (prefers-reduced-motion: reduce) { .is-spinning { animation: none; } }
+.app-update {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+
+.app-update__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.42rem;
+  min-height: 2.45rem;
+  border: 1px solid color-mix(in srgb, var(--film_highlight_color) 45%, var(--film_info_border));
+  border-radius: 999px;
+  padding: 0.32rem 0.66rem 0.32rem 0.38rem;
+  background: color-mix(in srgb, var(--film_highlight_color) 10%, var(--body_background));
+  color: var(--body_color);
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 750;
+  line-height: 1;
+  white-space: nowrap;
+  transition:
+    border-color 160ms var(--transition-quick),
+    background-color 160ms var(--transition-quick),
+    color 160ms var(--transition-quick),
+    transform 160ms var(--transition-quick);
+}
+
+.app-update__button:hover {
+  border-color: var(--film_highlight_color);
+  background: color-mix(in srgb, var(--film_highlight_color) 17%, var(--body_background));
+  color: var(--film_highlight_color);
+  transform: translateY(-1px);
+}
+
+.app-update__button--available {
+  border-color: var(--film_highlight_color);
+  color: var(--film_highlight_color);
+}
+
+.app-update__button--error {
+  border-color: color-mix(in srgb, var(--danger) 65%, var(--film_info_border));
+}
+
+.app-update__button:disabled {
+  cursor: wait;
+  opacity: 0.72;
+  transform: none;
+}
+
+.app-update__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.72rem;
+  height: 1.72rem;
+  border-radius: 50%;
+  background: var(--film_highlight_color);
+  color: var(--body_background);
+}
+
+.app-update__button--error .app-update__icon {
+  background: var(--danger);
+}
+
+.app-update--compact .app-update__button {
+  width: 2.65rem;
+  height: 2.65rem;
+  min-height: 0;
+  padding: 0;
+}
+
+.app-update--compact .app-update__button > span:last-child {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.app-update__message {
+  position: absolute;
+  z-index: 70;
+  top: calc(100% + 0.65rem);
+  right: 0;
+  width: max-content;
+  max-width: min(22rem, calc(100vw - 1rem));
+  border: 1px solid var(--film_info_border);
+  border-radius: 0.55rem;
+  padding: 0.55rem 0.7rem;
+  background: var(--body_background);
+  color: var(--body_color);
+  box-shadow: var(--shadow-soft);
+  font-size: 0.76rem;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: normal;
+}
+
+.app-update__message--available {
+  border-color: color-mix(in srgb, var(--film_highlight_color) 55%, var(--film_info_border));
+}
+
+.app-update__message--error {
+  border-color: var(--danger);
+}
+
+.is-spinning {
+  animation: app-update-spin 0.8s linear infinite;
+}
+
+@keyframes app-update-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .is-spinning {
+    animation: none;
+  }
+}

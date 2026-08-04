@@ -2,10 +2,20 @@ import { useState } from "react";
 import { App } from "@capacitor/app";
 import { Browser } from "@capacitor/browser";
 import { Capacitor } from "@capacitor/core";
-import { Check, Download, LoaderCircle, RefreshCw } from "lucide-react";
+import { BadgeCheck, CircleArrowUp, Download, LoaderCircle, TriangleAlert } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { checkForAppUpdate } from "../../services/appUpdate";
 import "./AppUpdateButton.scss";
+
+const UPDATE_ERROR_MESSAGES = {
+  APP_INFO_UNAVAILABLE: "appInfoUnavailable",
+  INVALID_RELEASE: "invalidAppRelease",
+  UPDATE_CHECK_TIMEOUT: "updateCheckTimeout",
+  UPDATE_NETWORK_ERROR: "updateNetworkError",
+  UPDATE_RATE_LIMITED: "updateRateLimited",
+  UPDATE_SERVICE_ERROR: "updateServiceError",
+  UPDATE_SOURCE_UNAVAILABLE: "updateSourceUnavailable",
+};
 
 function AppUpdateButton({ compact = false }) {
   const { t } = useTranslation();
@@ -21,7 +31,16 @@ function AppUpdateButton({ compact = false }) {
     setStatus("checking");
     setMessage(t("checkingUpdate"));
     try {
-      const appInfo = await App.getInfo();
+      let appInfo;
+
+      try {
+        appInfo = await App.getInfo();
+      } catch {
+        const appInfoError = new Error("APP_INFO_UNAVAILABLE");
+        appInfoError.code = "APP_INFO_UNAVAILABLE";
+        throw appInfoError;
+      }
+
       const result = await checkForAppUpdate({ currentVersion: appInfo.version });
       setUpdate(result);
       setStatus(result.available ? "available" : "current");
@@ -32,7 +51,9 @@ function AppUpdateButton({ compact = false }) {
       );
     } catch (error) {
       setStatus("error");
-      setMessage(error.message === "NO_RELEASE" ? t("noAppRelease") : t("updateCheckFailed"));
+      const errorCode = error?.code || error?.message;
+      const messageKey = UPDATE_ERROR_MESSAGES[errorCode] || "updateCheckFailed";
+      setMessage(t(messageKey));
     }
   };
 
@@ -59,24 +80,41 @@ function AppUpdateButton({ compact = false }) {
     ? t("updateToVersion", { version: update.latestVersion })
     : isBusy
       ? t(status === "checking" ? "checkingUpdate" : "openingUpdate")
-      : t("checkAppUpdate");
-  const Icon = isBusy ? LoaderCircle : isAvailable ? Download : status === "current" ? Check : RefreshCw;
+      : status === "error"
+        ? t("retryUpdateCheck")
+        : status === "current"
+          ? t("checkUpdateAgain")
+          : t("appUpdateAction");
+  const Icon = isBusy
+    ? LoaderCircle
+    : isAvailable
+      ? Download
+      : status === "current"
+        ? BadgeCheck
+        : status === "error"
+          ? TriangleAlert
+          : CircleArrowUp;
 
   return (
     <div className={`app-update${compact ? " app-update--compact" : ""}`}>
       <button
         aria-label={buttonLabel}
-        className={`app-update__button${isAvailable ? " is-available" : ""}`}
+        className={`app-update__button app-update__button--${status}`}
         disabled={isBusy}
         onClick={handleClick}
         title={buttonLabel}
         type="button"
       >
-        <Icon aria-hidden="true" className={isBusy ? "is-spinning" : ""} size={17} />
+        <span className="app-update__icon" aria-hidden="true">
+          <Icon className={isBusy ? "is-spinning" : ""} size={17} />
+        </span>
         <span>{buttonLabel}</span>
       </button>
       {message && (
-        <span className={`app-update__message app-update__message--${status}`} role="status">
+        <span
+          className={`app-update__message app-update__message--${status}`}
+          role={status === "error" ? "alert" : "status"}
+        >
           {message}
         </span>
       )}

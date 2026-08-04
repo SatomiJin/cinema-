@@ -28,7 +28,12 @@ export function NativeBackHandler() {
     let listenerHandle;
 
     void CapacitorApp.addListener("backButton", ({ canGoBack }) => {
-      if (canGoBack) {
+      const routerHistoryIndex = window.history.state?.idx;
+      const canGoBackInApp = Number.isInteger(routerHistoryIndex)
+        ? routerHistoryIndex > 0
+        : canGoBack;
+
+      if (canGoBackInApp) {
         navigate(-1);
         return;
       }

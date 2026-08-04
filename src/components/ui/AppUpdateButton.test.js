@@ -34,10 +34,29 @@ describe("AppUpdateButton", () => {
   test("checks first, then opens the newer APK on the next click", async () => {
     checkForAppUpdate.mockResolvedValue({ available: true, downloadUrl: "https://example.com/app-release.apk", hasDirectApk: true, latestVersion: "v1.1.0" });
     render(<AppUpdateButton />);
-    fireEvent.click(screen.getByRole("button", { name: "checkAppUpdate" }));
+    fireEvent.click(screen.getByRole("button", { name: "appUpdateAction" }));
     await waitFor(() => expect(checkForAppUpdate).toHaveBeenCalledWith({ currentVersion: "1.0.0" }));
     fireEvent.click(screen.getByRole("button", { name: "updateToVersion v1.1.0" }));
     await waitFor(() => expect(Browser.open).toHaveBeenCalledWith({ url: "https://example.com/app-release.apk" }));
     await screen.findByText("finishUpdateInstall");
+  });
+
+  test("uses a distinct app-update affordance", () => {
+    const { container } = render(<AppUpdateButton compact />);
+    const button = screen.getByRole("button", { name: "appUpdateAction" });
+
+    expect(button).toHaveAttribute("title", "appUpdateAction");
+    expect(container.querySelector(".lucide-circle-arrow-up")).toBeInTheDocument();
+    expect(container.querySelector(".lucide-refresh-cw")).not.toBeInTheDocument();
+  });
+
+  test("explains when the public update source is unavailable", async () => {
+    checkForAppUpdate.mockRejectedValue({ code: "UPDATE_SOURCE_UNAVAILABLE" });
+    render(<AppUpdateButton />);
+
+    fireEvent.click(screen.getByRole("button", { name: "appUpdateAction" }));
+
+    expect(await screen.findByRole("alert")).toHaveTextContent("updateSourceUnavailable");
+    expect(screen.getByRole("button", { name: "retryUpdateCheck" })).toBeInTheDocument();
   });
 });
