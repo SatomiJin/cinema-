@@ -8,6 +8,7 @@ import DarkMode from "../../../../themes/DarkMode";
 import SearchTablet from "../Search/SearchTablet";
 import { COUNTRY_OPTIONS, GENRE_OPTIONS, YEAR_OPTIONS } from "../../../../constants/filterOptions";
 import UiVersionToggle from "../../../../components/ui/UiVersionToggle";
+import AppUpdateButton from "../../../../components/ui/AppUpdateButton";
 import "./UserHeaderPc.scss";
 
 function UserHeaderPc() {
@@ -79,6 +80,7 @@ function UserHeaderPc() {
             </div>
             <div className="language"><LanguageComponent /></div>
             <div className="theme"><DarkMode /></div>
+            <AppUpdateButton />
             <UiVersionToggle />
             <button className="home-control classic-home-control" type="button" onClick={() => navigate("/")} aria-label="Satomi Movie home"><Home aria-hidden="true" size={19} /></button>
           </div>

@@ -1,4 +1,6 @@
 import React, { useEffect, useLayoutEffect } from "react";
+import { App as CapacitorApp } from "@capacitor/app";
+import { Capacitor } from "@capacitor/core";
 import { useTranslation } from "react-i18next";
 import { AnimatePresence, MotionConfig, motion } from "motion/react";
 import {
@@ -6,12 +8,51 @@ import {
   Route,
   Routes,
   useLocation,
+  useNavigate,
   useNavigationType,
 } from "react-router-dom";
 import { routes } from "./routes/index";
 import DefaultLayout from "./layouts/DefaultLayout/DefaultLayout";
 import { UiVersionProvider } from "./context/UiVersionContext";
 import "./styles/classicUi.scss";
+
+export function NativeBackHandler() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!Capacitor.isNativePlatform() || Capacitor.getPlatform() !== "android") {
+      return undefined;
+    }
+
+    let isDisposed = false;
+    let listenerHandle;
+
+    void CapacitorApp.addListener("backButton", ({ canGoBack }) => {
+      if (canGoBack) {
+        navigate(-1);
+        return;
+      }
+
+      void CapacitorApp.minimizeApp();
+    }).then((handle) => {
+      if (isDisposed) {
+        void handle.remove();
+        return;
+      }
+
+      listenerHandle = handle;
+    });
+
+    return () => {
+      isDisposed = true;
+      if (listenerHandle) {
+        void listenerHandle.remove();
+      }
+    };
+  }, [navigate]);
+
+  return null;
+}
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -71,6 +112,7 @@ function App() {
     <div className="App">
       <UiVersionProvider>
         <Router>
+          <NativeBackHandler />
           <MotionConfig reducedMotion="user">
             <DefaultLayout>
               <AnimatedRoutes />

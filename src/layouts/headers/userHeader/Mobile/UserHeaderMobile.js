@@ -7,6 +7,7 @@ import LanguageComponent from "../../../../components/LanguageComponent/Language
 import "./UserHeaderMobile.scss";
 import { useNavigate } from "react-router-dom";
 import UiVersionToggle from "../../../../components/ui/UiVersionToggle";
+import AppUpdateButton from "../../../../components/ui/AppUpdateButton";
 
 function UserHeaderMobile() {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ function UserHeaderMobile() {
           <button className="mobile-control" type="button" aria-label="Open search" aria-expanded={isSearchOpen} onClick={() => { setMenuOpen(false); setSearchOpen(true); }}><Search aria-hidden="true" size={20} /></button>
           <div className="theme"><DarkMode /></div>
           <div className="language"><LanguageComponent /></div>
+          <AppUpdateButton compact />
           <UiVersionToggle compact />
           <button className="mobile-control classic-home-control" type="button" onClick={() => navigate("/")} aria-label="Satomi Movie home"><Home aria-hidden="true" size={20} /></button>
         </div>
