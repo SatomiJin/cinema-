@@ -46,8 +46,8 @@ jobs:
           REACT_APP_API_FILM_URL: https://phimapi.com
           CI: "false"
 
-      - name: Copy assets to Android
-        run: npx cap copy android
+      - name: Sync assets and plugins to Android
+        run: npx cap sync android
 
       - name: Make Gradle executable
         run: chmod +x android/gradlew
