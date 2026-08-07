@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { App } from "@capacitor/app";
 import { Browser } from "@capacitor/browser";
 import { Capacitor } from "@capacitor/core";
-import { BadgeCheck, CircleArrowUp, Download, LoaderCircle, TriangleAlert } from "lucide-react";
+import { BadgeCheck, CircleArrowUp, Download, LoaderCircle, TriangleAlert, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { checkForAppUpdate } from "../../services/appUpdate";
 import "./AppUpdateButton.scss";
@@ -17,6 +17,9 @@ const UPDATE_ERROR_MESSAGES = {
   UPDATE_SOURCE_UNAVAILABLE: "updateSourceUnavailable",
 };
 
+const AUTO_DISMISS_STATUSES = new Set(["current", "opened", "error"]);
+const NOTICE_AUTO_DISMISS_MS = 7000;
+
 function AppUpdateButton({ compact = false }) {
   const { t } = useTranslation();
   const [update, setUpdate] = useState(null);
@@ -24,6 +27,13 @@ function AppUpdateButton({ compact = false }) {
   const [message, setMessage] = useState("");
   const isAndroidApp =
     Capacitor.isNativePlatform() && Capacitor.getPlatform() === "android";
+
+  useEffect(() => {
+    if (!message || !AUTO_DISMISS_STATUSES.has(status)) return undefined;
+
+    const timeoutId = window.setTimeout(() => setMessage(""), NOTICE_AUTO_DISMISS_MS);
+    return () => window.clearTimeout(timeoutId);
+  }, [message, status]);
 
   if (!isAndroidApp) return null;
 
@@ -111,12 +121,19 @@ function AppUpdateButton({ compact = false }) {
         <span>{buttonLabel}</span>
       </button>
       {message && (
-        <span
+        <div
           className={`app-update__message app-update__message--${status}`}
-          role={status === "error" ? "alert" : "status"}
         >
-          {message}
-        </span>
+          <span role={status === "error" ? "alert" : "status"}>{message}</span>
+          <button
+            aria-label={t("dismissUpdateMessage")}
+            className="app-update__message-close"
+            onClick={() => setMessage("")}
+            type="button"
+          >
+            <X aria-hidden="true" size={16} />
+          </button>
+        </div>
       )}
     </div>
   );
