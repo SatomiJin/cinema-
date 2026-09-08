@@ -1,5 +1,25 @@
 apply plugin: 'com.android.application'
 
+// Release signing comes from environment variables so the keystore never lives in the repo.
+// An unsigned/debug-signed release APK cannot be installed over a properly signed one, so a
+// release build with missing credentials must fail loudly instead of silently falling back to
+// the debug key.
+def hasReleaseSigning = System.getenv("ANDROID_KEYSTORE_PATH") as boolean
+
+gradle.taskGraph.whenReady { taskGraph ->
+    def buildsRelease = taskGraph.allTasks.any { task ->
+        task.project == project && task.name ==~ /(?i).*(assemble|bundle)Release.*/
+    }
+
+    if (buildsRelease && !hasReleaseSigning) {
+        throw new GradleException(
+            "Refusing to build a release artifact without signing credentials. Set " +
+            "ANDROID_KEYSTORE_PATH, ANDROID_KEYSTORE_PASSWORD, ANDROID_KEY_ALIAS and " +
+            "ANDROID_KEY_PASSWORD. See docs/RELEASE.md."
+        )
+    }
+}
+
 android {
     namespace = "com.cinemamovie.app"
     compileSdk = rootProject.ext.compileSdkVersion
@@ -29,9 +49,7 @@ android {
     }
     buildTypes {
         release {
-            if (System.getenv("ANDROID_KEYSTORE_PATH")) {
-                signingConfig signingConfigs.release
-            }
+            signingConfig hasReleaseSigning ? signingConfigs.release : null
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

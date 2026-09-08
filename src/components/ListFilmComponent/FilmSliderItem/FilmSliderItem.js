@@ -1,17 +1,10 @@
 import "./FilmSliderItem.scss";
-import defaultPoster from "../../../assets/image/poster-film.png";
+import { getImageUrl, handleImageError } from "../../../utils/imageUrl";
 
 function FilmSliderItem(props) {
   const data = props?.data || {};
 
-  const changeUrl = (url) => {
-    if (!url) return defaultPoster;
-    let splitUrl = url.split("/");
-    let testUrl = splitUrl?.some((item) => item === "phimimg.com");
-    if (testUrl) return url;
-    if (!testUrl) return `https://img.phimapi.com/${url}`;
-  };
-  const posterUrl = data?.poster_url ? changeUrl(data.poster_url) : defaultPoster;
+  const posterUrl = getImageUrl(data?.poster_url);
 
   return (
     <div className="slider-film-container">
@@ -22,6 +15,7 @@ function FilmSliderItem(props) {
           alt={data?.name}
           loading="lazy"
           decoding="async"
+          onError={handleImageError}
         />
         <div className="play_hover">
           <i className="fa-solid fa-caret-right"></i>

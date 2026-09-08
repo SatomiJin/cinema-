@@ -15,11 +15,10 @@ permissions:
   contents: write
 
 jobs:
-  build:
+  # Debug build: fast feedback on every branch push and PR. Never published.
+  debug:
+    if: github.ref_type != 'tag'
     runs-on: ubuntu-latest
-    env:
-      HAS_RELEASE_SIGNING: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' && secrets.ANDROID_KEYSTORE_PASSWORD != '' && secrets.ANDROID_KEY_ALIAS != '' }}
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -57,7 +56,7 @@ jobs:
         run: ./gradlew assembleDebug
         env:
           VERSION_CODE: ${{ github.run_number }}
-          VERSION_NAME: ${{ github.ref_type == 'tag' && github.ref_name || format('0.1.{0}', github.run_number) }}
+          VERSION_NAME: 0.0.0-dev.${{ github.run_number }}
 
       - name: Upload debug APK
         uses: actions/upload-artifact@v4
@@ -65,34 +64,157 @@ jobs:
           name: cinema-debug-apk
           path: android/app/build/outputs/apk/debug/*.apk
 
-      - name: Prepare release signing key
-        if: startsWith(github.ref, 'refs/tags/v') && env.HAS_RELEASE_SIGNING == 'true'
+  # Release build: only ever runs for a v* tag, and always produces a signed APK
+  # attached to the GitHub Release that the in-app updater reads.
+  release:
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # The in-app updater compares the release tag against the installed
+      # versionName, so the tag must be a plain semver with a leading "v".
+      # versionCode is derived from that same semver, which keeps it strictly
+      # increasing across releases and independent of workflow run counters.
+      - name: Derive version from tag
+        id: version
         run: |
-          echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > android/app/release.keystore
+          set -euo pipefail
+          TAG="${GITHUB_REF_NAME}"
+
+          if [[ ! "$TAG" =~ ^v([0-9]+)\.([0-9]+)\.([0-9]+)$ ]]; then
+            echo "::error::Tag '$TAG' is not of the form vMAJOR.MINOR.PATCH (e.g. v1.0.1)."
+            exit 1
+          fi
+
+          MAJOR="${BASH_REMATCH[1]}"
+          MINOR="${BASH_REMATCH[2]}"
+          PATCH="${BASH_REMATCH[3]}"
+
+          if (( MINOR > 999 || PATCH > 999 )); then
+            echo "::error::MINOR and PATCH must each be <= 999 to keep versionCode monotonic."
+            exit 1
+          fi
+
+          VERSION_CODE=$(( MAJOR * 1000000 + MINOR * 1000 + PATCH ))
+
+          if (( VERSION_CODE < 1 )); then
+            echo "::error::Refusing to build v0.0.0 (versionCode must be >= 1)."
+            exit 1
+          fi
+
+          echo "name=${TAG#v}" >> "$GITHUB_OUTPUT"
+          echo "code=${VERSION_CODE}" >> "$GITHUB_OUTPUT"
+          echo "Building $TAG -> versionName=${TAG#v} versionCode=${VERSION_CODE}"
+
+      # Fail loudly rather than skipping the publish step, which would push a tag
+      # with no release attached and no error anywhere.
+      - name: Verify signing secrets are present
         env:
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          set -euo pipefail
+          missing=()
+          [[ -n "$ANDROID_KEYSTORE_BASE64" ]]   || missing+=("ANDROID_KEYSTORE_BASE64")
+          [[ -n "$ANDROID_KEYSTORE_PASSWORD" ]] || missing+=("ANDROID_KEYSTORE_PASSWORD")
+          [[ -n "$ANDROID_KEY_ALIAS" ]]         || missing+=("ANDROID_KEY_ALIAS")
+
+          if (( ${#missing[@]} > 0 )); then
+            echo "::error::Missing repository secrets: ${missing[*]}. See docs/RELEASE.md."
+            exit 1
+          fi
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test -- --watchAll=false
+        env:
+          CI: "true"
+
+      - name: Build React assets
+        run: npm run build
+        env:
+          BUILD_PATH: android-build
+          REACT_APP_API_FILM_URL: https://phimapi.com
+          CI: "false"
+
+      - name: Sync assets and plugins to Android
+        run: npx cap sync android
+
+      - name: Make Gradle executable
+        run: chmod +x android/gradlew
+
+      - name: Prepare release signing key
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          set -euo pipefail
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > android/app/release.keystore
+          test -s android/app/release.keystore
 
       - name: Build release APK
-        if: startsWith(github.ref, 'refs/tags/v') && env.HAS_RELEASE_SIGNING == 'true'
         working-directory: android
         run: ./gradlew assembleRelease
         env:
-          VERSION_CODE: ${{ github.run_number }}
-          VERSION_NAME: ${{ github.ref_name }}
+          VERSION_CODE: ${{ steps.version.outputs.code }}
+          VERSION_NAME: ${{ steps.version.outputs.name }}
           ANDROID_KEYSTORE_PATH: release.keystore
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
 
-      - name: Upload release APK
-        if: startsWith(github.ref, 'refs/tags/v') && env.HAS_RELEASE_SIGNING == 'true'
+      # A debug-signed APK here would be installable now but impossible to
+      # upgrade later, so confirm the artifact really carries the release key.
+      - name: Verify APK signature
+        run: |
+          set -euo pipefail
+          APK=$(find android/app/build/outputs/apk/release -name "*.apk" | head -n 1)
+          test -n "$APK"
+
+          BUILD_TOOLS=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -n 1)
+          "$BUILD_TOOLS/apksigner" verify --print-certs "$APK" > certs.txt
+          cat certs.txt
+
+          if grep -qi "CN=Android Debug" certs.txt; then
+            echo "::error::APK is signed with the debug key. Refusing to publish."
+            exit 1
+          fi
+
+      - name: Rename APK
+        id: apk
+        run: |
+          set -euo pipefail
+          SRC=$(find android/app/build/outputs/apk/release -name "*.apk" | head -n 1)
+          DEST="cinema-movie-${GITHUB_REF_NAME}-release.apk"
+          cp "$SRC" "$DEST"
+          echo "path=$DEST" >> "$GITHUB_OUTPUT"
+
+      - name: Upload release APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: cinema-release-apk
-          path: android/app/build/outputs/apk/release/*.apk
+          path: ${{ steps.apk.outputs.path }}
 
       - name: Publish GitHub Release
-        if: startsWith(github.ref, 'refs/tags/v') && env.HAS_RELEASE_SIGNING == 'true'
         uses: softprops/action-gh-release@v2
         with:
-          files: android/app/build/outputs/apk/release/*.apk
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          generate_release_notes: true
+          files: ${{ steps.apk.outputs.path }}

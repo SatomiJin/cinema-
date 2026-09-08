@@ -1,20 +1,13 @@
 import "./FilmItemComponent.scss";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import defaultPoster from "../../assets/image/poster-film.png";
+import { getImageUrl, handleImageError } from "../../utils/imageUrl";
 
 function FilmItemComponent(props) {
   const data = props?.dataFilm || {};
   const { i18n } = useTranslation();
 
-  const changeUrl = (url) => {
-    let splitUrl = url?.split("/");
-    let testUrl = splitUrl?.some((item) => item === "phimimg.com");
-    if (testUrl) return url;
-    if (!testUrl) return `https://phimimg.com/${url}`;
-  };
-
-  const posterUrl = data && data?.poster_url ? changeUrl(data?.poster_url) : defaultPoster;
+  const posterUrl = getImageUrl(data?.poster_url);
   const displayName = i18n.language === "en" ? data?.origin_name : data?.name;
 
   return (
@@ -31,6 +24,7 @@ function FilmItemComponent(props) {
             alt={displayName || data?.origin_name || ""}
             loading="lazy"
             decoding="async"
+            onError={handleImageError}
           />
           <div className="overlay"></div>
           <i className="fa-solid fa-play play-icon"></i>
