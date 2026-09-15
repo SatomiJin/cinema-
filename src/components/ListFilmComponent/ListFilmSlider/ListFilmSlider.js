@@ -4,10 +4,8 @@ import { Pagination } from "swiper/modules";
 import "./ListFilmSlider.scss";
 import FilmSliderItem from "../FilmSliderItem/FilmSliderItem";
 import { Link } from "react-router-dom";
-import { useUiVersion } from "../../../context/UiVersionContext";
 
 function ListFilmSlider(props) {
-  const { isClassic } = useUiVersion();
   const listFilm = Array.isArray(props?.listFilm) ? props.listFilm : [];
   const renderFilmLink = (item, index) => {
     const content = <FilmSliderItem data={item} index={index} />;
@@ -52,20 +50,12 @@ function ListFilmSlider(props) {
         resistanceRatio={0.25}
         touchReleaseOnEdges
         pagination={{ clickable: true, dynamicBullets: true, type: "bullets" }}
-        breakpoints={
-          isClassic
-            ? {
-                0: { slidesPerView: 3 },
-                620: { slidesPerView: 3 },
-                1024: { slidesPerView: 5 },
-              }
-            : {
-                0: { slidesPerView: 2.15 },
-                620: { slidesPerView: 3.25 },
-                1024: { slidesPerView: 5.2 },
-                1440: { slidesPerView: 6.2 },
-              }
-        }
+        breakpoints={{
+          0: { slidesPerView: 2.15 },
+          620: { slidesPerView: 3.25 },
+          1024: { slidesPerView: 5.2 },
+          1440: { slidesPerView: 6.2 },
+        }}
       >
         {listFilm.length > 0 ? (
           listFilm.map((item, index) => {

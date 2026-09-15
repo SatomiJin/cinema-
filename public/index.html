@@ -1,48 +1,42 @@
 <!DOCTYPE html>
 <html lang="vi">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#0b0d12" />
-    <meta name="color-scheme" content="light dark" />
-    <meta
-      name="description"
-      content="Satomi Movie — khám phá phim mới, phim bộ, phim lẻ và hoạt hình."
-    />
-    <script>
-      try {
-        const savedTheme = localStorage.getItem("theme");
-        const preferredTheme =
-          savedTheme ||
-          (window.matchMedia("(prefers-color-scheme: dark)").matches
-            ? "dark"
-            : "light");
-        document.documentElement.setAttribute("data-theme", preferredTheme);
-        const savedUiVersion = localStorage.getItem("ui-version");
-        document.documentElement.setAttribute(
-          "data-ui-version",
-          savedUiVersion === "classic" ? "classic" : "modern"
-        );
-      } catch (_error) {
-        document.documentElement.setAttribute("data-theme", "light");
-        document.documentElement.setAttribute("data-ui-version", "modern");
-      }
-    </script>
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <link rel="preconnect" href="https://img.phimapi.com" />
-    <link rel="dns-prefetch" href="https://img.phimapi.com" />
-    <link rel="preconnect" href="https://phimimg.com" />
-    <link rel="dns-prefetch" href="https://phimimg.com" />
 
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b0d12" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="description" content="Satomi Movie — khám phá phim mới, phim bộ, phim lẻ và hoạt hình." />
+  <script>
+    try {
+      const savedTheme = localStorage.getItem("theme");
+      const preferredTheme =
+        savedTheme ||
+        (window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light");
+      document.documentElement.setAttribute("data-theme", preferredTheme);
+    } catch (_error) {
+      document.documentElement.setAttribute("data-theme", "light");
+    }
+  </script>
+  <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+  <link rel="preconnect" href="https://img.phimapi.com" />
+  <link rel="dns-prefetch" href="https://img.phimapi.com" />
+  <link rel="preconnect" href="https://phimimg.com" />
+  <link rel="dns-prefetch" href="https://phimimg.com" />
 
-    <!-- Font Awesome -->
-    <script src="https://kit.fontawesome.com/feceadf1dd.js" crossorigin="anonymous"></script>
-    <title>Satomi Movie — Phòng chiếu của bạn</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-  </body>
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/feceadf1dd.js" crossorigin="anonymous"></script>
+  <title>Satomi Movie — Phòng chiếu của bạn</title>
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+</body>
+
 </html>

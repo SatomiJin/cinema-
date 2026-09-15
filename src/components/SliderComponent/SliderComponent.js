@@ -9,12 +9,10 @@ import * as FilmService from "../../services/FilmService";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useUiVersion } from "../../context/UiVersionContext";
 import "./SliderSkeleton.scss";
 
 function SliderComponent() {
   const { t } = useTranslation();
-  const { isClassic } = useUiVersion();
   const [dataAnime, setDataAnime] = useState([]);
   const mutationGet = useMutationHook(() => FilmService.getListAnime());
   const { data, mutate, isIdle, isPending } = mutationGet;
@@ -33,7 +31,10 @@ function SliderComponent() {
   const hasFilms = dataAnime.length > 0;
 
   return (
-    <div className="slider-component-container" aria-labelledby="now-projecting-title">
+    <div
+      className="slider-component-container"
+      aria-labelledby="now-projecting-title"
+    >
       <div className="projection-heading">
         <span className="projection-heading__signal" aria-hidden="true"></span>
         <h1 id="now-projecting-title">{t("newAnimeFilm")}</h1>
@@ -43,7 +44,7 @@ function SliderComponent() {
           modules={[Pagination]}
           slidesPerView={1}
           slidesPerGroup={1}
-          spaceBetween={isClassic ? 10 : 0}
+          spaceBetween={0}
           speed={420}
           watchOverflow
           grabCursor
@@ -58,24 +59,12 @@ function SliderComponent() {
             dynamicBullets: true,
             type: "bullets",
           }}
-          breakpoints={
-            isClassic
-              ? {
-                  0: { slidesPerView: 1 },
-                  620: { slidesPerView: 2 },
-                  1024: { slidesPerView: 3 },
-                }
-              : undefined
-          }
           className="card-list"
         >
           {hasFilms ? (
             dataAnime.map((item, index) => {
               return (
-                <SwiperSlide
-                  key={item?.slug || index}
-                  className="card-item"
-                >
+                <SwiperSlide key={item?.slug || index} className="card-item">
                   <Link
                     className="projection-link"
                     to={`/${item?.type}/${item?.slug}`}

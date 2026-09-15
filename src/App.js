@@ -13,14 +13,15 @@ import {
 } from "react-router-dom";
 import { routes } from "./routes/index";
 import DefaultLayout from "./layouts/DefaultLayout/DefaultLayout";
-import { UiVersionProvider } from "./context/UiVersionContext";
-import "./styles/classicUi.scss";
 
 export function NativeBackHandler() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!Capacitor.isNativePlatform() || Capacitor.getPlatform() !== "android") {
+    if (
+      !Capacitor.isNativePlatform() ||
+      Capacitor.getPlatform() !== "android"
+    ) {
       return undefined;
     }
 
@@ -87,7 +88,9 @@ function AnimatedRoutes() {
           {routes.map((item) => {
             const Page = item.page;
 
-            return <Route element={<Page />} key={item.path} path={item.path} />;
+            return (
+              <Route element={<Page />} key={item.path} path={item.path} />
+            );
           })}
         </Routes>
       </motion.div>
@@ -105,7 +108,9 @@ function App() {
     }
 
     const updateDocumentLanguage = (nextLanguage) => {
-      document.documentElement.lang = nextLanguage?.startsWith("en") ? "en" : "vi";
+      document.documentElement.lang = nextLanguage?.startsWith("en")
+        ? "en"
+        : "vi";
     };
 
     updateDocumentLanguage(lang || i18n.resolvedLanguage || i18n.language);
@@ -115,16 +120,14 @@ function App() {
   }, [i18n]);
   return (
     <div className="App">
-      <UiVersionProvider>
-        <Router>
-          <NativeBackHandler />
-          <MotionConfig reducedMotion="user">
-            <DefaultLayout>
-              <AnimatedRoutes />
-            </DefaultLayout>
-          </MotionConfig>
-        </Router>
-      </UiVersionProvider>
+      <Router>
+        <NativeBackHandler />
+        <MotionConfig reducedMotion="user">
+          <DefaultLayout>
+            <AnimatedRoutes />
+          </DefaultLayout>
+        </MotionConfig>
+      </Router>
     </div>
   );
 }

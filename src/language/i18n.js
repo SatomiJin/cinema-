@@ -25,9 +25,6 @@ i18next.use(initReactI18next).init({
         backToTop: "Về đầu trang",
         chooseLanguage: "Chọn ngôn ngữ",
         skipToContent: "Đi đến nội dung chính",
-        classicUi: "Cổ điển",
-        modernUi: "Hiện đại",
-        switchUi: "Chuyển sang giao diện {{ui}}",
         appUpdateAction: "Cập nhật ứng dụng",
         checkAppUpdate: "Kiểm tra cập nhật",
         checkUpdateAgain: "Kiểm tra lại",
@@ -35,29 +32,35 @@ i18next.use(initReactI18next).init({
         dismissUpdateMessage: "Đóng thông báo cập nhật",
         checkingUpdate: "Đang kiểm tra bản cập nhật...",
         updateToVersion: "Cập nhật {{version}}",
-        updateAvailableMessage: "Đã có {{version}}. Bấm lại để tải và cập nhật.",
+        updateAvailableMessage:
+          "Đã có {{version}}. Bấm lại để tải và cập nhật.",
         appUpToDate: "Bạn đang dùng bản mới nhất ({{version}}).",
         noAppRelease: "Chưa có bản phát hành để cập nhật.",
         appInfoUnavailable: "Không đọc được phiên bản ứng dụng trên thiết bị.",
         invalidAppRelease: "Thông tin bản cập nhật không hợp lệ.",
         updateCheckTimeout: "Máy chủ cập nhật phản hồi quá lâu. Hãy thử lại.",
-        updateNetworkError: "Không kết nối được máy chủ cập nhật. Hãy kiểm tra mạng.",
-        updateRateLimited: "Máy chủ đang giới hạn lượt kiểm tra. Hãy thử lại sau.",
+        updateNetworkError:
+          "Không kết nối được máy chủ cập nhật. Hãy kiểm tra mạng.",
+        updateRateLimited:
+          "Máy chủ đang giới hạn lượt kiểm tra. Hãy thử lại sau.",
         updateServiceError: "Máy chủ cập nhật đang gặp sự cố. Hãy thử lại sau.",
         updateSourceUnavailable:
           "Kênh cập nhật chưa sẵn sàng hoặc chưa có bản phát hành công khai.",
         updateCheckFailed: "Không thể kiểm tra cập nhật do lỗi không xác định.",
         openingUpdate: "Đang mở bản cập nhật...",
-        finishUpdateInstall: "Đã mở tệp cập nhật. Hãy xác nhận cài đặt trong Android.",
-        chooseReleaseApk: "Trang phát hành đã mở. Hãy chọn tệp APK để cập nhật.",
+        finishUpdateInstall:
+          "Đã mở tệp cập nhật. Hãy xác nhận cài đặt trong Android.",
+        chooseReleaseApk:
+          "Trang phát hành đã mở. Hãy chọn tệp APK để cập nhật.",
         updateOpenFailed: "Không thể mở bản cập nhật. Vui lòng thử lại.",
         downloadingUpdate: "Đang tải bản cập nhật...",
         downloadingUpdatePercent: "Đang tải bản cập nhật... {{percent}}%",
         installingUpdate: "Đang mở trình cài đặt...",
-        confirmInstallPrompt: "Hãy xác nhận cài đặt trong hộp thoại của Android.",
+        confirmInstallPrompt:
+          "Hãy xác nhận cài đặt trong hộp thoại của Android.",
         allowInstallTitle: "Cần cấp quyền cài đặt",
         allowInstallMessage:
-          "Hãy bật \"Cho phép từ nguồn này\" cho ứng dụng, rồi quay lại và nhấn cập nhật.",
+          'Hãy bật "Cho phép từ nguồn này" cho ứng dụng, rồi quay lại và nhấn cập nhật.',
         allowInstallAction: "Mở cài đặt",
         downloadTimeout: "Tải bản cập nhật quá lâu. Hãy thử lại.",
         downloadNetworkError: "Không tải được bản cập nhật. Hãy kiểm tra mạng.",
@@ -118,9 +121,6 @@ i18next.use(initReactI18next).init({
         backToTop: "Back to top",
         chooseLanguage: "Choose language",
         skipToContent: "Skip to main content",
-        classicUi: "Classic",
-        modernUi: "Modern",
-        switchUi: "Switch to {{ui}} interface",
         appUpdateAction: "Update app",
         checkAppUpdate: "Check for updates",
         checkUpdateAgain: "Check again",
@@ -128,20 +128,27 @@ i18next.use(initReactI18next).init({
         dismissUpdateMessage: "Dismiss update notification",
         checkingUpdate: "Checking for updates...",
         updateToVersion: "Update to {{version}}",
-        updateAvailableMessage: "{{version}} is available. Tap again to download and update.",
+        updateAvailableMessage:
+          "{{version}} is available. Tap again to download and update.",
         appUpToDate: "You are using the latest version ({{version}}).",
         noAppRelease: "No app release is available yet.",
         appInfoUnavailable: "The installed app version could not be read.",
         invalidAppRelease: "The update information is invalid.",
-        updateCheckTimeout: "The update server took too long to respond. Try again.",
-        updateNetworkError: "The update server could not be reached. Check your connection.",
-        updateRateLimited: "The update server is limiting checks. Try again later.",
-        updateServiceError: "The update server is unavailable. Try again later.",
+        updateCheckTimeout:
+          "The update server took too long to respond. Try again.",
+        updateNetworkError:
+          "The update server could not be reached. Check your connection.",
+        updateRateLimited:
+          "The update server is limiting checks. Try again later.",
+        updateServiceError:
+          "The update server is unavailable. Try again later.",
         updateSourceUnavailable:
           "The update channel is not ready or has no public release yet.",
-        updateCheckFailed: "The update check failed because of an unknown error.",
+        updateCheckFailed:
+          "The update check failed because of an unknown error.",
         openingUpdate: "Opening the update...",
-        finishUpdateInstall: "The update file is open. Confirm installation in Android.",
+        finishUpdateInstall:
+          "The update file is open. Confirm installation in Android.",
         chooseReleaseApk: "The release page is open. Select the APK to update.",
         updateOpenFailed: "Unable to open the update. Please try again.",
         downloadingUpdate: "Downloading the update...",
@@ -150,10 +157,11 @@ i18next.use(initReactI18next).init({
         confirmInstallPrompt: "Confirm the installation in the Android dialog.",
         allowInstallTitle: "Install permission needed",
         allowInstallMessage:
-          "Turn on \"Allow from this source\" for the app, then come back and tap update.",
+          'Turn on "Allow from this source" for the app, then come back and tap update.',
         allowInstallAction: "Open settings",
         downloadTimeout: "The update took too long to download. Try again.",
-        downloadNetworkError: "The update could not be downloaded. Check your connection.",
+        downloadNetworkError:
+          "The update could not be downloaded. Check your connection.",
         downloadFailed: "Downloading the update failed. Please try again.",
         installFailed: "The installer could not be opened. Please try again.",
         newFilm: "Newly updated movies",
