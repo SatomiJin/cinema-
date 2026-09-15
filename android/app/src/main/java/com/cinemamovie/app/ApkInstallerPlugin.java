@@ -2,6 +2,7 @@ package com.cinemamovie.app;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
@@ -194,16 +195,25 @@ public class ApkInstallerPlugin extends Plugin {
         }
 
         try {
+            PackageInfo packageInfo = getContext().getPackageManager().getPackageArchiveInfo(
+                apk.getAbsolutePath(), 0
+            );
+            if (packageInfo == null || !getContext().getPackageName().equals(packageInfo.packageName)) {
+            call.reject("The downloaded file is not a valid Cinema APK.", "INVALID_APK");
+            return;
+            }
+
             Uri contentUri = FileProvider.getUriForFile(
                     getContext(),
                     getContext().getPackageName() + ".fileprovider",
                     apk
             );
 
-            Intent intent = new Intent(Intent.ACTION_VIEW)
+            Intent intent = new Intent(Intent.ACTION_INSTALL_PACKAGE)
                     .setDataAndType(contentUri, APK_MIME_TYPE)
                     .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                .putExtra(Intent.EXTRA_RETURN_RESULT, true);
 
             startActivityForResult(call, intent, "apkInstallResult");
         } catch (Exception error) {
