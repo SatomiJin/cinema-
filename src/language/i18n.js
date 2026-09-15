@@ -38,6 +38,7 @@ i18next.use(initReactI18next).init({
         noAppRelease: "Chưa có bản phát hành để cập nhật.",
         appInfoUnavailable: "Không đọc được phiên bản ứng dụng trên thiết bị.",
         invalidAppRelease: "Thông tin bản cập nhật không hợp lệ.",
+        apkNotFound: "Bản phát hành mới không có tệp APK để tải.",
         updateCheckTimeout: "Máy chủ cập nhật phản hồi quá lâu. Hãy thử lại.",
         updateNetworkError:
           "Không kết nối được máy chủ cập nhật. Hãy kiểm tra mạng.",
@@ -47,12 +48,6 @@ i18next.use(initReactI18next).init({
         updateSourceUnavailable:
           "Kênh cập nhật chưa sẵn sàng hoặc chưa có bản phát hành công khai.",
         updateCheckFailed: "Không thể kiểm tra cập nhật do lỗi không xác định.",
-        openingUpdate: "Đang mở bản cập nhật...",
-        finishUpdateInstall:
-          "Đã mở tệp cập nhật. Hãy xác nhận cài đặt trong Android.",
-        chooseReleaseApk:
-          "Trang phát hành đã mở. Hãy chọn tệp APK để cập nhật.",
-        updateOpenFailed: "Không thể mở bản cập nhật. Vui lòng thử lại.",
         downloadingUpdate: "Đang tải bản cập nhật...",
         downloadingUpdatePercent: "Đang tải bản cập nhật... {{percent}}%",
         installingUpdate: "Đang mở trình cài đặt...",
@@ -66,6 +61,7 @@ i18next.use(initReactI18next).init({
         downloadNetworkError: "Không tải được bản cập nhật. Hãy kiểm tra mạng.",
         downloadFailed: "Tải bản cập nhật thất bại. Vui lòng thử lại.",
         installFailed: "Không thể mở trình cài đặt. Vui lòng thử lại.",
+        installCancelled: "Bạn đã hủy cài đặt. Hãy thử lại khi sẵn sàng.",
 
         newFilm: "Phim mới cập nhật",
         newFilmSeries: "Phim bộ mới cập nhật",
@@ -134,6 +130,7 @@ i18next.use(initReactI18next).init({
         noAppRelease: "No app release is available yet.",
         appInfoUnavailable: "The installed app version could not be read.",
         invalidAppRelease: "The update information is invalid.",
+        apkNotFound: "The new release does not include an APK to download.",
         updateCheckTimeout:
           "The update server took too long to respond. Try again.",
         updateNetworkError:
@@ -146,11 +143,6 @@ i18next.use(initReactI18next).init({
           "The update channel is not ready or has no public release yet.",
         updateCheckFailed:
           "The update check failed because of an unknown error.",
-        openingUpdate: "Opening the update...",
-        finishUpdateInstall:
-          "The update file is open. Confirm installation in Android.",
-        chooseReleaseApk: "The release page is open. Select the APK to update.",
-        updateOpenFailed: "Unable to open the update. Please try again.",
         downloadingUpdate: "Downloading the update...",
         downloadingUpdatePercent: "Downloading the update... {{percent}}%",
         installingUpdate: "Opening the installer...",
@@ -164,6 +156,7 @@ i18next.use(initReactI18next).init({
           "The update could not be downloaded. Check your connection.",
         downloadFailed: "Downloading the update failed. Please try again.",
         installFailed: "The installer could not be opened. Please try again.",
+        installCancelled: "Installation was cancelled. Try again when ready.",
         newFilm: "Newly updated movies",
         newFilmSeries: "Newly updated series film",
         newMovieFilm: "Newly updated movie film",

@@ -41,7 +41,10 @@ function toBase64(buffer) {
 
   // Chunked so a large APK does not blow the argument limit of String.fromCharCode.
   for (let index = 0; index < bytes.length; index += chunkSize) {
-    binary += String.fromCharCode.apply(null, bytes.subarray(index, index + chunkSize));
+    binary += String.fromCharCode.apply(
+      null,
+      bytes.subarray(index, index + chunkSize),
+    );
   }
 
   return btoa(binary);
@@ -51,8 +54,12 @@ function toBase64(buffer) {
  * Streams the APK into the app cache, reporting progress when the server sends a length.
  * Returns the on-device path the native installer should open.
  */
-export async function downloadApk(url, { onProgress, fetchImpl = (...args) => window.fetch(...args) } = {}) {
-  const abortController = typeof AbortController === "undefined" ? null : new AbortController();
+export async function downloadApk(
+  url,
+  { onProgress, fetchImpl = (...args) => window.fetch(...args) } = {},
+) {
+  const abortController =
+    typeof AbortController === "undefined" ? null : new AbortController();
   const timeoutId = abortController
     ? setTimeout(() => abortController.abort(), DOWNLOAD_TIMEOUT_MS)
     : null;
@@ -60,11 +67,16 @@ export async function downloadApk(url, { onProgress, fetchImpl = (...args) => wi
   let response;
 
   try {
-    response = await fetchImpl(url, { cache: "no-store", signal: abortController?.signal });
+    response = await fetchImpl(url, {
+      cache: "no-store",
+      signal: abortController?.signal,
+    });
   } catch (error) {
     clearTimeout(timeoutId);
     throw new ApkInstallError(
-      abortController?.signal.aborted ? "DOWNLOAD_TIMEOUT" : "DOWNLOAD_NETWORK_ERROR",
+      abortController?.signal.aborted
+        ? "DOWNLOAD_TIMEOUT"
+        : "DOWNLOAD_NETWORK_ERROR",
       { cause: error },
     );
   }
@@ -88,7 +100,9 @@ export async function downloadApk(url, { onProgress, fetchImpl = (...args) => wi
 
         chunks.push(value);
         receivedBytes += value.length;
-        onProgress?.(Math.min(99, Math.round((receivedBytes / totalBytes) * 100)));
+        onProgress?.(
+          Math.min(99, Math.round((receivedBytes / totalBytes) * 100)),
+        );
       }
 
       buffer = new Blob(chunks);
@@ -110,7 +124,10 @@ export async function downloadApk(url, { onProgress, fetchImpl = (...args) => wi
 
     onProgress?.(100);
 
-    const { uri } = await Filesystem.getUri({ path: APK_FILENAME, directory: APK_DIRECTORY });
+    const { uri } = await Filesystem.getUri({
+      path: APK_FILENAME,
+      directory: APK_DIRECTORY,
+    });
     return uri;
   } catch (error) {
     if (error instanceof ApkInstallError) throw error;
@@ -126,7 +143,11 @@ export async function installApk(path) {
   } catch (error) {
     const code = error?.code;
     throw new ApkInstallError(
-      code === "PERMISSION_DENIED" ? "INSTALL_PERMISSION_DENIED" : "INSTALL_FAILED",
+      code === "PERMISSION_DENIED"
+        ? "INSTALL_PERMISSION_DENIED"
+        : code === "INSTALL_CANCELLED"
+          ? "INSTALL_CANCELLED"
+          : "INSTALL_FAILED",
       { cause: error },
     );
   }
@@ -134,7 +155,10 @@ export async function installApk(path) {
 
 export async function clearDownloadedApk() {
   try {
-    await Filesystem.deleteFile({ path: APK_FILENAME, directory: APK_DIRECTORY });
+    await Filesystem.deleteFile({
+      path: APK_FILENAME,
+      directory: APK_DIRECTORY,
+    });
   } catch {
     // A missing file is the desired end state anyway.
   }

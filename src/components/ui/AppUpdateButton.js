@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { App } from "@capacitor/app";
-import { Browser } from "@capacitor/browser";
 import { Capacitor } from "@capacitor/core";
 import {
   BadgeCheck,
@@ -23,6 +22,7 @@ import "./AppUpdateButton.scss";
 
 const UPDATE_ERROR_MESSAGES = {
   APP_INFO_UNAVAILABLE: "appInfoUnavailable",
+  APK_NOT_FOUND: "apkNotFound",
   INVALID_RELEASE: "invalidAppRelease",
   UPDATE_CHECK_TIMEOUT: "updateCheckTimeout",
   UPDATE_NETWORK_ERROR: "updateNetworkError",
@@ -34,6 +34,7 @@ const UPDATE_ERROR_MESSAGES = {
   DOWNLOAD_EMPTY: "downloadFailed",
   DOWNLOAD_FAILED: "downloadFailed",
   INSTALL_FAILED: "installFailed",
+  INSTALL_CANCELLED: "installCancelled",
   INSTALL_PERMISSION_FAILED: "installFailed",
 };
 
@@ -102,24 +103,13 @@ function AppUpdateButton({ compact = false }) {
     }
   };
 
-  // Falls back to the browser whenever the release has no direct APK, or the in-app
-  // install path is unavailable, so the user can always finish the update by hand.
-  const openInBrowser = async () => {
-    setStatus("opening");
-    setMessage(t("openingUpdate"));
-    try {
-      await Browser.open({ url: update.downloadUrl });
-      setStatus("opened");
-      setMessage(
-        update.hasDirectApk ? t("finishUpdateInstall") : t("chooseReleaseApk"),
-      );
-    } catch {
-      setStatus("error");
-      setMessage(t("updateOpenFailed"));
-    }
-  };
-
   const installInApp = async () => {
+    if (!update?.downloadUrl) {
+      setStatus("error");
+      setMessage(t("apkNotFound"));
+      return;
+    }
+
     if (!(await canInstallApk())) {
       setStatus("permission");
       setMessage(t("allowInstallMessage"));
@@ -157,7 +147,8 @@ function AppUpdateButton({ compact = false }) {
           "DOWNLOAD_FAILED",
         ].includes(error?.code)
       ) {
-        await openInBrowser();
+        setStatus("error");
+        setMessage(t(UPDATE_ERROR_MESSAGES[error.code]));
         return;
       }
 
@@ -172,7 +163,7 @@ function AppUpdateButton({ compact = false }) {
       }
 
       setStatus("error");
-      setMessage(t(UPDATE_ERROR_MESSAGES[error?.code] || "updateOpenFailed"));
+      setMessage(t(UPDATE_ERROR_MESSAGES[error?.code] || "downloadFailed"));
     }
   };
 
@@ -192,8 +183,7 @@ function AppUpdateButton({ compact = false }) {
     }
   };
 
-  const startUpdate = () =>
-    update?.hasDirectApk ? installInApp() : openInBrowser();
+  const startUpdate = () => installInApp();
 
   const handleClick = () => {
     if (status === "permission") return void grantPermission();
@@ -203,7 +193,6 @@ function AppUpdateButton({ compact = false }) {
 
   const isBusy =
     status === "checking" ||
-    status === "opening" ||
     status === "downloading" ||
     status === "installing";
   const isAvailable = status === "available";
@@ -214,7 +203,7 @@ function AppUpdateButton({ compact = false }) {
         ? "installingUpdate"
         : status === "checking"
           ? "checkingUpdate"
-          : "openingUpdate";
+          : "appUpdateAction";
   const buttonLabel = isAvailable
     ? t("updateToVersion", { version: update.latestVersion })
     : status === "permission"

@@ -1,5 +1,6 @@
 package com.cinemamovie.app;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -7,6 +8,7 @@ import android.provider.Settings;
 
 import androidx.core.content.FileProvider;
 
+import com.getcapacitor.ActivityResult;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -114,11 +116,20 @@ public class ApkInstallerPlugin extends Plugin {
                     .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            getContext().startActivity(intent);
-            call.resolve();
+            startActivityForResult(call, intent, "apkInstallResult");
         } catch (Exception error) {
             call.reject("INSTALL_FAILED", "Could not launch the system installer.", error);
         }
+    }
+
+    @com.getcapacitor.annotation.ActivityCallback
+    private void apkInstallResult(PluginCall call, ActivityResult result) {
+        if (result.getResultCode() == Activity.RESULT_CANCELED) {
+            call.reject("INSTALL_CANCELLED", "The APK installation was cancelled.");
+            return;
+        }
+
+        call.resolve();
     }
 
     private boolean hasInstallPermission() {

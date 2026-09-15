@@ -54,7 +54,9 @@ function findReleaseApk(assets = []) {
   const apkAssets = assets.filter((asset) => /\.apk$/i.test(asset.name || ""));
 
   return (
-    apkAssets.find((asset) => /release/i.test(asset.name) && !/debug/i.test(asset.name)) ||
+    apkAssets.find(
+      (asset) => /release/i.test(asset.name) && !/debug/i.test(asset.name),
+    ) ||
     apkAssets.find((asset) => !/debug/i.test(asset.name)) ||
     apkAssets[0]
   );
@@ -66,7 +68,8 @@ export async function checkForAppUpdate({
   updateApiUrl = UPDATE_API_URL,
   timeoutMs = DEFAULT_REQUEST_TIMEOUT_MS,
 }) {
-  const abortController = typeof AbortController === "undefined" ? null : new AbortController();
+  const abortController =
+    typeof AbortController === "undefined" ? null : new AbortController();
   const timeoutId = abortController
     ? setTimeout(() => abortController.abort(), timeoutMs)
     : null;
@@ -81,7 +84,9 @@ export async function checkForAppUpdate({
     });
   } catch (error) {
     throw createUpdateError(
-      abortController?.signal.aborted ? "UPDATE_CHECK_TIMEOUT" : "UPDATE_NETWORK_ERROR",
+      abortController?.signal.aborted
+        ? "UPDATE_CHECK_TIMEOUT"
+        : "UPDATE_NETWORK_ERROR",
       { cause: error },
     );
   } finally {
@@ -94,14 +99,20 @@ export async function checkForAppUpdate({
 
   if (!response.ok) {
     if (response.status === 404) {
-      throw createUpdateError("UPDATE_SOURCE_UNAVAILABLE", { status: response.status });
+      throw createUpdateError("UPDATE_SOURCE_UNAVAILABLE", {
+        status: response.status,
+      });
     }
 
     if (response.status === 403 || response.status === 429) {
-      throw createUpdateError("UPDATE_RATE_LIMITED", { status: response.status });
+      throw createUpdateError("UPDATE_RATE_LIMITED", {
+        status: response.status,
+      });
     }
 
-    throw createUpdateError("UPDATE_SERVICE_ERROR", { status: response.status });
+    throw createUpdateError("UPDATE_SERVICE_ERROR", {
+      status: response.status,
+    });
   }
 
   let release;
@@ -119,17 +130,22 @@ export async function checkForAppUpdate({
   const latestVersion = release.tag_name;
   const apk = findReleaseApk(release.assets);
 
-  if (!latestVersion || !release.html_url) {
+  if (!latestVersion) {
     throw createUpdateError("INVALID_RELEASE");
   }
 
   try {
+    const available = isVersionNewer(latestVersion, currentVersion);
+
+    if (available && !apk?.browser_download_url) {
+      throw createUpdateError("APK_NOT_FOUND");
+    }
+
     return {
-      available: isVersionNewer(latestVersion, currentVersion),
-      downloadUrl: apk?.browser_download_url || release.html_url,
+      available,
+      downloadUrl: apk?.browser_download_url || null,
       hasDirectApk: Boolean(apk?.browser_download_url),
       latestVersion,
-      releaseUrl: release.html_url,
     };
   } catch (error) {
     if (error.message === "INVALID_VERSION") {

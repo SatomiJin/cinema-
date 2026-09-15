@@ -7,7 +7,6 @@ import {
 } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { App } from "@capacitor/app";
-import { Browser } from "@capacitor/browser";
 import { Capacitor } from "@capacitor/core";
 import AppUpdateButton from "./AppUpdateButton";
 import { checkForAppUpdate } from "../../services/appUpdate";
@@ -25,7 +24,6 @@ jest.mock("react-i18next", () => ({
   }),
 }));
 jest.mock("@capacitor/app", () => ({ App: { getInfo: jest.fn() } }));
-jest.mock("@capacitor/browser", () => ({ Browser: { open: jest.fn() } }));
 jest.mock("@capacitor/core", () => ({
   Capacitor: { getPlatform: jest.fn(), isNativePlatform: jest.fn() },
 }));
@@ -43,7 +41,6 @@ describe("AppUpdateButton", () => {
     Capacitor.isNativePlatform.mockReturnValue(true);
     Capacitor.getPlatform.mockReturnValue("android");
     App.getInfo.mockResolvedValue({ version: "1.0.0" });
-    Browser.open.mockResolvedValue(undefined);
     canInstallApk.mockResolvedValue(true);
     clearDownloadedApk.mockResolvedValue(undefined);
     downloadApk.mockResolvedValue("file:///cache/cinema-update.apk");
@@ -88,14 +85,13 @@ describe("AppUpdateButton", () => {
       "https://example.com/app-release.apk",
       expect.any(Object),
     );
-    expect(Browser.open).not.toHaveBeenCalled();
     await screen.findByText("confirmInstallPrompt");
   });
 
-  test("falls back to the browser when the release has no direct APK", async () => {
+  test("does not redirect when the release has no direct APK", async () => {
     checkForAppUpdate.mockResolvedValue({
       available: true,
-      downloadUrl: "https://example.com/releases/tag/v1.1.0",
+      downloadUrl: null,
       hasDirectApk: false,
       latestVersion: "v1.1.0",
     });
@@ -107,13 +103,8 @@ describe("AppUpdateButton", () => {
       screen.getByRole("button", { name: "updateToVersion v1.1.0" }),
     );
 
-    await waitFor(() =>
-      expect(Browser.open).toHaveBeenCalledWith({
-        url: "https://example.com/releases/tag/v1.1.0",
-      }),
-    );
+    await screen.findByText("apkNotFound");
     expect(downloadApk).not.toHaveBeenCalled();
-    await screen.findByText("chooseReleaseApk");
   });
 
   test("asks for install permission before downloading, then retries once granted", async () => {
@@ -141,7 +132,7 @@ describe("AppUpdateButton", () => {
     await waitFor(() => expect(installApk).toHaveBeenCalled());
   });
 
-  test("falls back to the browser when direct APK download is blocked", async () => {
+  test("reports a direct APK download failure without redirecting", async () => {
     downloadApk.mockRejectedValue({ code: "DOWNLOAD_NETWORK_ERROR" });
     checkForAppUpdate.mockResolvedValue({
       available: true,
@@ -157,13 +148,9 @@ describe("AppUpdateButton", () => {
       screen.getByRole("button", { name: "updateToVersion v1.1.0" }),
     );
 
-    await waitFor(() =>
-      expect(Browser.open).toHaveBeenCalledWith({
-        url: "https://example.com/app-release.apk",
-      }),
-    );
-    expect(await screen.findByText("finishUpdateInstall")).toBeInTheDocument();
+    expect(await screen.findByText("downloadNetworkError")).toBeInTheDocument();
     expect(clearDownloadedApk).not.toHaveBeenCalled();
+    expect(screen.queryByText("finishUpdateInstall")).not.toBeInTheDocument();
     expect(installApk).not.toHaveBeenCalled();
   });
 
