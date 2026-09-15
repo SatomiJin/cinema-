@@ -139,6 +139,14 @@ function AppUpdateButton({ compact = false }) {
       setStatus("opened");
       setMessage(t("confirmInstallPrompt"));
     } catch (error) {
+      console.error("[AppUpdate] update flow failed", {
+        code: error?.code,
+        message: error?.message,
+        stack: error?.stack,
+        downloadUrl: update?.downloadUrl,
+        apkAssetName: update?.apkAssetName,
+        apkAssetId: update?.apkAssetId,
+      });
       if (
         [
           "DOWNLOAD_TIMEOUT",

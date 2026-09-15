@@ -137,12 +137,21 @@ export async function checkForAppUpdate({
   try {
     const available = isVersionNewer(latestVersion, currentVersion);
 
+    console.info("[AppUpdate] GitHub release", {
+      latestVersion,
+      apkAssetName: apk?.name || null,
+      apkAssetId: apk?.id || null,
+      downloadUrl: apk?.browser_download_url || null,
+    });
+
     if (available && !apk?.browser_download_url) {
       throw createUpdateError("APK_NOT_FOUND");
     }
 
     return {
       available,
+      apkAssetId: apk?.id || null,
+      apkAssetName: apk?.name || null,
       downloadUrl: apk?.browser_download_url || null,
       hasDirectApk: Boolean(apk?.browser_download_url),
       latestVersion,

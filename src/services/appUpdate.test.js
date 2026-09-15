@@ -15,10 +15,12 @@ describe("app update service", () => {
       json: async () => ({
         assets: [
           {
+            id: 123,
             name: "app-debug.apk",
             browser_download_url: "https://example.com/debug.apk",
           },
           {
+            id: 456,
             name: "app-release.apk",
             browser_download_url: "https://example.com/release.apk",
           },
@@ -32,6 +34,8 @@ describe("app update service", () => {
       checkForAppUpdate({ currentVersion: "1.2.0", fetchImpl }),
     ).resolves.toEqual({
       available: true,
+      apkAssetId: 456,
+      apkAssetName: "app-release.apk",
       downloadUrl: "https://example.com/release.apk",
       hasDirectApk: true,
       latestVersion: "v1.3.0",

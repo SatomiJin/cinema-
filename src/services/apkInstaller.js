@@ -56,8 +56,14 @@ function toBase64(buffer) {
  */
 export async function downloadApk(
   url,
-  { onProgress, fetchImpl = (...args) => window.fetch(...args) } = {},
+  { onProgress, fetchImpl = null } = {},
 ) {
+  if (!fetchImpl) {
+    return downloadApkNative(url, onProgress);
+  }
+
+  console.info("[AppUpdate] APK download start", { url });
+
   const abortController =
     typeof AbortController === "undefined" ? null : new AbortController();
   const timeoutId = abortController
@@ -69,9 +75,22 @@ export async function downloadApk(
   try {
     response = await fetchImpl(url, {
       cache: "no-store",
+      redirect: "follow",
       signal: abortController?.signal,
     });
+    console.info("[AppUpdate] APK download response", {
+      status: response?.status,
+      redirected: response?.redirected,
+      responseUrl: response?.url,
+      contentType: response?.headers?.get?.("content-type") || null,
+      contentLength: response?.headers?.get?.("content-length") || null,
+    });
   } catch (error) {
+    console.error("[AppUpdate] APK download request failed", {
+      url,
+      message: error?.message,
+      stack: error?.stack,
+    });
     clearTimeout(timeoutId);
     throw new ApkInstallError(
       abortController?.signal.aborted
@@ -130,10 +149,46 @@ export async function downloadApk(
     });
     return uri;
   } catch (error) {
+    console.error("[AppUpdate] APK download processing failed", {
+      url,
+      message: error?.message,
+      stack: error?.stack,
+    });
     if (error instanceof ApkInstallError) throw error;
     throw new ApkInstallError("DOWNLOAD_FAILED", { cause: error });
   } finally {
     clearTimeout(timeoutId);
+  }
+}
+
+async function downloadApkNative(url, onProgress) {
+  let progressListener;
+
+  try {
+    progressListener = await ApkInstaller.addListener(
+      "downloadProgress",
+      ({ percent }) => {
+        if (typeof percent === "number") onProgress?.(Math.min(99, percent));
+      },
+    );
+
+    console.info("[AppUpdate] APK native download start", { url });
+    const result = await ApkInstaller.downloadApk({ url });
+    console.info("[AppUpdate] APK native download response", result);
+    onProgress?.(100);
+    return result.uri;
+  } catch (error) {
+    console.error("[AppUpdate] APK native download failed", {
+      url,
+      code: error?.code,
+      message: error?.message,
+      stack: error?.stack,
+    });
+    throw new ApkInstallError(error?.code || "DOWNLOAD_NETWORK_ERROR", {
+      cause: error,
+    });
+  } finally {
+    await progressListener?.remove?.();
   }
 }
 

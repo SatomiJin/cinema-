@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
+import android.util.Log;
 
 import androidx.activity.result.ActivityResult;
 import androidx.core.content.FileProvider;
@@ -16,7 +17,12 @@ import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
+import java.net.URL;
 
 /**
  * Hands a downloaded APK to the system installer.
@@ -30,6 +36,8 @@ import java.io.IOException;
 public class ApkInstallerPlugin extends Plugin {
 
     private static final String APK_MIME_TYPE = "application/vnd.android.package-archive";
+    private static final String APK_FILENAME = "cinema-update.apk";
+    private static final String TAG = "ApkInstaller";
 
     @PluginMethod
     public void canInstall(PluginCall call) {
@@ -68,6 +76,87 @@ public class ApkInstallerPlugin extends Plugin {
         JSObject result = new JSObject();
         result.put("granted", false);
         call.resolve(result);
+    }
+
+    @PluginMethod
+    public void downloadApk(PluginCall call) {
+        String url = call.getString("url");
+
+        if (url == null || url.trim().isEmpty()) {
+            call.reject("No APK download URL was provided.", "DOWNLOAD_FAILED");
+            return;
+        }
+
+        execute(() -> {
+            File apk = new File(getContext().getCacheDir(), APK_FILENAME);
+            HttpURLConnection connection = null;
+
+            try {
+                URL requestUrl = new URL(url);
+                connection = (HttpURLConnection) requestUrl.openConnection();
+                connection.setInstanceFollowRedirects(true);
+                connection.setConnectTimeout(30000);
+                connection.setReadTimeout(180000);
+                connection.setRequestProperty("Accept", APK_MIME_TYPE);
+
+                int status = connection.getResponseCode();
+                String responseUrl = connection.getURL().toString();
+                String contentType = connection.getContentType();
+                long totalBytes = connection.getContentLengthLong();
+                Log.i(TAG, "APK download response status=" + status
+                        + " redirected=" + !url.equals(responseUrl)
+                        + " responseUrl=" + responseUrl
+                        + " contentType=" + contentType
+                        + " contentLength=" + totalBytes);
+
+                if (status < 200 || status >= 300) {
+                    call.reject("APK download returned HTTP " + status + ".", "DOWNLOAD_FAILED");
+                    return;
+                }
+
+                long receivedBytes = 0;
+                byte[] buffer = new byte[8192];
+                try (InputStream input = connection.getInputStream();
+                     FileOutputStream output = new FileOutputStream(apk)) {
+                    int bytesRead;
+                    while ((bytesRead = input.read(buffer)) != -1) {
+                        output.write(buffer, 0, bytesRead);
+                        receivedBytes += bytesRead;
+
+                        JSObject progress = new JSObject();
+                        progress.put("receivedBytes", receivedBytes);
+                        progress.put("totalBytes", totalBytes);
+                        if (totalBytes > 0) {
+                            progress.put("percent", Math.min(99, (int) ((receivedBytes * 100) / totalBytes)));
+                        }
+                        notifyListeners("downloadProgress", progress);
+                    }
+                }
+
+                if (!apk.exists() || apk.length() == 0) {
+                    call.reject("The downloaded APK is empty.", "DOWNLOAD_EMPTY");
+                    return;
+                }
+
+                JSObject result = new JSObject();
+                result.put("uri", apk.toURI().toString());
+                result.put("status", status);
+                result.put("responseUrl", responseUrl);
+                result.put("contentType", contentType);
+                result.put("totalBytes", receivedBytes);
+                call.resolve(result);
+            } catch (SocketTimeoutException error) {
+                Log.e(TAG, "APK download timeout", error);
+                call.reject(error.getMessage(), "DOWNLOAD_TIMEOUT", error);
+            } catch (Exception error) {
+                Log.e(TAG, "APK download failed", error);
+                call.reject(error.getMessage(), "DOWNLOAD_NETWORK_ERROR", error);
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+            }
+        });
     }
 
     @PluginMethod
