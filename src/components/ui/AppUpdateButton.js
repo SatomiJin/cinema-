@@ -2,7 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import { App } from "@capacitor/app";
 import { Browser } from "@capacitor/browser";
 import { Capacitor } from "@capacitor/core";
-import { BadgeCheck, CircleArrowUp, Download, LoaderCircle, TriangleAlert, X } from "lucide-react";
+import {
+  BadgeCheck,
+  CircleArrowUp,
+  Download,
+  LoaderCircle,
+  TriangleAlert,
+  X,
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { checkForAppUpdate } from "../../services/appUpdate";
 import {
@@ -53,7 +60,10 @@ function AppUpdateButton({ compact = false }) {
   useEffect(() => {
     if (!message || !AUTO_DISMISS_STATUSES.has(status)) return undefined;
 
-    const timeoutId = window.setTimeout(() => setMessage(""), NOTICE_AUTO_DISMISS_MS);
+    const timeoutId = window.setTimeout(
+      () => setMessage(""),
+      NOTICE_AUTO_DISMISS_MS,
+    );
     return () => window.clearTimeout(timeoutId);
   }, [message, status]);
 
@@ -73,7 +83,9 @@ function AppUpdateButton({ compact = false }) {
         throw appInfoError;
       }
 
-      const result = await checkForAppUpdate({ currentVersion: appInfo.version });
+      const result = await checkForAppUpdate({
+        currentVersion: appInfo.version,
+      });
       setUpdate(result);
       setStatus(result.available ? "available" : "current");
       setMessage(
@@ -84,7 +96,8 @@ function AppUpdateButton({ compact = false }) {
     } catch (error) {
       setStatus("error");
       const errorCode = error?.code || error?.message;
-      const messageKey = UPDATE_ERROR_MESSAGES[errorCode] || "updateCheckFailed";
+      const messageKey =
+        UPDATE_ERROR_MESSAGES[errorCode] || "updateCheckFailed";
       setMessage(t(messageKey));
     }
   };
@@ -97,7 +110,9 @@ function AppUpdateButton({ compact = false }) {
     try {
       await Browser.open({ url: update.downloadUrl });
       setStatus("opened");
-      setMessage(update.hasDirectApk ? t("finishUpdateInstall") : t("chooseReleaseApk"));
+      setMessage(
+        update.hasDirectApk ? t("finishUpdateInstall") : t("chooseReleaseApk"),
+      );
     } catch {
       setStatus("error");
       setMessage(t("updateOpenFailed"));
@@ -134,6 +149,18 @@ function AppUpdateButton({ compact = false }) {
       setStatus("opened");
       setMessage(t("confirmInstallPrompt"));
     } catch (error) {
+      if (
+        [
+          "DOWNLOAD_TIMEOUT",
+          "DOWNLOAD_NETWORK_ERROR",
+          "DOWNLOAD_EMPTY",
+          "DOWNLOAD_FAILED",
+        ].includes(error?.code)
+      ) {
+        await openInBrowser();
+        return;
+      }
+
       void clearDownloadedApk();
 
       if (!isMountedRef.current) return;
@@ -165,7 +192,8 @@ function AppUpdateButton({ compact = false }) {
     }
   };
 
-  const startUpdate = () => (update?.hasDirectApk ? installInApp() : openInBrowser());
+  const startUpdate = () =>
+    update?.hasDirectApk ? installInApp() : openInBrowser();
 
   const handleClick = () => {
     if (status === "permission") return void grantPermission();
@@ -231,7 +259,10 @@ function AppUpdateButton({ compact = false }) {
           className="app-update__progress"
           role="progressbar"
         >
-          <span className="app-update__progress-bar" style={{ width: `${progress}%` }} />
+          <span
+            className="app-update__progress-bar"
+            style={{ width: `${progress}%` }}
+          />
         </div>
       )}
       {message && (
