@@ -54,10 +54,7 @@ function toBase64(buffer) {
  * Streams the APK into the app cache, reporting progress when the server sends a length.
  * Returns the on-device path the native installer should open.
  */
-export async function downloadApk(
-  url,
-  { onProgress, fetchImpl = null } = {},
-) {
+export async function downloadApk(url, { onProgress, fetchImpl = null } = {}) {
   if (!fetchImpl) {
     return downloadApkNative(url, onProgress);
   }
