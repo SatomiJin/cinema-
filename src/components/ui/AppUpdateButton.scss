@@ -120,6 +120,26 @@
   cursor: pointer;
 }
 
+.app-update__message-fallback {
+  grid-column: 1 / -1;
+  justify-self: start;
+  border: 1px solid color-mix(in srgb, var(--film_highlight_color) 55%, var(--film_info_border));
+  border-radius: 999px;
+  padding: 0.4rem 0.7rem;
+  background: color-mix(in srgb, var(--film_highlight_color) 10%, var(--body_background));
+  color: var(--body_color);
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.app-update__message-fallback:hover,
+.app-update__message-fallback:focus-visible {
+  border-color: var(--film_highlight_color);
+  color: var(--film_highlight_color);
+}
+
 .app-update__message-close:hover,
 .app-update__message-close:focus-visible {
   background: var(--control-hover-bg);

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { App } from "@capacitor/app";
+import { Browser } from "@capacitor/browser";
 import { Capacitor } from "@capacitor/core";
 import {
   BadgeCheck,
@@ -47,6 +48,7 @@ function AppUpdateButton({ compact = false }) {
   const [status, setStatus] = useState("idle");
   const [message, setMessage] = useState("");
   const [progress, setProgress] = useState(0);
+  const [fallbackUrl, setFallbackUrl] = useState(null);
   const isMountedRef = useRef(true);
   const isAndroidApp =
     Capacitor.isNativePlatform() && Capacitor.getPlatform() === "android";
@@ -59,18 +61,25 @@ function AppUpdateButton({ compact = false }) {
   }, []);
 
   useEffect(() => {
-    if (!message || !AUTO_DISMISS_STATUSES.has(status)) return undefined;
+    if (
+      !message ||
+      !AUTO_DISMISS_STATUSES.has(status) ||
+      fallbackUrl
+    ) {
+      return undefined;
+    }
 
     const timeoutId = window.setTimeout(
       () => setMessage(""),
       NOTICE_AUTO_DISMISS_MS,
     );
     return () => window.clearTimeout(timeoutId);
-  }, [message, status]);
+  }, [fallbackUrl, message, status]);
 
   if (!isAndroidApp) return null;
 
   const checkUpdate = async () => {
+    setFallbackUrl(null);
     setStatus("checking");
     setMessage(t("checkingUpdate"));
     try {
@@ -155,6 +164,7 @@ function AppUpdateButton({ compact = false }) {
           "DOWNLOAD_FAILED",
         ].includes(error?.code)
       ) {
+        setFallbackUrl(update.downloadUrl);
         setStatus("error");
         setMessage(t(UPDATE_ERROR_MESSAGES[error.code]));
         return;
@@ -165,13 +175,36 @@ function AppUpdateButton({ compact = false }) {
       if (!isMountedRef.current) return;
 
       if (error?.code === "INSTALL_PERMISSION_DENIED") {
+        setFallbackUrl(null);
         setStatus("permission");
         setMessage(t("allowInstallMessage"));
         return;
       }
 
+      setFallbackUrl(update.downloadUrl);
       setStatus("error");
       setMessage(t(UPDATE_ERROR_MESSAGES[error?.code] || "downloadFailed"));
+    }
+  };
+
+  const openOfficialDownload = async () => {
+    if (!fallbackUrl) return;
+
+    try {
+      await Browser.open({ url: fallbackUrl });
+      if (!isMountedRef.current) return;
+      setFallbackUrl(null);
+      setStatus("opened");
+      setMessage(t("githubDownloadOpened"));
+    } catch (error) {
+      console.error("[AppUpdate] fallback download link failed", {
+        url: fallbackUrl,
+        message: error?.message,
+        stack: error?.stack,
+      });
+      if (!isMountedRef.current) return;
+      setStatus("error");
+      setMessage(t("githubDownloadOpenFailed"));
     }
   };
 
@@ -186,6 +219,7 @@ function AppUpdateButton({ compact = false }) {
 
       setMessage(t("allowInstallMessage"));
     } catch {
+      setFallbackUrl(update?.downloadUrl || null);
       setStatus("error");
       setMessage(t("installFailed"));
     }
@@ -265,6 +299,15 @@ function AppUpdateButton({ compact = false }) {
       {message && (
         <div className={`app-update__message app-update__message--${status}`}>
           <span role={status === "error" ? "alert" : "status"}>{message}</span>
+          {fallbackUrl && (
+            <button
+              className="app-update__message-fallback"
+              onClick={openOfficialDownload}
+              type="button"
+            >
+              {t("downloadFromGithub")}
+            </button>
+          )}
           <button
             aria-label={t("dismissUpdateMessage")}
             className="app-update__message-close"

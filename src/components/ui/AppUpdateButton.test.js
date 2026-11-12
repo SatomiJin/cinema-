@@ -7,6 +7,7 @@ import {
 } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { App } from "@capacitor/app";
+import { Browser } from "@capacitor/browser";
 import { Capacitor } from "@capacitor/core";
 import AppUpdateButton from "./AppUpdateButton";
 import { checkForAppUpdate } from "../../services/appUpdate";
@@ -24,6 +25,7 @@ jest.mock("react-i18next", () => ({
   }),
 }));
 jest.mock("@capacitor/app", () => ({ App: { getInfo: jest.fn() } }));
+jest.mock("@capacitor/browser", () => ({ Browser: { open: jest.fn() } }));
 jest.mock("@capacitor/core", () => ({
   Capacitor: { getPlatform: jest.fn(), isNativePlatform: jest.fn() },
 }));
@@ -41,6 +43,7 @@ describe("AppUpdateButton", () => {
     Capacitor.isNativePlatform.mockReturnValue(true);
     Capacitor.getPlatform.mockReturnValue("android");
     App.getInfo.mockResolvedValue({ version: "1.0.0" });
+    Browser.open.mockResolvedValue(undefined);
     canInstallApk.mockResolvedValue(true);
     clearDownloadedApk.mockResolvedValue(undefined);
     downloadApk.mockResolvedValue("file:///cache/cinema-update.apk");
@@ -132,7 +135,7 @@ describe("AppUpdateButton", () => {
     await waitFor(() => expect(installApk).toHaveBeenCalled());
   });
 
-  test("reports a direct APK download failure without redirecting", async () => {
+  test("offers the official download link after an APK download failure", async () => {
     downloadApk.mockRejectedValue({ code: "DOWNLOAD_NETWORK_ERROR" });
     checkForAppUpdate.mockResolvedValue({
       available: true,
@@ -152,6 +155,61 @@ describe("AppUpdateButton", () => {
     expect(clearDownloadedApk).not.toHaveBeenCalled();
     expect(screen.queryByText("finishUpdateInstall")).not.toBeInTheDocument();
     expect(installApk).not.toHaveBeenCalled();
+    expect(Browser.open).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByRole("button", { name: "downloadFromGithub" }));
+    await waitFor(() =>
+      expect(Browser.open).toHaveBeenCalledWith({
+        url: "https://example.com/app-release.apk",
+      }),
+    );
+    expect(await screen.findByText("githubDownloadOpened")).toBeInTheDocument();
+  });
+
+  test("offers the official download link when Android rejects the downloaded APK", async () => {
+    installApk.mockRejectedValue({ code: "INSTALL_CANCELLED" });
+    checkForAppUpdate.mockResolvedValue({
+      available: true,
+      downloadUrl: "https://example.com/app-release.apk",
+      latestVersion: "v1.1.0",
+    });
+    render(<AppUpdateButton />);
+
+    fireEvent.click(screen.getByRole("button", { name: "appUpdateAction" }));
+    await waitFor(() => expect(checkForAppUpdate).toHaveBeenCalled());
+    fireEvent.click(
+      screen.getByRole("button", { name: "updateToVersion v1.1.0" }),
+    );
+
+    expect(await screen.findByText("installCancelled")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "downloadFromGithub" }),
+    ).toBeInTheDocument();
+  });
+
+  test("keeps the official download action available if the browser cannot open", async () => {
+    Browser.open.mockRejectedValue(new Error("Browser unavailable"));
+    downloadApk.mockRejectedValue({ code: "DOWNLOAD_NETWORK_ERROR" });
+    checkForAppUpdate.mockResolvedValue({
+      available: true,
+      downloadUrl: "https://example.com/app-release.apk",
+      latestVersion: "v1.1.0",
+    });
+    render(<AppUpdateButton />);
+
+    fireEvent.click(screen.getByRole("button", { name: "appUpdateAction" }));
+    await waitFor(() => expect(checkForAppUpdate).toHaveBeenCalled());
+    fireEvent.click(
+      screen.getByRole("button", { name: "updateToVersion v1.1.0" }),
+    );
+    fireEvent.click(
+      await screen.findByRole("button", { name: "downloadFromGithub" }),
+    );
+
+    expect(await screen.findByText("githubDownloadOpenFailed")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "downloadFromGithub" }),
+    ).toBeInTheDocument();
   });
 
   test("uses a distinct app-update affordance", () => {
