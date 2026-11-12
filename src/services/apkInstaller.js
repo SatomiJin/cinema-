@@ -185,7 +185,14 @@ async function downloadApkNative(url, onProgress) {
       cause: error,
     });
   } finally {
-    await progressListener?.remove?.();
+    if (progressListener?.remove) {
+      void progressListener.remove().catch((error) => {
+        console.error("[AppUpdate] APK progress listener cleanup failed", {
+          message: error?.message,
+          stack: error?.stack,
+        });
+      });
+    }
   }
 }
 
